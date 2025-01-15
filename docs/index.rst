@@ -68,3 +68,4 @@ Contents
    source/turbine
    source/plant
    source/developer_guide
+   source/schema_documentation
