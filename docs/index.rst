@@ -65,8 +65,6 @@ Contents
 .. toctree::
    :maxdepth: 3
 
-   source/turbine
-   source/plant
    source/turbine_schema_doc
    source/plant_schema_doc
    source/developer_guide
