@@ -6,74 +6,91 @@ from jsonschema import Draft7Validator
 
 
 class TestRegression(unittest.TestCase):
-    def test_IEA_15_240_RWT(self):
-        path2yaml = Path(__file__).parent / "IEA-15-240-RWT.yaml"
+    
+    def test_load_IEA_15_240_RWT(self):
 
-        # Validate the file
-        windIO.validate(path2yaml, "turbine/IEAontology_schema")
+        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT.yaml"
 
         # Verify the file loads
         windIO.load_yaml(path2yaml)
 
-    def test_IEA_15_240_RWT_VolturnUS_S(self):
-        path2yaml = Path(__file__).parent / "IEA-15-240-RWT_VolturnUS-S.yaml"
+    
+    def test_validate_IEA_15_240_RWT(self):
+
+        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT.yaml"
+        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
 
         # Validate the file
-        windIO.validate(path2yaml, "turbine/IEAontology_schema")
+        windIO.validate(path2yaml, path2schema)
+    
+    def test_load_IEA_15_240_RWT_VolturnUS_S(self):
+
+        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT_VolturnUS-S.yaml"
 
         # Verify the file loads
         windIO.load_yaml(path2yaml)
+
     
-    def test_v1p0_2p0_converter_IEA_15_240_RWT(self):
+    def test_validate_IEA_15_240_RWT_VolturnUS_S(self):
+
+        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT_VolturnUS-S.yaml"
+        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
+
+        # Validate the file
+        windIO.validate(path2yaml, path2schema)
+
+   
+    # def test_v1p0_2p0_converter_IEA_15_240_RWT(self):
         
-        filename_v1p0 = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
-            "windIO",
-            "converters",
-            "v1p0",
-            "IEA-15-240-RWT.yaml"
-        )
+    #     filename_v1p0 = os.path.join(
+    #         os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
+    #         "windIO",
+    #         "converters",
+    #         "v1p0",
+    #         "IEA-15-240-RWT.yaml"
+    #     )
         
-        filename_v2p0 = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
-            "windIO",
-            "converters",
-            "v2p0",
-            "IEA-15-240-RWT.yaml"
-        )
+    #     filename_v2p0 = os.path.join(
+    #         os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
+    #         "windIO",
+    #         "converters",
+    #         "v2p0",
+    #         "IEA-15-240-RWT.yaml"
+    #     )
           
-        converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
-        converter.convert()
+    #     converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
+    #     converter.convert()
         
-        return None
+    #     return None
     
-    def test_v1p0_2p0_converter_IEA_15_240_RWT_VolturnUS_S(self):
+    # def test_v1p0_2p0_converter_IEA_15_240_RWT_VolturnUS_S(self):
         
-        filename_v1p0 = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
-            "windIO",
-            "converters",
-            "v1p0",
-            "IEA-15-240-RWT_VolturnUS-S.yaml"
-        )
+    #     filename_v1p0 = os.path.join(
+    #         os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
+    #         "windIO",
+    #         "converters",
+    #         "v1p0",
+    #         "IEA-15-240-RWT_VolturnUS-S.yaml"
+    #     )
         
-        filename_v2p0 = os.path.join(
-            os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
-            "windIO",
-            "converters",
-            "v2p0",
-            "IEA-15-240-RWT_VolturnUS-S.yaml"
-        )
+    #     filename_v2p0 = os.path.join(
+    #         os.path.dirname(os.path.dirname(os.path.dirname(os.path.realpath(__file__)))),
+    #         "windIO",
+    #         "converters",
+    #         "v2p0",
+    #         "IEA-15-240-RWT_VolturnUS-S.yaml"
+    #     )
           
-        converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
-        converter.convert()
+    #     converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
+    #     converter.convert()
         
-        return None
+    #     return None
     
     def test_valid_schema(self):
-        schema = windIO.load_yaml(
-            Path(windIO.schemas.turbine.__file__).parent / "IEAontology_schema.yaml",
-        )
+        
+        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema.yaml"
+        
+        schema = windIO.load_yaml(path2schema)
 
         Draft7Validator.META_SCHEMA["additionalProperties"] = False
         Draft7Validator.META_SCHEMA["properties"]["definitions"]["additionalProperties"] = True

@@ -11,8 +11,8 @@ import xarray as xr
 from typing import Any
 
 ### API design
-import windIO.examples.plant
-import windIO.examples.turbine
+import examples.plant
+import examples.turbine
 import windIO.schemas
 import windIO.schemas.plant         # By importing plant and turbine here, we can use the schemas as windIO.schemas.plant and windIO.schemas.turbine
 import windIO.schemas.turbine       # in the calling code after only importing windIO... import windIO; help(windIO.schemas.turbine)
@@ -92,6 +92,8 @@ def enforce_no_additional_properties(schema):
 
         # If this is an object type schema, and additionalProperties is not specified,
         #   set additionalProperties: false
+        if 'additionalProperties' in schema:
+            pass
         if (schema.get('type') == 'object' or 'properties' in schema) and 'additionalProperties' not in schema:
             schema['additionalProperties'] = False
         
