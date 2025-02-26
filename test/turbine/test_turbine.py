@@ -4,12 +4,14 @@ import windIO
 
 from jsonschema import Draft7Validator
 
+turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 
 class TestRegression(unittest.TestCase):
     
     def test_load_IEA_15_240_RWT(self):
 
-        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT.yaml"
+        
+        path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
 
         # Verify the file loads
         windIO.load_yaml(path2yaml)
@@ -17,7 +19,7 @@ class TestRegression(unittest.TestCase):
     
     def test_validate_IEA_15_240_RWT(self):
 
-        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT.yaml"
+        path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
         path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
 
         # Validate the file
@@ -25,7 +27,7 @@ class TestRegression(unittest.TestCase):
     
     def test_load_IEA_15_240_RWT_VolturnUS_S(self):
 
-        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT_VolturnUS-S.yaml"
+        path2yaml = turbine_reference_path / "IEA-15-240-RWT_VolturnUS-S.yaml"
 
         # Verify the file loads
         windIO.load_yaml(path2yaml)
@@ -33,7 +35,7 @@ class TestRegression(unittest.TestCase):
     
     def test_validate_IEA_15_240_RWT_VolturnUS_S(self):
 
-        path2yaml = Path(__file__).parent.parent.parent / "examples" / "turbine" / "IEA-15-240-RWT_VolturnUS-S.yaml"
+        path2yaml = turbine_reference_path / "IEA-15-240-RWT_VolturnUS-S.yaml"
         path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
 
         # Validate the file
