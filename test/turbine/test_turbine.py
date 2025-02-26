@@ -20,10 +20,9 @@ class TestRegression(unittest.TestCase):
     def test_validate_IEA_15_240_RWT(self):
 
         path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
-        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
 
         # Validate the file
-        windIO.validate(path2yaml, path2schema)
+        windIO.validate(path2yaml, schema_type="turbine/turbine_schema")
     
     def test_load_IEA_15_240_RWT_VolturnUS_S(self):
 
@@ -36,10 +35,9 @@ class TestRegression(unittest.TestCase):
     def test_validate_IEA_15_240_RWT_VolturnUS_S(self):
 
         path2yaml = turbine_reference_path / "IEA-15-240-RWT_VolturnUS-S.yaml"
-        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema"
 
         # Validate the file
-        windIO.validate(path2yaml, path2schema)
+        windIO.validate(path2yaml, schema_type="turbine/turbine_schema")
 
    
     # def test_v1p0_2p0_converter_IEA_15_240_RWT(self):
