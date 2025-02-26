@@ -1,7 +1,8 @@
 import os
 from copy import deepcopy
-from windIO.utils.yml_utils import load_yaml, write_yaml
 import numpy as np
+import windIO
+
 
 class v1p0_to_v2p0:
     def __init__(self, filename_v1p0, filename_v2p0, **kwargs) -> None:
@@ -10,7 +11,7 @@ class v1p0_to_v2p0:
 
     def convert(self):
         # Read the input yaml
-        dict_v1p0 = load_yaml(self.filename_v1p0)
+        dict_v1p0 = windIO.load_yaml(self.filename_v1p0)
         
         # Copy the input windio dict
         dict_v2p0 = deepcopy(dict_v1p0)
@@ -317,7 +318,7 @@ class v1p0_to_v2p0:
         dict_v2p0["control"]["torque"]["VS_maxspd"] = VS_maxspd_rads * 30. / np.pi
 
         # Print out
-        write_yaml(dict_v2p0, self.filename_v2p0)
+        windIO.write_yaml(dict_v2p0, self.filename_v2p0)
 
 
 if __name__ == "__main__":
