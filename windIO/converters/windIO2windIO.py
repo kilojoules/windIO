@@ -227,8 +227,10 @@ class v1p0_to_v2p0:
             dict_v2p0["components"]["drivetrain"]["generator"]["mass"] = v1p0_dt["generator_mass_user"]
         if "rpm_efficiency_user" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["generator"]["rpm_efficiency"] = v1p0_dt["rpm_efficiency_user"]
-        if "generator_type" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_dt["generator_type"]
+        v1p0_gen = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
+        if "generator_type" in v1p0_gen:
+            dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_gen["generator_type"]
+            dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_type")
 
         if "phi" in dict_v2p0["components"]["drivetrain"]["generator"]:
             phi_rad = dict_v2p0["components"]["drivetrain"]["generator"]["phi"]
@@ -316,6 +318,21 @@ class v1p0_to_v2p0:
         dict_v2p0["control"]["torque"]["VS_minspd"] = VS_minspd_rads * 30. / np.pi
         VS_maxspd_rads = dict_v2p0["control"]["torque"]["VS_maxspd"]
         dict_v2p0["control"]["torque"]["VS_maxspd"] = VS_maxspd_rads * 30. / np.pi
+        if "PC_zeta" in dict_v2p0["control"]["pitch"]:
+            dict_v2p0["control"]["pitch"].pop("PC_zeta")
+        if "PC_omega" in dict_v2p0["control"]["pitch"]:
+            dict_v2p0["control"]["pitch"].pop("PC_omega")
+        if "VS_zeta" in dict_v2p0["control"]["torque"]:
+            dict_v2p0["control"]["torque"].pop("VS_zeta")
+        if "VS_omega" in dict_v2p0["control"]["torque"]:
+            dict_v2p0["control"]["torque"].pop("VS_omega")
+        if "control_type" in dict_v2p0["control"]["torque"]:
+            dict_v2p0["control"]["torque"].pop("control_type")
+        if "setpoint_smooth" in dict_v2p0["control"]:
+            dict_v2p0["control"].pop("setpoint_smooth")
+        if "shutdown" in dict_v2p0["control"]:
+            dict_v2p0["control"].pop("shutdown")
+
 
         # Print out
         windIO.write_yaml(dict_v2p0, self.filename_v2p0)

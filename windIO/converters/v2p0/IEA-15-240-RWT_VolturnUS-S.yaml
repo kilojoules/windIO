@@ -14895,7 +14895,6 @@ components:
       c: 5.0
       cofi: 0.9
       freq: 60.0
-      generator_type: PMSG_Outer
       h_0: 0.05
       h_i: 0.004
       h_m: 0.0995385122
@@ -14932,6 +14931,7 @@ components:
       t_s: 0.06065213554
       tau_p: 0.1610453779
       tau_s: 0.1339360726
+      type: PMSG_Outer
       u_allow_pcent: 8.5
       y_allow_pcent: 1.0
       y_tau_p: 0.8
@@ -15453,18 +15453,10 @@ components:
       reference_axis: *id009
 control:
   pitch:
-    PC_omega: 0.2
-    PC_zeta: 1.0
     max_pitch: 89.95437383553924
     max_pitch_rate: 2.0
     min_pitch: 0.0
     ps_percent: 0.8
-  setpoint_smooth:
-    ss_pcgain: 0.001
-    ss_vsgain: 1
-  shutdown:
-    limit_type: gen_speed
-    limit_value: 2.0
   supervisory:
     Vin: 3.0
     Vout: 25.0
@@ -15472,9 +15464,6 @@ control:
   torque:
     VS_maxspd: 7.559999999999999
     VS_minspd: 4.999999999999999
-    VS_omega: 0.2
-    VS_zeta: 1.0
-    control_type: tsr_tracking
     max_torque_rate: 1500000.0
     tsr: 9.0
 costs:
