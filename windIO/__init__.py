@@ -19,7 +19,7 @@ import windIO.schemas
 
 plant_ex = windIO.examples.plant
 turbine_ex = windIO.examples.turbine
-schemas = windIO.schemas
+# schemas = windIO.schemas
 ### API design
 
 
