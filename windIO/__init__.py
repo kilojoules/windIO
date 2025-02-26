@@ -89,8 +89,10 @@ def load_yaml(filename: str, loader=XrResourceLoader) -> dict:
 def enforce_no_additional_properties(schema):
     """Recursively set additionalProperties: false for all objects in the schema"""
     if isinstance(schema, dict):
-        # If this is an object type schema, set additionalProperties: false
-        if schema.get('type') == 'object' or 'properties' in schema:
+
+        # If this is an object type schema, and additionalProperties is not specified,
+        #   set additionalProperties: false
+        if (schema.get('type') == 'object' or 'properties' in schema) and 'additionalProperties' not in schema:
             schema['additionalProperties'] = False
         
         # Recursively process all nested schemas
