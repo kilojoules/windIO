@@ -78,7 +78,7 @@ properties:
             rotor_diameter:
                 type: number
                 default: 0
-                description: Rotor diameter, defined as the sum of hub diameter and two times the blade length along its z axis, see blade
+                description: Diameter of the wind turbine rotor. It is defined as two times the sum of hub radius and blade length along the z direction times the cosine of the rotor precone. In formula, this is 2 x (Rhub + blade length along z) * cos(precone). This definition is consistent with commercial aeroelastic solvers. It is not consistent with OpenFAST, which takes into account the instantaneous blade deflection.
                 units: m
                 minimum: 0
                 maximum: 1000
