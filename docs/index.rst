@@ -19,13 +19,27 @@ You can access the yaml files at the following links:
 
    Author: `IEA Wind Task 37 Team <mailto:pietro.bortolotti@nrel.gov>`_
 
-Supporting windIO in modeling software
---------------------------------------
+Installation
+------------
+
+windIO is typically included as a dependency in software that uses the windIO data format, so
+users will normally not need to install it directly.
+However, it can be useful to install the windIO package to access version converters or during
+integration into a software package.
+In that case, windIO can be installed from PyPI with the following command:
+
+.. code-block:: bash
+
+   pip install windIO
+
+Supporting windIO in your software
+----------------------------------
 
 The windIO data format is defined by the schemas included in this repository.
 In order for a software to support windIO, it must support the data as described in the schemas
 and use the included functions to validate the data.
-windIO can be included as a dependency and installed as a package with pip.
+windIO should be included as a dependency.
+It is distributed through PyPI and can be installed as a package with pip.
 The suggested method of incorporating windIO into your code is:
 
 .. code-block:: python
