@@ -264,6 +264,7 @@ properties:
                                 type: array
                                 description: ...
                                 items:
+                                    additionalProperties: True
                                     type: object
                                     required:
                                         - name
@@ -387,6 +388,7 @@ properties:
                         # type: object
                         # TODO
             hub:
+                additionalProperties: True
                 type: object
                 properties:
                     outer_shape_bem:
@@ -447,6 +449,7 @@ properties:
                 type: object
                 properties:
                     drivetrain:
+                        additionalProperties: True
                         type: object
                         description: Inputs to WISDEM specific drivetrain sizing tool, DrivetrainSE
                         properties:
@@ -727,6 +730,7 @@ properties:
                                     minimum: 0
                                     maximum: 6
                     generator:
+                      additionalProperties: True
                       properties:
                         mass_coefficient:
                           type: number
@@ -1513,6 +1517,7 @@ properties:
                                             description: Angle between principle axes of the cross-section and the member coordinate system.  Essentially the rotation of the member if both joints were placed on the global x-y axis with the first side length along the z-axis
                                             units: rad
                                 internal_structure:
+                                    additionalProperties: True
                                     type: object
                                     required:
                                         - layers
@@ -2004,6 +2009,7 @@ properties:
         type: array
         description: Database of airfoils
         items:
+            additionalProperties: True
             type: object
             properties:
                 name:
@@ -2350,6 +2356,7 @@ properties:
                             maximum: 100
                             default: -1.0
     control:
+        additionalProperties: True
         type: object
         required:
             - supervisory
@@ -2382,6 +2389,7 @@ properties:
                         minimum: 60
                         maximum: 120
             pitch:
+                additionalProperties: True
                 type: object
                 required:
                     - max_pitch_rate
@@ -2400,6 +2408,7 @@ properties:
                         minimum: 0
                         maximum: 0.2
             torque:
+                additionalProperties: True
                 type: object
                 required:
                     - tsr
@@ -2446,6 +2455,8 @@ properties:
             - soil_poisson
             - air_pressure
             - air_vapor_pressure
+            - significant_wave_height
+            - significant_wave_period
         properties:
             gravity:
                 type: number
@@ -2544,6 +2555,18 @@ properties:
                 minimum: 0.
                 maximum: 2.e+1
                 description: Average inflow wind speed. If different than 0, this will overwrite the V mean of the IEC wind class
+            significant_wave_height:
+                type: number
+                default: 4.52
+                minimum: 0.01
+                maximum: 200
+                description: Average height of the highest one-third of waves in a wave record or time series (meters)
+            significant_wave_period:
+                type: number
+                default: 9.45
+                minimum: 0.05
+                maximum: 1000.0
+                description: Average period of the highest one-third of waves in a wave record or time series (seconds)
     bos:
         type: object
         default: {}
