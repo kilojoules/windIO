@@ -17,15 +17,9 @@ import numpy as np
 import windIO.examples.plant
 import windIO.examples.turbine
 import windIO.schemas
-import windIO.converters
-import windIO.converters.v1p0
-import windIO.converters.v2p0
-# import windIO.schemas.plant         # By importing plant and turbine here, we can use the schemas as windIO.schemas.plant and windIO.schemas.turbine
-# import windIO.schemas.turbine       # in the calling code after only importing windIO... import windIO; help(windIO.schemas.turbine)
 
 plant_ex = windIO.examples.plant
 turbine_ex = windIO.examples.turbine
-# schemas = windIO.schemas
 ### API design
 
 

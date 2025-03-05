@@ -6,6 +6,7 @@ from windIO.converters.windIO2windIO import v1p0_to_v2p0
 from jsonschema import Draft7Validator
 
 turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
+test_dir = Path(__file__).parent
 
 class TestRegression(unittest.TestCase):
     
@@ -43,13 +44,8 @@ class TestRegression(unittest.TestCase):
    
     def test_v1p0_2p0_converter_IEA_15_240_RWT(self):
         
-        path1p0 = Path(windIO.converters.v1p0.__file__).parent
-        path2p0 = Path(windIO.converters.v2p0.__file__).parent
-
-        filename_v1p0 = path1p0 / "IEA-15-240-RWT.yaml"
-        filename_v2p0 = path2p0 / "IEA-15-240-RWT.yaml"
-        filename_v1p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/windIO/converters/v1p0/IEA-15-240-RWT.yaml"
-        filename_v2p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/windIO/converters/v2p0/IEA-15-240-RWT.yaml"
+        filename_v1p0 = test_dir / "v1p0" / "IEA-15-240-RWT.yaml"
+        filename_v2p0 = test_dir / "IEA-15-240-RWT.yaml"
                  
         converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
         converter.convert()
@@ -59,13 +55,8 @@ class TestRegression(unittest.TestCase):
     
     def test_v1p0_2p0_converter_IEA_15_240_RWT_VolturnUS_S(self):
         
-        path1p0 = Path(windIO.converters.v1p0.__file__).parent
-        path2p0 = Path(windIO.converters.v2p0.__file__).parent
-
-        filename_v1p0 = path1p0 / "IEA-15-240-RWT_VolturnUS-S.yaml"
-        filename_v2p0 = path2p0 / "IEA-15-240-RWT_VolturnUS-S.yaml"
-        filename_v1p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/windIO/converters/v1p0/IEA-15-240-RWT_VolturnUS-S.yaml"
-        filename_v2p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/windIO/converters/v2p0/IEA-15-240-RWT_VolturnUS-S.yaml"
+        filename_v1p0 = test_dir / "v1p0" / "IEA-15-240-RWT_VolturnUS-S.yaml"
+        filename_v2p0 = test_dir / "IEA-15-240-RWT_VolturnUS-S.yaml"
                  
         converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
         converter.convert()

@@ -340,32 +340,7 @@ class v1p0_to_v2p0:
 
 if __name__ == "__main__":
     
-    filename_v1p0 = os.path.join(
-                        os.path.dirname(os.path.realpath(__file__)),
-                        "v1p0",
-                        "IEA-15-240-RWT.yaml"
-                    )
-    
-    filename_v2p0 = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    "v2p0",
-                    "IEA-15-240-RWT.yaml"
-                )
-    
-    converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
-    converter.convert()
-    
-    filename_v1p0 = os.path.join(
-                        os.path.dirname(os.path.realpath(__file__)),
-                        "v1p0",
-                        "IEA-15-240-RWT_VolturnUS-S.yaml"
-                    )
-    
-    filename_v2p0 = os.path.join(
-                    os.path.dirname(os.path.realpath(__file__)),
-                    "v2p0",
-                    "IEA-15-240-RWT_VolturnUS-S.yaml"
-                )
-    
+    filename_v1p0 = "v1p0.yaml"
+    filename_v2p0 = "v2p0.yaml"
     converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
     converter.convert()
