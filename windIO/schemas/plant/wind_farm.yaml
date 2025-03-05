@@ -10,7 +10,6 @@ optional:
   - electrical_collection_array
   - foundations
   - O_&_M
-additionalProperties: false
 
 # PROPERTIES
 properties:
@@ -22,14 +21,12 @@ properties:
     type: object
     required:
       - initial_layout
-    additionalProperties: false
     properties:
       initial_layout:
         $ref: "#/definitions/initial_layout"
 
   turbines:
     description: Turbine models installed in the WES
-    type: object
     $ref: "turbine.yaml#"
   electrical_substations:
     description: Information about electrical substations
@@ -38,7 +35,6 @@ properties:
       type: object
       required:
         - electrical_substation
-      additionalProperties: false
       properties:
         electrical_substation:
           $ref: "#/definitions/electrical_substation"
@@ -50,7 +46,6 @@ properties:
     required:
       - edges
       - cables
-    additionalProperties: false
     properties:
       edges:
         title: Edges of cable layout
@@ -65,7 +60,6 @@ properties:
           - cross_section
           - capacity
           - cost
-        additionalProperties: false
         properties:
           cable_type:
             title: Cable type
@@ -94,7 +88,6 @@ definitions:
     type: object
     required:
       - coordinates
-    additionalProperties: false
     properties:
       coordinates:
         title: Wind turbine coordinate
@@ -107,7 +100,6 @@ definitions:
       - coordinates
     optional:
       - capacity
-    additionalProperties: false
     properties:
       coordinates:
         title: Substation coordinates
