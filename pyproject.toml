@@ -58,4 +58,4 @@ windIO = [
 
 [project.urls]
 Homepage = "https://github.com/IEAWindSystems/windIO"
-Documentation = "https://windio.readthedocs.io/"
+Documentation = "https://ieawindsystems.github.io/windio"
