@@ -179,8 +179,6 @@ def enforce_no_additional_properties(schema):
 
         # If this is an object type schema, and additionalProperties is not specified,
         #   set additionalProperties: false
-        if 'additionalProperties' in schema:
-            pass
         if (schema.get('type') == 'object' or 'properties' in schema) and 'additionalProperties' not in schema:
             schema['additionalProperties'] = False
         
