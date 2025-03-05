@@ -121,7 +121,6 @@ definitions:
     required:
       - center
       - radius
-    additionalProperties: false
     properties:
       #~~
       center:

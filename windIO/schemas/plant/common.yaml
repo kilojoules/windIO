@@ -6,7 +6,6 @@ definitions:
     required:
       - x
       - y
-    additionalProperties: false
     properties:
       x:
         title: X coordinate
@@ -26,7 +25,6 @@ definitions:
     required:
       - x
       - y
-    additionalProperties: false
     properties:
       x:
         title: X coordinates
