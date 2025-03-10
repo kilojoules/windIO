@@ -31,11 +31,11 @@ if __name__ == "__main__":
     base_path = Path(__file__).parent.parent
     generate_from_filename(
         base_path / "windIO" / "schemas" / "plant" / "wind_energy_system.yaml",
-        "source/plant_schema_doc.html",
+        "_static/plant_schema_doc.html",
         config=config
     )
     generate_from_filename(
         base_path / "windIO" / "schemas" / "turbine" / "IEAontology_schema.yaml",
-        "source/turbine_schema_doc.html",
+        "_static/turbine_schema_doc.html",
         config=config
     )
