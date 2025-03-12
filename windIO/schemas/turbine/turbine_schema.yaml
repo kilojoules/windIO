@@ -1576,26 +1576,60 @@ properties:
                                             - outer_diameter
                                     else:
                                         if:
-                                            # If shape == polygonal, then we need to specify the side lengths
+                                            # If shape == rectangular, then we need to specify the side lengths
                                             properties:
                                                 shape:
-                                                    const: polygonal
+                                                    const: rectangular
                                         then:
                                             required:
-                                                - side_lengths1
-                                                - side_lengths2
-                                            optional:
-                                                - rotation
-                                                - angles
+                                                - side_lengths_a
+                                                - side_lengths_b
+                                            # TODO: Might add rotation in the future, ignore for now
+                                        else:
+                                            if:
+                                                # If shape == polygonal, then we need to specify the side lengths
+                                                properties:
+                                                    shape:
+                                                        const: polygonal
+                                            then:
+                                                required:
+                                                    - side_lengths1
+                                                    - side_lengths2
+                                                optional:
+                                                    - rotation
+                                                    - angles
                                     properties:
                                         shape:
                                             type: string
                                             description: Specifies cross-sectional shape of the member.  If circular, then the outer_diameter field is required.  If polygonal, then the side_lengths, angles, and rotation fields are required
                                             enum:
                                                 - circular
+                                                - rectangular
                                                 - polygonal
                                         outer_diameter:
                                             description: Gridded values describing diameter at non-dimensional axis from joint1 to joint2
+                                            type: object
+                                            required:
+                                                - grid
+                                                - values
+                                            properties:
+                                                grid:
+                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                values:
+                                                    $ref: "#/definitions/distributed_data/length"
+                                        side_length_a:
+                                            description: Gridded values describing side length a for rectangular members at non-dimensional axis from joint1 to joint2
+                                            type: object
+                                            required:
+                                                - grid
+                                                - values
+                                            properties:
+                                                grid:
+                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                values:
+                                                    $ref: "#/definitions/distributed_data/length"
+                                        side_length_b:
+                                            description: Gridded values describing side length b for rectangular members at non-dimensional axis from joint1 to joint2
                                             type: object
                                             required:
                                                 - grid
@@ -1638,6 +1672,7 @@ properties:
                                         - longitudinal_stiffeners
                                         - bulkhead
                                         - ballast
+                                        - flooded
                                     properties:
                                         outfitting_factor:
                                             type: number
@@ -1775,6 +1810,10 @@ properties:
                                                         description: Total volume of ballast (permanent ballast only)
                                                         units: m^3
                                                         minimum: 0
+                                        flooded:
+                                            type: boolean
+                                            default: False
+                                            description: Flag that defines whether a floater member is flooded or not.
                                 axial_joints:
                                     description: Additional joints that are defined along the non-dimensional member axis can be defined here.  Unlike the joints defined in the global coordinate system in the :code:`joints` section of the ontology, these joints will change their absolute (x,y,z) location if the member diameter is altered the or :code:`joint1` or :code:`joint2` locations are changed during an optimization.  This is especially useful when designing a truss-like structure with pontoons attaching to primary members or columns in a semisubmersible. Like the joints above, these must be given a unique name.
                                     type: array
@@ -1793,19 +1832,30 @@ properties:
                                                 maximum: 1.0
                                                 description: Non-dimensional value along member axis
                                 ca: &ca
-                                    description: User-defined added mass coefficient
-                                    type: number
-                                    default: 1.0
-                                    minimum: 0.0
+                                    description: User-defined added mass coefficient if axi-symmetric or user-defined added mass coefficient in x-direction
+                                    oneOf:
+                                        - type: number
+                                          default: -1.0
+                                          minimum: 0
+                                        - type: array
+                                          default: [-1.0] # default -1.0 so it will be deactivated when defaulting to -1.0
+                                          items:
+                                            type: number
+                                            minimum: -1.0
+                                    default: [-1.0]
+                                cay:
+                                    <<: *ca
+                                    description: User-defined added mass coefficient in y-direction
                                 cp: &cp
                                     description: User-defined pressure coefficient
                                     type: number
                                     default: 0.0
                                 cd: &cd
-                                    description: User-defined drag coefficient
-                                    type: number
-                                    default: 0.0
-                                    minimum: 0.0
+                                    <<: *ca
+                                    description: User-defined drag coefficient if axi-symmetric or user-defined drag coefficient in x-direction
+                                cdy:
+                                    <<: *cd
+                                    description: User-defined drag coefficient in y-direction                
                     rigid_bodies:
                         type: array
                         description: Additional point masses at joints with user-customized properties
