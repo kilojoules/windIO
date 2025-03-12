@@ -135,7 +135,7 @@ def test_include():
     with open(filename, "r") as f:
         for i in range(4):
             f.readline()
-        out
+        #out
     out = windIO.yaml.get_YAML(read_include=False).load(filename)
 
     # Include netCFD file
