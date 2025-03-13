@@ -41,7 +41,7 @@ def test_write_list_flow_style():
 
     def get_yaml_str(data, flow_style=False):
         out = StringIO()
-        yml_obj = windIO.YAML(typ="safe")
+        yml_obj = windIO.YAML(typ="safe", pure=True)
         yml_obj.default_flow_style = flow_style
         yml_obj.dump(data, out)
         return out.getvalue()
@@ -141,8 +141,8 @@ def test_write_numpy():
     # Reset file location
     tfile.seek(0)
 
-    # Convert "file" to python data (using the "safe" loader do get a python dict)
-    dout = windIO.yaml.get_YAML("safe").load(tfile)
+    # Convert "file" to python data withOUT numpy reader 
+    dout = windIO.yaml.get_YAML(read_numpy=False).load(tfile)
 
     # Asserting that dicts are equal
     assert_equal_dicts(test_data, dout)
@@ -181,4 +181,27 @@ def test_include():
 
 
 def test_numpy_read():
-    raise NotImplementedError("Test for reading numeric array into numpy")
+    # Data to test against
+    test_data = dict(
+        a=[0.1, 0.2],
+        b=[[0.1, 0.2], [0.3, 0.4]],
+        c=dict(a=[0.1, 0.2], b=[[0.1, 0.2], [0.3, 0.4]]),
+        d=[5, [1.0, 3.0], "test"],
+        e=["test1", "test2"]
+    )
+    str_repr = StringIO()
+    windIO.yaml.get_YAML().dump(test_data, str_repr)
+    str_repr.seek(0)
+
+    data = windIO.yaml.get_YAML().load(str_repr)
+    assert isinstance(data["a"], np.ndarray), "`a` should be numpy array"
+    assert len(data["a"].shape) == 1, "`a` shape should be 1D"
+    assert isinstance(data["b"], np.ndarray), "`b` should be numpy array"
+    assert len(data["b"].shape) == 2, "`b` shape should be 2D"
+    assert isinstance(data["c"]["a"], np.ndarray), "`c.a` should be numpy array"
+    assert len(data["c"]["a"].shape) == 1, "`c.a` shape should be 1D"
+    assert isinstance(data["c"]["b"], np.ndarray), "`c.b` should be numpy array"
+    assert len(data["c"]["b"].shape) == 2, "`c.b` shape should be 2D"
+    assert isinstance(data["d"], list), "`d` should remain a list"
+    assert isinstance(data["e"], list), "`e` should remain a list"
+

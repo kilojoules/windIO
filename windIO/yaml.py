@@ -3,6 +3,7 @@ from typing import Any
 
 import numpy as np
 from ruamel.yaml import YAML
+from ruamel.yaml.constructor import SafeConstructor
 import xarray as xr
 
 def include(constructor, node):
@@ -55,13 +56,13 @@ def ds2yml(ds: xr.Dataset) -> dict:
 def get_YAML(
     typ: str = "safe",
     write_numpy: bool = True,
+    read_numpy: bool = True,
     read_include: bool = True,
     n_list_flow_style: int = 1,
 ) -> YAML:
     yaml_obj = YAML(typ=typ, pure=True) # kenloen TODO: Can only make it work with the pure-python version (`pure=True`) as I can not figure out how to extract the file name for the file being  
     yaml_obj.default_flow_style = False
     yaml_obj.width = 1e6
-    yaml_obj.indent(mapping=4, sequence=6, offset=3)
     yaml_obj.allow_unicode = False
 
     # Write nested list of numbers with flow-style
@@ -101,6 +102,18 @@ def get_YAML(
             return list_rep(dumper, data.tolist())
 
         yaml_obj.Representer.add_representer(np.ndarray, ndarray_rep)
+
+        def numpy_constructor(constructor, node):
+            default_data = SafeConstructor.construct_sequence(constructor, node)
+            try:
+                if read_numpy:
+                    npdata = np.asarray(default_data)
+                    if np.isdtype(npdata.dtype, "numeric"):
+                        return npdata
+                raise ValueError
+            except ValueError:
+                return default_data
+        yaml_obj.Constructor.add_constructor('tag:yaml.org,2002:seq', numpy_constructor)
 
     if read_include:
 
