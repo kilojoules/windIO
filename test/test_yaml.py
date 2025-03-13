@@ -1,6 +1,7 @@
 import numpy as np
 from io import StringIO
 from pathlib import Path
+import xarray as xr
 
 import windIO
 import windIO.yaml
@@ -55,31 +56,51 @@ def test_write_list_flow_style():
     out1 = StringIO()
     windIO.yaml.get_YAML(n_list_flow_style=1).dump(data, out1)
     str_data1 = out1.getvalue()
+    n1D = 10
+    i1D = 0
     for line in str_data1.split("\n"):
         if "[" in line:
             assert line.count("[") == 1 and line.count("]") == 1
+            i1D += 1
+    assert i1D == n1D
 
     # With flow-style for 2D numeric array
     out1 = StringIO()
     windIO.yaml.get_YAML(n_list_flow_style=2).dump(data, out1)
     str_data1 = out1.getvalue()
+    n1D = 2
+    i1D = 0
+    n2D = 4
+    i2D = 0
     for line in str_data1.split("\n"):
         if "[" in line:
             if line.count("[") > 1:
                 assert line.count("[") == 3 and line.count("]") == 3
+                i2D += 1
             else:
                 assert line.count("[") == 1 and line.count("]") == 1
+                i1D += 1
+    assert i1D == n1D
+    assert i2D == n2D
 
     # With flow-style for 3D numeric array
     out1 = StringIO()
     windIO.yaml.get_YAML(n_list_flow_style=3).dump(data, out1)
     str_data1 = out1.getvalue()
+    n1D = 2
+    i1D = 0
+    n3D = 2
+    i3D = 0
     for line in str_data1.split("\n"):
         if "[" in line:
             if line.count("[") > 1:
                 assert line.count("[") == 7 and line.count("]") == 7
+                i3D += 1
             else:
                 assert line.count("[") == 1 and line.count("]") == 1
+                i1D += 1
+    assert i1D == n1D
+    assert i2D == n2D
 
 
 def test_write_numpy():
@@ -129,20 +150,34 @@ def test_write_numpy():
 
 def test_include():
     base_path = Path(windIO.plant_ex.__file__).parent
+
     # Include YAML file
     filename = base_path / "plant_energy_site/IEA37_case_study_1_2_energy_site.yaml"
-    # without include
+    # Manually inserting !include content
     with open(filename, "r") as f:
-        for i in range(4):
-            f.readline()
-        #out
-    out = windIO.yaml.get_YAML(read_include=False).load(filename)
+        lines = f.readlines()
+        key_name, sub_filename = [el.strip() for el in lines[7].split("!include")]
+        key_name = key_name.strip(":")
+        lines.pop(7)
+        out_wo_inc = windIO.yaml.get_YAML().load("\n".join(lines))
+        out_wo_inc[key_name] = windIO.yaml.get_YAML().load(Path(filename).parent / sub_filename)
+
+    out = windIO.load_yaml(filename)
+    assert_equal_dicts(out, out_wo_inc)
 
     # Include netCFD file
-    windIO.yaml.get_YAML().load(
+    filename = base_path / "plant_energy_resource/GriddedResource_nc.yaml"
+    with open(filename, "r") as f:
+        lines = f.readlines()
+        key_name, sub_filename = [el.strip() for el in lines[1].split("!include")]
+        key_name = key_name.strip(":")
+        lines.pop(1)
+        out_wo_inc = windIO.yaml.get_YAML().load("\n".join(lines))
+        out_wo_inc[key_name] = windIO.yaml.ds2yml(xr.open_dataset(Path(filename).parent / sub_filename))
+    out = windIO.yaml.get_YAML().load(
         base_path / "plant_energy_resource/GriddedResource_nc.yaml"
     )
-    raise NotImplementedError("Should be tested against a manually embedding")
+    assert_equal_dicts(out, out_wo_inc)
 
 
 def test_numpy_read():
