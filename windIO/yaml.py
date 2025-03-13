@@ -56,7 +56,7 @@ def ds2yml(ds: xr.Dataset) -> dict:
 def get_YAML(
     typ: str = "safe",
     write_numpy: bool = True,
-    read_numpy: bool = True,
+    read_numpy: bool = False,
     read_include: bool = True,
     n_list_flow_style: int = 1,
 ) -> YAML:
@@ -103,17 +103,17 @@ def get_YAML(
 
         yaml_obj.Representer.add_representer(np.ndarray, ndarray_rep)
 
-        def numpy_constructor(constructor, node):
-            default_data = SafeConstructor.construct_sequence(constructor, node)
-            try:
-                if read_numpy:
-                    npdata = np.asarray(default_data)
-                    if np.isdtype(npdata.dtype, "numeric"):
-                        return npdata
-                raise ValueError
-            except ValueError:
-                return default_data
-        yaml_obj.Constructor.add_constructor('tag:yaml.org,2002:seq', numpy_constructor)
+    def numpy_constructor(constructor, node):
+        default_data = SafeConstructor.construct_sequence(constructor, node)
+        try:
+            if read_numpy:
+                npdata = np.asarray(default_data)
+                if np.isdtype(npdata.dtype, "numeric"):
+                    return npdata
+            raise ValueError
+        except ValueError:
+            return default_data
+    yaml_obj.Constructor.add_constructor('tag:yaml.org,2002:seq', numpy_constructor)
 
     if read_include:
 

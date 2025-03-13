@@ -142,7 +142,7 @@ def test_write_numpy():
     tfile.seek(0)
 
     # Convert "file" to python data withOUT numpy reader 
-    dout = windIO.yaml.get_YAML(read_numpy=False).load(tfile)
+    dout = windIO.yaml.get_YAML().load(tfile)
 
     # Asserting that dicts are equal
     assert_equal_dicts(test_data, dout)
@@ -193,7 +193,7 @@ def test_numpy_read():
     windIO.yaml.get_YAML().dump(test_data, str_repr)
     str_repr.seek(0)
 
-    data = windIO.yaml.get_YAML().load(str_repr)
+    data = windIO.yaml.get_YAML(read_numpy=True).load(str_repr)
     assert isinstance(data["a"], np.ndarray), "`a` should be numpy array"
     assert len(data["a"].shape) == 1, "`a` shape should be 1D"
     assert isinstance(data["b"], np.ndarray), "`b` should be numpy array"
