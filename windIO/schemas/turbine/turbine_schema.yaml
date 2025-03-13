@@ -115,96 +115,89 @@ properties:
         properties:
             blade:
                 type: object
-                description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape_bem`, :code:`elastic_properties_mb`, and :code:`internal_structure_2d_fem`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, possibly curved, :code:`reference_axis`.
+                description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape`, :code:`elastic_properties`, and :code:`structure`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, possibly curved, :code:`reference_axis`.
                 properties:
-                    outer_shape_bem:
+                    reference_axis:
                         type: object
-                        description: :code:`outer_shape_bem` consists of a dictionary containing the data for blade BEM-based aerodynamics. 
+                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine blade are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at blade root, with z aligned with the pitch axis, x pointing towards the suction sides of the airfoils (standard prebend will be negative) and y pointing to the trailing edge (standard sweep will be positive). The blade main direction is expressed along z, and total blade length must be computed integrating the fields x, y, and z three-dimensionally.
                         required:
-                            - airfoil_position
-                            - chord
-                            - twist
-                            - section_offset_x
-                            - reference_axis
+                            - grid
+                            - x
+                            - y
+                            - z
+                        additionalProperties: False
                         properties:
-                            airfoil_position:
-                                type: object
-                                description: The array :code:`labels` specifies the names of the airfoils to be placed along the blade. The positions are specified in the field :code:`grid`. The two arrays must share the same length and to keep an airfoil constant along blade span, this must be defined twice. The :code:`labels` must match the :code:`names` of the airfoils listed in the top level :code:`airfoils`. In between airfoils, the recommended interpolation scheme for both coordinates and polars is the Piecewise Cubic Hermite Interpolating Polynomial (PCHIP), which is implemented in `Matlab <https://www.mathworks.com/help/matlab/ref/pchip.html>`_ and in the Python library `SciPy  <https://docs.scipy.org/doc/scipy/reference/generated/scipy.interpolate.PchipInterpolator.html>`_. Optionally, the field :code:`rthick.values` can also be defined, see below.
-                                required:
-                                    - grid
-                                    - labels
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    labels:
-                                        type: array
-                                        items:
-                                            type: string
-                                            minItems: 2
-                                            uniqueItems: false
-                            chord:
-                                type: object
-                                description: The array :code:`values` specifies the chord along blade span.
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/length"
+                            grid:
+                                $ref: "#/definitions/distributed_data/grid_nd"
+                            x:
+                                $ref: "#/definitions/distributed_data/length"
+                            y:
+                                $ref: "#/definitions/distributed_data/length"
+                            z:
+                                $ref: "#/definitions/distributed_data/length"
+                    outer_shape:
+                        type: object
+                        description: :code:`outer_shape` consists of a dictionary containing the data describing the outer shape of the blade.
+                        required:
+                            - grid
+                            - twist
+                            - chord
+                            - rthick
+                            - section_offset_x
+                            - airfoils
+                        properties:
+                            grid:
+                                $ref: "#/definitions/distributed_data/grid_nd"
                             twist:
-                                type: object
-                                description: The array :code:`values` specifies the aerodynamic twist along blade span. Twist is generally positive toward blade root, and may become negative toward blade tip.
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/angle"
-                            section_offset_x:
-                                type: object
-                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the distance in meters along the chordline from the reference axis to the leading edge. 0 means that the airfoil is pinned at the leading edge, a positive offset means that the leading edge is upstream of the reference axis in local chordline coordinates, and a negative offset that the leading edge aft of the reference axis.
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/length"
-                            section_offset_y:
-                                type: object
-                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the chordline normal distance in meters from the reference axis. 0 means that the reference axis lies on the airfoil chordline, a positive offset means that the chordline is shifted in the direction of the suction side relative to the reference axis, and a negative offset that the section is shifted in the direction of the pressure side of the airfoil.
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/length"
+                                description: Aerodynamic twist along blade span in degrees. Twist is generally positive toward blade root, and may become negative toward blade tip.
+                                $ref: "#/definitions/distributed_data/angle"
+                            chord:
+                                description: Chord in meters along blade span.
+                                $ref: "#/definitions/distributed_data/length"
                             rthick:
-                                type: object
-                                description: This array has recently been added to windIO to overcome the uncertainty in the interpolated distribution of relative thickness along blade span. It should match the field :code:`airfoil_position`
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/grid_nd"
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
-                    elastic_properties_mb:
+                                description: Relative thickness, expressed between 0 and 1, along blade span.
+                                $ref: "#/definitions/distributed_data/grid_nd"
+                            section_offset_x:
+                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the distance in meters along the chordline from the reference axis to the leading edge. 0 means that the airfoil is pinned at the leading edge, a positive offset means that the leading edge is upstream of the reference axis in local chordline coordinates, and a negative offset that the leading edge aft of the reference axis.
+                                $ref: "#/definitions/distributed_data/length"
+                            section_offset_y:
+                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the chordline normal distance in meters from the reference axis. 0 means that the reference axis lies on the airfoil chordline, a positive offset means that the chordline is shifted in the direction of the suction side relative to the reference axis, and a negative offset that the section is shifted in the direction of the pressure side of the airfoil.
+                                $ref: "#/definitions/distributed_data/length"
+                            airfoils:
+                                type: array
+                                description: List of airfoils and corresponding polars adopted along blade span. The airfoil positions must correspond to the :code:`rthick` field. For each airfoil, their spanwise position can be defined (if not defined :code:`rthick` will be used, if both are defined :code:`rthick` should dominate). Also, for each airfoil different sets of polars can be defined with an associated weight. The array of weights must sum up to 1. The weights help blend different polar sets, for example a 70% free transition / 30% fully turbulent.
+                                items:
+                                    type: object
+                                    properties:
+                                        name:
+                                            type: string
+                                            description: Name of the airfoil, must be available in the airfoil database
+                                        spanwise_position:
+                                            type: number
+                                            description: Spanwise position defined between 0 (root) and 1 (tip) along the curved reference axis.
+                                            minimum: 0.
+                                            maximum: 1.
+                                        configuration:
+                                            type: array
+                                            description: Tags corresponding to polar sets defined for this airfoil
+                                            items:
+                                                type: string
+                                        weight:
+                                            type: array
+                                            description: Weights, defined between 0 and 1 and summing up to 1, defining the blending of the different sets of polars
+                                            items:
+                                                type: number
+                                                minimum: 0.
+                                                maximum: 1.
+
+
+
+                    elastic_properties:
                         $ref: "#/definitions/beam"
-                    internal_structure_2d_fem:
+                    structure:
                         type: object
                         default: {}
-                        description: The field :code:`internal_structure_2d_fem` contains the data to describe the internal structure of standard wind turbine blades. This is a fairly sophisticated process and the ontology proposed in this work supports different definitions. On the top level, the field :code:`internal_structure_2d_fem` has three sub-components, namely the :code:`reference_axis`, which is usually defined equal to the :code:`reference_axis` in the field :code:`outer_shape_bem`, the :code:`webs`, where the positions of the shear webs are defined, and the :code:`layers`, which describe all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position in the two-dimensional sections. Recently, the fields :code:`joint` and :code:`root` were added to support blades that are segmented spanwise and details about the blade root bolting.
+                        description: The field :code:`structure` contains the data to describe the internal structure of standard wind turbine blades. This is a fairly sophisticated process and the ontology proposed in this work supports different definitions. On the top level, the field :code:`structure` has three sub-components, namely the :code:`reference_axis`, which is usually defined equal to the :code:`reference_axis` in the field :code:`outer_shape`, the :code:`webs`, where the positions of the shear webs are defined, and the :code:`layers`, which describe all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position in the two-dimensional sections. Recently, the fields :code:`joint` and :code:`root` were added to support blades that are segmented spanwise and details about the blade root bolting.
                         required:
                             - reference_axis
                             - layers
@@ -405,13 +398,13 @@ properties:
                         units: none
                         minimum: 0
                         maximum: 2.
-                    elastic_properties_mb:
+                    elastic_properties:
                         $ref: "#/definitions/point_mass"
                         description: Point mass modeling the full hub system, which includes the hub, the spinner, the blade bearings, the pitch actuators, the cabling, ....
             drivetrain:
                 type: object
                 properties:
-                    outer_shape_bem:
+                    outer_shape:
                         type: object
                         description: Geometrical metrics describing the drivetrain. Currently, these are inputs to WISDEM specific drivetrain sizing tool, DrivetrainSE
                         properties:
@@ -518,7 +511,7 @@ properties:
                                     uniqueItems: false
                                     minimum: 0
                                     maximum: 6
-                            elastic_properties_mb:
+                            elastic_properties:
                                 $ref: "#/definitions/point_mass"
                                 description: Point mass modeling the gearbox
                     lss:
@@ -556,7 +549,7 @@ properties:
                                 type: string
                                 description: Material name identifier
                                 default: steel
-                            elastic_properties_mb:
+                            elastic_properties:
                                 $ref: "#/definitions/beam"
                                 description: Beam modelling the low speed shaft
                     hss:
@@ -594,7 +587,7 @@ properties:
                                 type: string
                                 description: Material name identifier
                                 default: steel
-                            elastic_properties_mb:
+                            elastic_properties:
                                 $ref: "#/definitions/beam"
                                 description: Beam modelling the high speed shaft
                     nose:
@@ -621,7 +614,7 @@ properties:
                                     minItems: 2
                                     maxItems: 2
                                     default: 0.1
-                            elastic_properties_mb:
+                            elastic_properties:
                                 $ref: "#/definitions/beam"
                                 description: Beam modelling the nose
                     bedplate:
@@ -707,7 +700,7 @@ properties:
                                 type: boolean
                                 description: If power electronics are located uptower (True) or at tower base (False)
                                 default: True                  
-                            elastic_properties_mb:
+                            elastic_properties:
                                 $ref: "#/definitions/point_mass"
                                 description: Point mass modeling the assembly of brake, hvac, converter, transformer, and main bearings
                     generator:
@@ -1202,17 +1195,17 @@ properties:
                         #   description: Words
                         
 
-                        elastic_properties_mb:
+                        elastic_properties:
                                 $ref: "#/definitions/point_mass"
                                 description: Point mass modeling the generator
             tower:
                 type: object
                 description: Data describing the wind turbine tower.
                 required:
-                    - outer_shape_bem
-                    - internal_structure_2d_fem
+                    - outer_shape
+                    - structure
                 properties:
-                    outer_shape_bem:
+                    outer_shape:
                         type: object
                         required:
                             - reference_axis
@@ -1242,9 +1235,9 @@ properties:
                                         $ref: "#/definitions/distributed_data/grid_nd"
                                     values:
                                         $ref: "#/definitions/distributed_data/grid_nd"
-                    elastic_properties_mb:
+                    elastic_properties:
                         $ref: "#/definitions/beam"
-                    internal_structure_2d_fem:
+                    structure:
                         type: object
                         required:
                             - reference_axis
@@ -1291,8 +1284,8 @@ properties:
             monopile:
                 type: object
                 required:
-                    - outer_shape_bem
-                    - internal_structure_2d_fem
+                    - outer_shape
+                    - structure
                 optional:
                     - transition_piece_mass
                     - transition_piece_cost
@@ -1316,7 +1309,7 @@ properties:
                         units: kg
                         minimum: 0.0
                         default: 0.0
-                    outer_shape_bem:
+                    outer_shape:
                         type: object
                         required:
                             - reference_axis
@@ -1364,9 +1357,9 @@ properties:
                                         $ref: "#/definitions/distributed_data/grid_nd"
                                     values:
                                         $ref: "#/definitions/distributed_data/grid_nd"
-                    elastic_properties_mb:
+                    elastic_properties:
                         $ref: "#/definitions/beam"
-                    internal_structure_2d_fem:
+                    structure:
                         type: object
                         required:
                             - reference_axis
@@ -2169,7 +2162,7 @@ properties:
                                     minimum: 0.0
     airfoils:
         type: array
-        description: Database of airfoils. windIO describes the airfoils in terms of coordinates, polars, and unsteady aerodynamic coefficients. The yaml entry airfoils consists of a list of elements. For each set of coordinates, multiple sets of polars and parameters can co-exist. Note that the airfoils listed in this database are not all necessarily used in the blade. Only the ones called in :code:`airfoil_position' within :code:`outer_shape_bem` of the :code:`component` :code:`blade` will actually be loaded to model the blade.
+        description: Database of airfoils. windIO describes the airfoils in terms of coordinates, polars, and unsteady aerodynamic coefficients. The yaml entry airfoils consists of a list of elements. For each set of coordinates, multiple sets of polars and parameters can co-exist. Note that the airfoils listed in this database are not all necessarily used in the blade. Only the ones called in :code:`airfoil_position' within :code:`outer_shape` of the :code:`component` :code:`blade` will actually be loaded to model the blade.
         items:
             # additionalProperties: True
             type: object
@@ -2205,7 +2198,7 @@ properties:
                                 minimum: -1.0
                                 maximum: 1.0
                                 uniqueItems: false
-                relative_thickness:
+                rthick:
                     type: number
                     units: none
                     minimum: 0
@@ -2221,191 +2214,196 @@ properties:
                     type: array
                     description: Different sets of polars at varying conditions. 
                     items:
-                        type: object
-                        description: List of one or more sets of polars for the airfoil. The field :code:`polars` must include the sub-fields :code:`configuration`, :code:`re`, :code:`cl`, :code:`cd`, and :code:`cm`. Parameters characterizing the unsteady aerodynamics are optional.
-                        required:
-                            - configuration
-                            - re
-                            - cl
-                            - cd
-                            - cm
-                        properties:
-                            configuration:
-                                type: string
-                                description: Text to identify the setup for the definition of the polars
-                            re:
-                                type: number
-                                description: Reynolds number of the polars
-                                minimum: 0
-                            cl:
+                        configuration:
+                            type: string
+                            description: Tag to identify the set polars that can be called in :code:`blade`
+                        description:
+                            type: string
+                            description: Text to identify the setup for the definition of the polars
+                        sets:
+                            type: array
+                            description: Sets of polars. For each set, Reynolds number, lift, drag, and moment coefficients must be provided. Optionally, unsteady aerodynamic coefficients can be listed.
+                            items:
                                 type: object
-                                description: Lift coefficient as a function of angle of attack (deg)
                                 required:
-                                    - grid
-                                    - values
+                                    - re
+                                    - cl
+                                    - cd
+                                    - cm
                                 properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_aoa"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/polar_coeff"
-                            cd:
-                                type: object
-                                description: Drag coefficient as a function of angle of attack (deg)
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_aoa"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/polar_coeff"
-                            cm:
-                                type: object
-                                description: Moment coefficient as a function of angle of attack (deg)
-                                required:
-                                    - grid
-                                    - values
-                                properties:
-                                    grid:
-                                        $ref: "#/definitions/distributed_data/grid_aoa"
-                                    values:
-                                        $ref: "#/definitions/distributed_data/polar_coeff"
-                            aoa0:
-                                type: number
-                                description: 0-lift angle of attack
-                                units: deg
-                            aoa1:
-                                type: number
-                                description: Angle of attack at f=0.7, (approximately the stall angle) for AOA>alpha0
-                                units: deg
-                            aoa2:
-                                type: number
-                                description: Angle of attack at f=0.7, (approximately the stall angle) for AOA<alpha0
-                                units: deg
-                            eta_e:
-                                type: number
-                                description: Recovery factor in the range [0.85 - 0.95]
-                                default: 1.
-                            c_nalpha:
-                                type: number
-                                description: Slope of the 2D normal force coefficient curve
-                                units: 1/rad
-                                minimum: 0.
-                            T_f0:
-                                type: number
-                                description: Initial value of the time constant associated with Df in the expression of Df and f. [default = 3]
-                                default: 3.
-                                minimum: 0.
-                            T_V0:
-                                type: number
-                                description: Initial value of the time constant associated with the vortex lift decay process; it is used in the expression of Cvn. It depends on Re,M, and airfoil class. [default = 6]
-                                default: 6.
-                                minimum: 0.
-                            T_p:
-                                type: number
-                                description: Boundary-layer,leading edge pressure gradient time constant in the expression of Dp. It should be tuned based on airfoil experimental data. [default = 1.7]
-                                default: 1.7
-                                minimum: 0.
-                            T_VL:
-                                type: number
-                                description: Initial value of the time constant associated with the vortex advection process; it represents the non-dimensional time in semi-chords, needed for a vortex to travel from LE to trailing edge (TE); it is used in the expression of Cvn. It depends on Re, M (weakly), and airfoil. [valid range = 6 - 13, default = 11]
-                                default: 11
-                                minimum: 6.
-                                minimum: 13.
-                            b1:
-                                type: number
-                                description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.14]
-                                default: 0.14
-                            b2:
-                                type: number
-                                description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.53]
-                                default: 0.53
-                            b5:
-                                type: number
-                                description: Constant in the expression of K'''_q,cm_q^nc, and k_m,q.  [from  experimental results, defaults to 5]
-                                default: 5.
-                            A1:
-                                type: number
-                                description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.3]
-                                default: 0.3
-                            A2:
-                                type: number
-                                description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.7]
-                                default: 0.7
-                            A5:
-                                type: number
-                                description: Constant in the expression of K'''_q,cm_q^nc, and k_m,q. [from experimental results, defaults to 1]
-                                default: 1.
-                            S1:
-                                type: number
-                                description: Constant in the f curve best-fit for alpha0<=AOA<=alpha1; by definition it depends on the airfoil.
-                                default: 0.
-                            S2:
-                                type: number
-                                description: Constant in the f curve best-fit for AOA> alpha1; by definition it depends on the airfoil.
-                                default: 0.
-                            S3:
-                                type: number
-                                description: Constant in the f curve best-fit for alpha2<=AOA< alpha0; by definition it depends on the airfoil.
-                                default: 0.
-                            S4:
-                                type: number
-                                description: Constant in the f curve best-fit for AOA< alpha2; by definition it depends on the airfoil.
-                                default: 0.
-                            cn1:
-                                type: number
-                                description: Critical value of C0n at leading edge separation. It should be extracted from airfoil data at a given Mach and Reynolds number. It can be calculated from the static value of Cn at either the break in the pitching moment or the loss of chord force at the onset of stall. It is close to the condition of maximum lift of the airfoil at low Mach numbers.
-                            cn2:
-                                type: number
-                                description: As Cn1 for negative AOAs
-                            St_sh:
-                                type: number
-                                description: Strouhal's shedding frequency constant. [default = 0.19]
-                                default: 0.19
-                            cd0:
-                                type: number
-                                description: 2D drag coefficient value at 0-lift.
-                            cm0:
-                                type: number
-                                description: 2D pitching moment coefficient about 1/4-chord location, at 0-lift, positive if nose up.
-                                default: 0.
-                            k0:
-                                type: number
-                                description: Constant in the \hat(x)_cp curve best-fit; = (\hat(x)_AC-0.25).
-                                default: 0.
-                            k1:
-                                type: number
-                                description: Constant in the \hat(x)_cp curve best-fit.
-                                default: 0.
-                            k2:
-                                type: number
-                                description: Constant in the \hat(x)_cp curve best-fit.
-                                default: 0.
-                            k3:
-                                type: number
-                                description: Constant in the \hat(x)_cp curve best-fit.
-                                default: 0.
-                            k1_hat:
-                                type: number
-                                description: Constant in the expression of Cc due to leading edge vortex effects.
-                                default: 0.
-                            x_cp_bar:
-                                type: number
-                                description: Constant in the expression of \hat(x)_cp^v. [default = 0.2]
-                                default: 0.2
-                            UACutout:
-                                type: number
-                                description: Angle of attack above which unsteady aerodynamics are disabled (deg). [Specifying the string "Default" sets UACutout to 45 degrees]
-                                units: deg
-                                default: 45
-                            filtCutOff:
-                                type: number
-                                description: Cut-off frequency (-3 dB corner frequency) for low-pass filtering the AoA input to UA, as well as the 1st and 2nd derivatives (Hz) [default = 20]
-                                units: Hz
-                                default: 20
+                                    re:
+                                        type: number
+                                        description: Reynolds number of the polars
+                                        minimum: 0
+                                    cl:
+                                        type: object
+                                        description: Lift coefficient as a function of angle of attack (deg)
+                                        required:
+                                            - grid
+                                            - values
+                                        properties:
+                                            grid:
+                                                $ref: "#/definitions/distributed_data/grid_aoa"
+                                            values:
+                                                $ref: "#/definitions/distributed_data/polar_coeff"
+                                    cd:
+                                        type: object
+                                        description: Drag coefficient as a function of angle of attack (deg)
+                                        required:
+                                            - grid
+                                            - values
+                                        properties:
+                                            grid:
+                                                $ref: "#/definitions/distributed_data/grid_aoa"
+                                            values:
+                                                $ref: "#/definitions/distributed_data/polar_coeff"
+                                    cm:
+                                        type: object
+                                        description: Moment coefficient as a function of angle of attack (deg)
+                                        required:
+                                            - grid
+                                            - values
+                                        properties:
+                                            grid:
+                                                $ref: "#/definitions/distributed_data/grid_aoa"
+                                            values:
+                                                $ref: "#/definitions/distributed_data/polar_coeff"
+                                    aoa0:
+                                        type: number
+                                        description: 0-lift angle of attack
+                                        units: deg
+                                    aoa1:
+                                        type: number
+                                        description: Angle of attack at f=0.7, (approximately the stall angle) for AOA>alpha0
+                                        units: deg
+                                    aoa2:
+                                        type: number
+                                        description: Angle of attack at f=0.7, (approximately the stall angle) for AOA<alpha0
+                                        units: deg
+                                    eta_e:
+                                        type: number
+                                        description: Recovery factor in the range [0.85 - 0.95]
+                                        default: 1.
+                                    c_nalpha:
+                                        type: number
+                                        description: Slope of the 2D normal force coefficient curve
+                                        units: 1/rad
+                                        minimum: 0.
+                                    T_f0:
+                                        type: number
+                                        description: Initial value of the time constant associated with Df in the expression of Df and f. [default = 3]
+                                        default: 3.
+                                        minimum: 0.
+                                    T_V0:
+                                        type: number
+                                        description: Initial value of the time constant associated with the vortex lift decay process; it is used in the expression of Cvn. It depends on Re,M, and airfoil class. [default = 6]
+                                        default: 6.
+                                        minimum: 0.
+                                    T_p:
+                                        type: number
+                                        description: Boundary-layer,leading edge pressure gradient time constant in the expression of Dp. It should be tuned based on airfoil experimental data. [default = 1.7]
+                                        default: 1.7
+                                        minimum: 0.
+                                    T_VL:
+                                        type: number
+                                        description: Initial value of the time constant associated with the vortex advection process; it represents the non-dimensional time in semi-chords, needed for a vortex to travel from LE to trailing edge (TE); it is used in the expression of Cvn. It depends on Re, M (weakly), and airfoil. [valid range = 6 - 13, default = 11]
+                                        default: 11
+                                        minimum: 6.
+                                        minimum: 13.
+                                    b1:
+                                        type: number
+                                        description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.14]
+                                        default: 0.14
+                                    b2:
+                                        type: number
+                                        description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.53]
+                                        default: 0.53
+                                    b5:
+                                        type: number
+                                        description: Constant in the expression of K'''_q,cm_q^nc, and k_m,q.  [from  experimental results, defaults to 5]
+                                        default: 5.
+                                    A1:
+                                        type: number
+                                        description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.3]
+                                        default: 0.3
+                                    A2:
+                                        type: number
+                                        description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.7]
+                                        default: 0.7
+                                    A5:
+                                        type: number
+                                        description: Constant in the expression of K'''_q,cm_q^nc, and k_m,q. [from experimental results, defaults to 1]
+                                        default: 1.
+                                    S1:
+                                        type: number
+                                        description: Constant in the f curve best-fit for alpha0<=AOA<=alpha1; by definition it depends on the airfoil.
+                                        default: 0.
+                                    S2:
+                                        type: number
+                                        description: Constant in the f curve best-fit for AOA> alpha1; by definition it depends on the airfoil.
+                                        default: 0.
+                                    S3:
+                                        type: number
+                                        description: Constant in the f curve best-fit for alpha2<=AOA< alpha0; by definition it depends on the airfoil.
+                                        default: 0.
+                                    S4:
+                                        type: number
+                                        description: Constant in the f curve best-fit for AOA< alpha2; by definition it depends on the airfoil.
+                                        default: 0.
+                                    cn1:
+                                        type: number
+                                        description: Critical value of C0n at leading edge separation. It should be extracted from airfoil data at a given Mach and Reynolds number. It can be calculated from the static value of Cn at either the break in the pitching moment or the loss of chord force at the onset of stall. It is close to the condition of maximum lift of the airfoil at low Mach numbers.
+                                    cn2:
+                                        type: number
+                                        description: As Cn1 for negative AOAs
+                                    St_sh:
+                                        type: number
+                                        description: Strouhal's shedding frequency constant. [default = 0.19]
+                                        default: 0.19
+                                    cd0:
+                                        type: number
+                                        description: 2D drag coefficient value at 0-lift.
+                                    cm0:
+                                        type: number
+                                        description: 2D pitching moment coefficient about 1/4-chord location, at 0-lift, positive if nose up.
+                                        default: 0.
+                                    k0:
+                                        type: number
+                                        description: Constant in the \hat(x)_cp curve best-fit; = (\hat(x)_AC-0.25).
+                                        default: 0.
+                                    k1:
+                                        type: number
+                                        description: Constant in the \hat(x)_cp curve best-fit.
+                                        default: 0.
+                                    k2:
+                                        type: number
+                                        description: Constant in the \hat(x)_cp curve best-fit.
+                                        default: 0.
+                                    k3:
+                                        type: number
+                                        description: Constant in the \hat(x)_cp curve best-fit.
+                                        default: 0.
+                                    k1_hat:
+                                        type: number
+                                        description: Constant in the expression of Cc due to leading edge vortex effects.
+                                        default: 0.
+                                    x_cp_bar:
+                                        type: number
+                                        description: Constant in the expression of \hat(x)_cp^v. [default = 0.2]
+                                        default: 0.2
+                                    UACutout:
+                                        type: number
+                                        description: Angle of attack above which unsteady aerodynamics are disabled (deg). [Specifying the string "Default" sets UACutout to 45 degrees]
+                                        units: deg
+                                        default: 45
+                                    filtCutOff:
+                                        type: number
+                                        description: Cut-off frequency (-3 dB corner frequency) for low-pass filtering the AoA input to UA, as well as the 1st and 2nd derivatives (Hz) [default = 20]
+                                        units: Hz
+                                        default: 20
     materials:
         type: array
-        description: Database of the materials. The schema enforces that the fields :code:`name`, :code:`orth`, :code:`rho`, :code:`E`, and :code:`nu` are specified. For composites, direction 1 is aligned with the main fiber direction, direction 2 is in the plane transverse to the fibers, and direction 3 is perspendicular to the laminate plane. Note that fiber angles are specified in :code:`internal_structure_2d_fem` of the :code:`component` :code:`blade`.
+        description: Database of the materials. The schema enforces that the fields :code:`name`, :code:`orth`, :code:`rho`, :code:`E`, and :code:`nu` are specified. For composites, direction 1 is aligned with the main fiber direction, direction 2 is in the plane transverse to the fibers, and direction 3 is perspendicular to the laminate plane. Note that fiber angles are specified in :code:`structure` of the :code:`component` :code:`blade`.
         items:
             type: object
             required:
@@ -3405,7 +3403,6 @@ definitions:
     distributed_data:
         grid_nd:
             type: array
-            description: Grid along a beam expressed non-dimensional from 0 to 1
             default: [0.0, 1.0]
             items:
                 type: number
@@ -3444,7 +3441,6 @@ definitions:
                 uniqueItems: false
         length:
             type: array
-            description: Length quantity described along a beam, expressed in meter
             default: [0.0, 0.0]
             items:
                 type: number
@@ -3471,7 +3467,6 @@ definitions:
                 uniqueItems: false
         angle:
             type: array
-            description: Angle quantity along a beam, expressed in deg
             default: [0.0, 0.0]
             items:
                 type: number
@@ -3497,17 +3492,6 @@ definitions:
                         fixed:
                             type: string
                             description: Name of the layer to lock the edge
-        offset:
-            type: object
-            description: Dimensional offset in respect to the reference axis along the x axis, which is the chord line rotated by a user-defined angle. Negative values move the midpoint towards the leading edge, positive towards the trailing edge
-            required:
-                - grid
-                - values
-            properties:
-                grid:
-                    $ref: "#/definitions/distributed_data/grid_nd"
-                values:
-                    $ref: "#/definitions/distributed_data/length"
         rotation:
             type: object
             description: The rotation defines the angle between the chord line and the y axis and it has the opposite sign of the twist. For shear webs perpendicular to the chord line in the section(s) where twist is zero, it is easiest to simply use the keyword fixed :code:`twist`. Blades with straight shear webs will always have the field rotation equal to the twist plus/minus a constant angle and, assuming a non-swept blade (zero values in the blade y reference axis), a linear field offset.
@@ -3559,27 +3543,12 @@ definitions:
                             $ref: "#/definitions/distributed_data/length"
     beam:
         type: object
-        description: The equivalent elastic properties of a beam are defined in :code:`elastic_properties_mb`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia.
+        description: The equivalent elastic properties of a beam are defined in :code:`elastic_properties`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia.
         required:
-            - reference_axis
-            - twist
             - stiffness_matrix
             - inertia_matrix
             - structural_damping
         properties:
-            reference_axis:
-                $ref: "#/definitions/distributed_data/axis_coordinates"
-            twist:
-                type: object
-                description: The array :code:`values` specifies the structural twist along blade span.
-                required:
-                    - grid
-                    - values
-                properties:
-                    grid:
-                        $ref: "#/definitions/distributed_data/grid_nd"
-                    values:
-                        $ref: "#/definitions/distributed_data/angle"
             stiffness_matrix:
                 type: object
                 required:
