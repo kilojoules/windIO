@@ -10,7 +10,6 @@ description: >-
 required:
   - name
   - wind_resource
-additionalProperties: false
 
 
 # PROPERTIES
@@ -25,7 +24,6 @@ properties:
     title: Wind resource
     type: object
     decription: Resource where data optionally depend on wind_speed, wind_direction and/or position
-    additionalProperties: false
     oneOf:
         - required: 
           - probability
