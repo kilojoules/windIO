@@ -277,7 +277,7 @@ properties:
                                             $ref: "#/definitions/distributed_data/nd_arc_position"
                                         rotation:
                                             $ref: "#/definitions/distributed_data/rotation"
-                                        offset_y_ref_axis:
+                                        offset_y_reference_axis:
                                             $ref: "#/definitions/distributed_data/offset"
                             layers:
                                 type: array
@@ -356,7 +356,7 @@ properties:
                                             $ref: "#/definitions/distributed_data/nd_arc_position"
                                         rotation:
                                             $ref: "#/definitions/distributed_data/rotation"
-                                        offset_y_ref_axis:
+                                        offset_y_reference_axis:
                                             $ref: "#/definitions/distributed_data/offset"
                             joint:
                                 type: object
@@ -2347,7 +2347,7 @@ properties:
                                         description: Initial value of the time constant associated with the vortex advection process; it represents the non-dimensional time in semi-chords, needed for a vortex to travel from LE to trailing edge (TE); it is used in the expression of Cvn. It depends on Re, M (weakly), and airfoil. [valid range = 6 - 13, default = 11]
                                         default: 11
                                         minimum: 6.
-                                        minimum: 13.
+                                        maximum: 13.
                                     b1:
                                         type: number
                                         description: Constant in the expression of phi_alpha^c and phi_q^c.  This value is relatively insensitive for thin airfoils, but may be different for turbine airfoils. [from experimental results, defaults to 0.14]

@@ -34,33 +34,33 @@ class v1p0_to_v2p0:
         windIO.write_yaml(dict_v2p0, self.filename_v2p0)
 
     def convert_blade(self, dict_v2p0):
-        dict_v2p0 = self.convert_blade_ref_axis(dict_v2p0)
+        dict_v2p0 = self.convert_blade_reference_axis(dict_v2p0)
         dict_v2p0 = self.convert_blade_outer_shape(dict_v2p0)
         dict_v2p0 = self.convert_blade_structure(dict_v2p0)
         if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
             dict_v2p0 = self.convert_elastic_properties(dict_v2p0)
         return dict_v2p0
     
-    def convert_blade_ref_axis(self, dict_v2p0):
+    def convert_blade_reference_axis(self, dict_v2p0):
         
         # New common ref axis for all blade subfields
-        dict_v2p0["components"]["blade"]["ref_axis"] = {}
-        grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["grid"]
-        grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["grid"]
-        grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["grid"]
+        dict_v2p0["components"]["blade"]["reference_axis"] = {}
+        grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["grid"]
+        grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["grid"]
+        grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["grid"]
         common_grid = list(set(grid_x + grid_y + grid_z))
-        values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["values"]
-        values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["values"]
-        values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["values"]
+        values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["values"]
+        values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["values"]
+        values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["values"]
         # Take grid from z as common grid and interpolate linearly
-        dict_v2p0["components"]["blade"]["ref_axis"]["grid"] = common_grid
-        dict_v2p0["components"]["blade"]["ref_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
-        dict_v2p0["components"]["blade"]["ref_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
-        dict_v2p0["components"]["blade"]["ref_axis"]["z"] = np.interp(common_grid, grid_z, values_z)
+        dict_v2p0["components"]["blade"]["reference_axis"]["grid"] = common_grid
+        dict_v2p0["components"]["blade"]["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
+        dict_v2p0["components"]["blade"]["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
+        dict_v2p0["components"]["blade"]["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z)
         # Pop older ref axis
-        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("ref_axis")
-        dict_v2p0["components"]["blade"]["internal_structure_2d_fem"].pop("ref_axis")
-        dict_v2p0["components"]["blade"]["elastic_properties_mb"].pop("ref_axis")
+        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("reference_axis")
+        dict_v2p0["components"]["blade"]["internal_structure_2d_fem"].pop("reference_axis")
+        dict_v2p0["components"]["blade"]["elastic_properties_mb"].pop("reference_axis")
 
         return dict_v2p0
     
@@ -98,21 +98,21 @@ class v1p0_to_v2p0:
         dict_v2p0["components"]["blade"]["structure"] = dict_v2p0["components"]["blade"]["internal_structure_2d_fem"]
         dict_v2p0["components"]["blade"].pop("internal_structure_2d_fem")
         # Convert field `rotation` from rad to deg when defined in webs/layers
-        # Also, switch label offset_y_pa to offset_y_ref_axis
+        # Also, switch label offset_y_pa to offset_y_reference_axis
         blade_struct = dict_v2p0["components"]["blade"]["structure"]
         for iweb in range(len(blade_struct["webs"])):
             if "rotation" in blade_struct["webs"][iweb]:
                 rotation_rad = blade_struct["webs"][iweb]["rotation"]["values"]
                 blade_struct["webs"][iweb]["rotation"]["values"] = np.rad2deg(rotation_rad)
             if "offset_y_pa" in blade_struct["webs"][iweb]:
-                blade_struct["webs"][iweb]["offset_y_ref_axis"] = blade_struct["webs"][iweb]["offset_y_pa"]
+                blade_struct["webs"][iweb]["offset_y_reference_axis"] = blade_struct["webs"][iweb]["offset_y_pa"]
                 blade_struct["webs"][iweb].pop("offset_y_pa")
         for ilayer in range(len(blade_struct["layers"])):
             if "rotation" in blade_struct["layers"][ilayer]:
                 rotation_rad = blade_struct["layers"][ilayer]["rotation"]["values"]
                 blade_struct["layers"][ilayer]["rotation"]["values"] = np.rad2deg(rotation_rad)
             if "offset_y_pa" in blade_struct["layers"][ilayer]:
-                blade_struct["layers"][ilayer]["offset_y_ref_axis"] = blade_struct["layers"][ilayer]["offset_y_pa"]
+                blade_struct["layers"][ilayer]["offset_y_reference_axis"] = blade_struct["layers"][ilayer]["offset_y_pa"]
                 blade_struct["layers"][ilayer].pop("offset_y_pa")
         return dict_v2p0
 
