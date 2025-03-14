@@ -31,7 +31,7 @@ class v1p0_to_v2p0:
         dict_v2p0 = self.convert_controls(dict_v2p0)
 
         # Print out
-        windIO.write_yaml(dict_v2p0, self.filename_v2p0)
+        windIO.yaml.write_yaml(dict_v2p0, self.filename_v2p0)
 
     def convert_blade(self, dict_v2p0):
         dict_v2p0 = self.convert_blade_reference_axis(dict_v2p0)
@@ -56,11 +56,7 @@ class v1p0_to_v2p0:
         dict_v2p0["components"]["blade"]["reference_axis"]["grid"] = common_grid
         dict_v2p0["components"]["blade"]["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
         dict_v2p0["components"]["blade"]["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
-        dict_v2p0["components"]["blade"]["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z)
-        # Pop older ref axis
-        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("reference_axis")
-        dict_v2p0["components"]["blade"]["internal_structure_2d_fem"].pop("reference_axis")
-        dict_v2p0["components"]["blade"]["elastic_properties_mb"].pop("reference_axis")
+        dict_v2p0["components"]["blade"]["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z)     
 
         return dict_v2p0
     
@@ -91,6 +87,10 @@ class v1p0_to_v2p0:
         # Convert twist from rad to deg
         twist_rad = dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"]
         dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"] = np.rad2deg(twist_rad)
+
+        # Pop older ref axis
+        dict_v2p0["components"]["blade"]["outer_shape"].pop("reference_axis")
+
         return dict_v2p0
     
     def convert_blade_structure(self, dict_v2p0):
@@ -114,6 +114,10 @@ class v1p0_to_v2p0:
             if "offset_y_pa" in blade_struct["layers"][ilayer]:
                 blade_struct["layers"][ilayer]["offset_y_reference_axis"] = blade_struct["layers"][ilayer]["offset_y_pa"]
                 blade_struct["layers"][ilayer].pop("offset_y_pa")
+        
+        # Pop older ref axis
+        blade_struct.pop("reference_axis")
+
         return dict_v2p0
 
     def convert_elastic_properties(self, dict_v2p0):
@@ -177,6 +181,8 @@ class v1p0_to_v2p0:
         blade_beam["structural_damping"]["mu"] = np.zeros(6)
 
         blade_beam.pop("twist")
+        # Pop older ref axis
+        blade_beam.pop("reference_axis")
         
         return dict_v2p0
 
