@@ -93,8 +93,10 @@ class v1p0_to_v2p0:
 
         # Restructure how airfoil spanwise positions are defined
         n_af = len(blade_os["airfoil_position"]["grid"])
-        blade_os["airfoils"] = [{}] * n_af
+        blade_os["airfoils"] = [{}]
         for i in range(n_af):
+            if i>0:
+                blade_os["airfoils"].append({})
             blade_os["airfoils"][i]["name"] = blade_os["airfoil_position"]["labels"][i]
             blade_os["airfoils"][i]["spanwise_position"] = blade_os["airfoil_position"]["grid"][i]
             blade_os["airfoils"][i]["configuration"] = ["default"]
@@ -486,7 +488,12 @@ class v1p0_to_v2p0:
 
 if __name__ == "__main__":
     
-    filename_v1p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/test/turbine/v1p0/IEA-15-240-RWT.yaml"
+    from pathlib import Path
+
+    turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
+
+    path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"    
     filename_v2p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/test/turbine/IEA-15-240-RWT.yaml"
-    converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
+    
+    converter = v1p0_to_v2p0(path2yaml, filename_v2p0)
     converter.convert()
