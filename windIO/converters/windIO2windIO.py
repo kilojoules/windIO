@@ -34,15 +34,47 @@ class v1p0_to_v2p0:
         windIO.write_yaml(dict_v2p0, self.filename_v2p0)
 
     def convert_blade(self, dict_v2p0):
+        dict_v2p0 = self.convert_blade_ref_axis(dict_v2p0)
         dict_v2p0 = self.convert_blade_outer_shape(dict_v2p0)
         dict_v2p0 = self.convert_blade_structure(dict_v2p0)
         if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
             dict_v2p0 = self.convert_elastic_properties(dict_v2p0)
         return dict_v2p0
     
+    def convert_blade_ref_axis(self, dict_v2p0):
+        
+        # New common ref axis for all blade subfields
+        dict_v2p0["components"]["blade"]["ref_axis"] = {}
+        grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["grid"]
+        grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["grid"]
+        grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["grid"]
+        values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["values"]
+        values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["values"]
+        values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["values"]
+        # Take grid from z as common grid and interpolate linearly
+        dict_v2p0["components"]["blade"]["ref_axis"]["grid"] = grid_z
+        dict_v2p0["components"]["blade"]["ref_axis"]["x"] = np.interp(grid_z, grid_x, values_x)
+        dict_v2p0["components"]["blade"]["ref_axis"]["y"] = np.interp(grid_z, grid_y, values_y)
+        dict_v2p0["components"]["blade"]["ref_axis"]["z"] = values_z
+        # Pop older ref axis
+        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("ref_axis")
+        dict_v2p0["components"]["blade"]["internal_structure_2d_fem"].pop("ref_axis")
+        dict_v2p0["components"]["blade"]["elastic_properties_mb"].pop("ref_axis")
+
+        return dict_v2p0
+    
     def convert_blade_outer_shape(self, dict_v2p0):
-                # Switch from pitch_axis to section_offset_x
+        # Start by changing name
+        dict_v2p0["components"]["blade"]["outer_shape"] = dict_v2p0["components"]["blade"]["outer_shape_bem"]
+        dict_v2p0["components"]["blade"].pop("outer_shape_bem")
+
+        # Now take common grid from chord
+        grid_chord = dict_v2p0["components"]["blade"]["outer_shape"]["chord"]["grid"]
+        dict_v2p0["components"]["blade"]["outer_shape"]["grid"] = grid_chord
+        
+        # Switch from pitch_axis to section_offset_x
         # First interpolate on chord grid
+        
         blade_bem = dict_v2p0["components"]["blade"]["outer_shape_bem"]
         pitch_axis_grid =  blade_bem["pitch_axis"]["grid"]
         pitch_axis_values =  blade_bem["pitch_axis"]["values"]
@@ -142,7 +174,6 @@ class v1p0_to_v2p0:
         blade_beam["structural_damping"] = {}
         blade_beam["structural_damping"]["mu"] = np.zeros(6)
 
-        blade_beam.pop("reference_axis")
         blade_beam.pop("twist")
 
         dict_v2p0["components"]["blade"]["elastic_properties_mb"] = blade_beam
