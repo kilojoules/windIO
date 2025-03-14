@@ -3,6 +3,7 @@ from pathlib import Path
 
 from json_schema_for_humans.generate import generate_from_filename
 from json_schema_for_humans.generation_configuration import GenerationConfiguration
+from bs4 import BeautifulSoup
 
 if __name__ == "__main__":
 
@@ -29,13 +30,35 @@ if __name__ == "__main__":
 
     # Using the json file and config from above, create the docs web page
     base_path = Path(__file__).parent.parent
+
+    # Generate the plant schema html
+    # Split the output into a head and body file to include in the Sphinx docs
+    schema_html_path = Path("_static/plant_schema_doc.html")
     generate_from_filename(
         base_path / "windIO" / "schemas" / "plant" / "wind_energy_system.yaml",
-        "_static/plant_schema_doc.html",
+        schema_html_path,
         config=config
     )
+    schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
+
+    schema_html_head = Path("_static/plant_schema_head.html")
+    schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
+    
+    schema_html_body = Path("_static/plant_schema_body.html")
+    schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))
+
+    # Generate the turbine schema html
+    # Split the output into a head and body file to include in the Sphinx docs
+    schema_html_path = Path("_static/turbine_schema_doc.html")
     generate_from_filename(
         base_path / "windIO" / "schemas" / "turbine" / "IEAontology_schema.yaml",
-        "_static/turbine_schema_doc.html",
+        schema_html_path,
         config=config
     )
+    schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
+
+    schema_html_head = Path("_static/turbine_schema_head.html")
+    schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
+    
+    schema_html_body = Path("_static/turbine_schema_body.html")
+    schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))
