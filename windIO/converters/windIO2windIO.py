@@ -48,14 +48,15 @@ class v1p0_to_v2p0:
         grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["grid"]
         grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["grid"]
         grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["grid"]
+        common_grid = list(set(grid_x + grid_y + grid_z))
         values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["x"]["values"]
         values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["y"]["values"]
         values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["ref_axis"]["z"]["values"]
         # Take grid from z as common grid and interpolate linearly
-        dict_v2p0["components"]["blade"]["ref_axis"]["grid"] = grid_z
-        dict_v2p0["components"]["blade"]["ref_axis"]["x"] = np.interp(grid_z, grid_x, values_x)
-        dict_v2p0["components"]["blade"]["ref_axis"]["y"] = np.interp(grid_z, grid_y, values_y)
-        dict_v2p0["components"]["blade"]["ref_axis"]["z"] = values_z
+        dict_v2p0["components"]["blade"]["ref_axis"]["grid"] = common_grid
+        dict_v2p0["components"]["blade"]["ref_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
+        dict_v2p0["components"]["blade"]["ref_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
+        dict_v2p0["components"]["blade"]["ref_axis"]["z"] = np.interp(common_grid, grid_z, values_z)
         # Pop older ref axis
         dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("ref_axis")
         dict_v2p0["components"]["blade"]["internal_structure_2d_fem"].pop("ref_axis")
@@ -74,8 +75,7 @@ class v1p0_to_v2p0:
         
         # Switch from pitch_axis to section_offset_x
         # First interpolate on chord grid
-        
-        blade_bem = dict_v2p0["components"]["blade"]["outer_shape_bem"]
+        blade_bem = dict_v2p0["components"]["blade"]["outer_shape"]
         pitch_axis_grid =  blade_bem["pitch_axis"]["grid"]
         pitch_axis_values =  blade_bem["pitch_axis"]["values"]
         chord_grid =  blade_bem["chord"]["grid"]
@@ -87,14 +87,14 @@ class v1p0_to_v2p0:
                                       )
         # Now dimensionalize offset using chord
         section_offset_x_values = pitch_axis_interp * chord_values
-        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("pitch_axis")
-        dict_v2p0["components"]["blade"]["outer_shape_bem"]["section_offset_x"] = {}
-        dict_v2p0["components"]["blade"]["outer_shape_bem"]["section_offset_x"]["grid"] = section_offset_x_grid
-        dict_v2p0["components"]["blade"]["outer_shape_bem"]["section_offset_x"]["values"] = section_offset_x_values
+        dict_v2p0["components"]["blade"]["outer_shape"].pop("pitch_axis")
+        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"] = {}
+        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"]["grid"] = section_offset_x_grid
+        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"]["values"] = section_offset_x_values
         
         # Convert twist from rad to deg
-        twist_rad = dict_v2p0["components"]["blade"]["outer_shape_bem"]["twist"]["values"]
-        dict_v2p0["components"]["blade"]["outer_shape_bem"]["twist"]["values"] = np.rad2deg(twist_rad)
+        twist_rad = dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"]
+        dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"] = np.rad2deg(twist_rad)
         return dict_v2p0
     
     def convert_blade_structure(self, dict_v2p0):
