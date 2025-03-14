@@ -18,10 +18,32 @@ class v1p0_to_v2p0:
 
         # Add windIO version
         dict_v2p0["windIO_version"] = "2.0"
-        
-        # Switch from pitch_axis to section_offset_x
+            
+        dict_v2p0 = self.convert_blade(dict_v2p0)
+        dict_v2p0 = self.convert_nacelle(dict_v2p0)
+        dict_v2p0 = self.convert_tower(dict_v2p0)
+        if "monopile" in dict_v2p0["components"]:
+            dict_v2p0 = self.convert_monopile(dict_v2p0)
+        if "floating_platform" in dict_v2p0["components"]:
+            dict_v2p0 = self.convert_floating_platform(dict_v2p0)
+        dict_v2p0 = self.convert_airfoils(dict_v2p0)
+        dict_v2p0 = self.convert_materials(dict_v2p0)
+        dict_v2p0 = self.convert_controls(dict_v2p0)
+
+        # Print out
+        windIO.write_yaml(dict_v2p0, self.filename_v2p0)
+
+    def convert_blade(self, dict_v2p0):
+        dict_v2p0 = self.convert_blade_outer_shape(dict_v2p0)
+        dict_v2p0 = self.convert_blade_structure(dict_v2p0)
+        if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
+            dict_v2p0 = self.convert_elastic_properties(dict_v2p0)
+        return dict_v2p0
+    
+    def convert_blade_outer_shape(self, dict_v2p0):
+                # Switch from pitch_axis to section_offset_x
         # First interpolate on chord grid
-        blade_bem = dict_v1p0["components"]["blade"]["outer_shape_bem"]
+        blade_bem = dict_v2p0["components"]["blade"]["outer_shape_bem"]
         pitch_axis_grid =  blade_bem["pitch_axis"]["grid"]
         pitch_axis_values =  blade_bem["pitch_axis"]["values"]
         chord_grid =  blade_bem["chord"]["grid"]
@@ -41,7 +63,9 @@ class v1p0_to_v2p0:
         # Convert twist from rad to deg
         twist_rad = dict_v2p0["components"]["blade"]["outer_shape_bem"]["twist"]["values"]
         dict_v2p0["components"]["blade"]["outer_shape_bem"]["twist"]["values"] = np.rad2deg(twist_rad)
-
+        return dict_v2p0
+    
+    def convert_blade_structure(self, dict_v2p0):
         # Convert field `rotation` from rad to deg when defined in webs/layers
         # Also, switch label offset_y_pa to offset_y_ref_axis
         blade_struct = dict_v2p0["components"]["blade"]["internal_structure_2d_fem"]
@@ -59,67 +83,74 @@ class v1p0_to_v2p0:
             if "offset_y_pa" in blade_struct["layers"][ilayer]:
                 blade_struct["layers"][ilayer]["offset_y_ref_axis"] = blade_struct["layers"][ilayer]["offset_y_pa"]
                 blade_struct["layers"][ilayer].pop("offset_y_pa")
-        
-        
+        return dict_v2p0
+
+    def convert_elastic_properties(self, dict_v2p0):
         # Redefine stiffness and inertia matrices listing each element individually as opposed to an array
-        if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
-            blade_beam = dict_v2p0["components"]["blade"]["elastic_properties_mb"]["six_x_six"]
+        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties_mb"]["six_x_six"]
 
-            # # Start by moving structural twist from rad to deg
-            # if "values" in blade_beam["twist"]:
-            #     twist_rad = blade_beam["twist"]["values"]
-            #     blade_beam["twist"]["values"] = np.rad2deg(twist_rad)
+        # # Start by moving structural twist from rad to deg
+        # if "values" in blade_beam["twist"]:
+        #     twist_rad = blade_beam["twist"]["values"]
+        #     blade_beam["twist"]["values"] = np.rad2deg(twist_rad)
 
-            # # Move reference_axis up to level
-            # blade_beam["reference_axis"] = blade_beam["reference_axis"]
+        # # Move reference_axis up to level
+        # blade_beam["reference_axis"] = blade_beam["reference_axis"]
 
-            # Now open up stiffness matrix, listing each Kij entry
-            blade_beam["stiffness_matrix"] = {}
-            blade_beam["stiffness_matrix"]["grid"] = blade_beam["stiff_matrix"]["grid"]
-            Kij = ["K11","K12","K13","K14","K15","K16",
-                   "K22","K23","K24","K25","K26",
-                   "K33","K34","K35","K36",
-                   "K44","K45","K46",
-                   "K55","K56",
-                   "K66",
-                   ]
-            n_grid = len(blade_beam["stiffness_matrix"]["grid"])
+        # Now open up stiffness matrix, listing each Kij entry
+        blade_beam["stiffness_matrix"] = {}
+        blade_beam["stiffness_matrix"]["grid"] = blade_beam["stiff_matrix"]["grid"]
+        Kij = ["K11","K12","K13","K14","K15","K16",
+                "K22","K23","K24","K25","K26",
+                "K33","K34","K35","K36",
+                "K44","K45","K46",
+                "K55","K56",
+                "K66",
+                ]
+        n_grid = len(blade_beam["stiffness_matrix"]["grid"])
+        for ij in range(21):
+                blade_beam["stiffness_matrix"][Kij[ij]] = np.zeros(n_grid)
+        for igrid in range(n_grid):
+            Kval = blade_beam["stiff_matrix"]["values"][igrid]
             for ij in range(21):
-                    blade_beam["stiffness_matrix"][Kij[ij]] = np.zeros(n_grid)
-            for igrid in range(n_grid):
-                Kval = blade_beam["stiff_matrix"]["values"][igrid]
-                for ij in range(21):
-                    blade_beam["stiffness_matrix"][Kij[ij]][igrid] = Kval[ij]
+                blade_beam["stiffness_matrix"][Kij[ij]][igrid] = Kval[ij]
 
-            # Pop out old stiff_matrix field
-            blade_beam.pop("stiff_matrix")
-            
-            # Move on to inertia matrix
-            I = blade_beam["inertia_matrix"]
-            I["mass"] = np.zeros(n_grid)
-            I["cm_x"] = np.zeros(n_grid)
-            I["cm_y"] = np.zeros(n_grid)
-            I["i_edge"] = np.zeros(n_grid)
-            I["i_flap"] = np.zeros(n_grid)
-            I["i_plr"] = np.zeros(n_grid)
-            I["i_cp"] = np.zeros(n_grid)
-            for igrid in range(n_grid):
-                I["mass"][igrid] = I["values"][igrid][0]
-                I["cm_x"][igrid] = I["values"][igrid][10]/I["values"][igrid][0]
-                I["cm_y"][igrid] = -I["values"][igrid][5]/I["values"][igrid][0]
-                I["i_edge"][igrid] = I["values"][igrid][15]
-                I["i_flap"][igrid] = I["values"][igrid][18]
-                I["i_plr"][igrid] = I["values"][igrid][20]
-                I["i_cp"][igrid] = -I["values"][igrid][16]
-            
-            I.pop("values")
+        # Pop out old stiff_matrix field
+        blade_beam.pop("stiff_matrix")
+        
+        # Move on to inertia matrix
+        I = blade_beam["inertia_matrix"]
+        I["mass"] = np.zeros(n_grid)
+        I["cm_x"] = np.zeros(n_grid)
+        I["cm_y"] = np.zeros(n_grid)
+        I["i_edge"] = np.zeros(n_grid)
+        I["i_flap"] = np.zeros(n_grid)
+        I["i_plr"] = np.zeros(n_grid)
+        I["i_cp"] = np.zeros(n_grid)
+        for igrid in range(n_grid):
+            I["mass"][igrid] = I["values"][igrid][0]
+            I["cm_x"][igrid] = I["values"][igrid][10]/I["values"][igrid][0]
+            I["cm_y"][igrid] = -I["values"][igrid][5]/I["values"][igrid][0]
+            I["i_edge"][igrid] = I["values"][igrid][15]
+            I["i_flap"][igrid] = I["values"][igrid][18]
+            I["i_plr"][igrid] = I["values"][igrid][20]
+            I["i_cp"][igrid] = -I["values"][igrid][16]
+        
+        I.pop("values")
 
-            # Add required field structural damping
-            blade_beam["structural_damping"] = {}
-            blade_beam["structural_damping"]["mu"] = np.zeros(6)
+        # Add required field structural damping
+        blade_beam["structural_damping"] = {}
+        blade_beam["structural_damping"]["mu"] = np.zeros(6)
 
-            dict_v2p0["components"]["blade"]["elastic_properties_mb"] = blade_beam
+        blade_beam.pop("reference_axis")
+        blade_beam.pop("twist")
 
+        dict_v2p0["components"]["blade"]["elastic_properties_mb"] = blade_beam
+        
+        return dict_v2p0
+
+    def convert_nacelle(self, dict_v2p0):
+        
         # Cone angle from rad to deg
         cone_rad = dict_v2p0["components"]["hub"]["cone_angle"]
         dict_v2p0["components"]["hub"]["cone_angle"] = np.rad2deg(cone_rad)
@@ -238,35 +269,44 @@ class v1p0_to_v2p0:
 
         dict_v2p0["components"].pop("nacelle")
 
+
+        return dict_v2p0
+
+    def convert_tower(self, dict_v2p0):
         # Tower and monopile drag_coefficient renamed cd
         cd_tower = dict_v2p0["components"]["tower"]["outer_shape_bem"]["drag_coefficient"]
         dict_v2p0["components"]["tower"]["outer_shape_bem"]["cd"] = cd_tower
         dict_v2p0["components"]["tower"]["outer_shape_bem"].pop("drag_coefficient")
-        
-        if "monopile" in dict_v2p0["components"]:
-            cd_monopile = dict_v2p0["components"]["monopile"]["outer_shape_bem"]["drag_coefficient"]
-            dict_v2p0["components"]["monopile"]["outer_shape_bem"]["cd"] = cd_monopile
-            dict_v2p0["components"]["monopile"]["outer_shape_bem"].pop("drag_coefficient")
+        return dict_v2p0
 
+    def convert_monopile(self, dict_v2p0):
+        cd_monopile = dict_v2p0["components"]["monopile"]["outer_shape_bem"]["drag_coefficient"]
+        dict_v2p0["components"]["monopile"]["outer_shape_bem"]["cd"] = cd_monopile
+        dict_v2p0["components"]["monopile"]["outer_shape_bem"].pop("drag_coefficient")
+        return dict_v2p0
+
+    def convert_floating_platform(self, dict_v2p0):
         # Rad to deg in some inputs to floating platform
-        if "floating_platform" in dict_v2p0["components"]:
-            members = dict_v2p0["components"]["floating_platform"]["members"]
-            for i_memb in range(len(members)):
-                members[i_memb]["ca"] = members[i_memb]["Ca"]
-                members[i_memb].pop("Ca")
-                members[i_memb]["cd"] = members[i_memb]["Cd"]
-                members[i_memb].pop("Cd")
-                if "angles" in members[i_memb]["outer_shape"]:
-                    angles_rad = members[i_memb]["outer_shape"]["angles"]
-                    members[i_memb]["outer_shape"]["angles"] = np.rad2deg(angles_rad)
-                if "rotation" in members[i_memb]["outer_shape"]:
-                    rotation_rad = members[i_memb]["outer_shape"]["rotation"]
-                    members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
-                if "ring_stiffeners" in members[i_memb]["internal_structure"]:
-                    if "spacing" in members[i_memb]["internal_structure"]["ring_stiffeners"]:
-                        spacing_rad = members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"]
-                        members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
 
+        members = dict_v2p0["components"]["floating_platform"]["members"]
+        for i_memb in range(len(members)):
+            members[i_memb]["ca"] = members[i_memb]["Ca"]
+            members[i_memb].pop("Ca")
+            members[i_memb]["cd"] = members[i_memb]["Cd"]
+            members[i_memb].pop("Cd")
+            if "angles" in members[i_memb]["outer_shape"]:
+                angles_rad = members[i_memb]["outer_shape"]["angles"]
+                members[i_memb]["outer_shape"]["angles"] = np.rad2deg(angles_rad)
+            if "rotation" in members[i_memb]["outer_shape"]:
+                rotation_rad = members[i_memb]["outer_shape"]["rotation"]
+                members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
+            if "ring_stiffeners" in members[i_memb]["internal_structure"]:
+                if "spacing" in members[i_memb]["internal_structure"]["ring_stiffeners"]:
+                    spacing_rad = members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"]
+                    members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
+        return dict_v2p0
+
+    def convert_airfoils(self, dict_v2p0):
         # Airfoils: angle of attack in deg and cl, cd, cm tags
         for i_af in range(len(dict_v2p0["airfoils"])):
             af = dict_v2p0["airfoils"][i_af]
@@ -295,7 +335,20 @@ class v1p0_to_v2p0:
                 plr["cm"]["grid"][-1] = 180
                 plr["cm"]["values"] = deepcopy(plr["c_m"]["values"])
                 plr.pop("c_m")
+            
+                plr["sets"] = [{}]
+                plr["sets"][0]["re"] = plr["re"]
+                plr.pop("re")
+                plr["sets"][0]["cl"] = plr["cl"]
+                plr.pop("cl")
+                plr["sets"][0]["cd"] = plr["cd"]
+                plr.pop("cd")
+                plr["sets"][0]["cm"] = plr["cm"]
+                plr.pop("cm")
 
+        return dict_v2p0
+    
+    def convert_materials(self, dict_v2p0):
         # Materials
         # manufacturing_id instead of component_id
         for i_mat in range(len(dict_v2p0["materials"])):
@@ -306,6 +359,10 @@ class v1p0_to_v2p0:
                 alp0_rad = dict_v2p0["materials"][i_mat]["alp0"]
                 if alp0_rad < np.pi:
                     dict_v2p0["materials"][i_mat]["alp0"] = np.rad2deg(alp0_rad)
+
+        return dict_v2p0
+    
+    def convert_controls(self, dict_v2p0):
 
         # Controls, update a few fields from rad to deg and from rad/s to rpm
         min_pitch_rad = dict_v2p0["control"]["pitch"]["min_pitch"]
@@ -333,14 +390,12 @@ class v1p0_to_v2p0:
         if "shutdown" in dict_v2p0["control"]:
             dict_v2p0["control"].pop("shutdown")
 
-
-        # Print out
-        windIO.write_yaml(dict_v2p0, self.filename_v2p0)
+        return dict_v2p0
 
 
 if __name__ == "__main__":
     
-    filename_v1p0 = "v1p0.yaml"
-    filename_v2p0 = "v2p0.yaml"
+    filename_v1p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/test/turbine/v1p0/IEA-15-240-RWT.yaml"
+    filename_v2p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/test/turbine/IEA-15-240-RWT.yaml"
     converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
     converter.convert()
