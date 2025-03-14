@@ -376,20 +376,27 @@ class v1p0_to_v2p0:
 
         members = dict_v2p0["components"]["floating_platform"]["members"]
         for i_memb in range(len(members)):
+            # some renaming
             members[i_memb]["ca"] = members[i_memb]["Ca"]
             members[i_memb].pop("Ca")
             members[i_memb]["cd"] = members[i_memb]["Cd"]
             members[i_memb].pop("Cd")
+            members[i_memb]["structure"] = members[i_memb]["internal_structure"]
+            members[i_memb].pop("internal_structure")
+            if "ballasts" in members[i_memb]["structure"]:
+                members[i_memb]["structure"]["ballast"] = members[i_memb]["structure"]["ballasts"]
+                members[i_memb]["structure"].pop("ballasts")
+            # switch from rad to deg
             if "angles" in members[i_memb]["outer_shape"]:
                 angles_rad = members[i_memb]["outer_shape"]["angles"]
                 members[i_memb]["outer_shape"]["angles"] = np.rad2deg(angles_rad)
             if "rotation" in members[i_memb]["outer_shape"]:
                 rotation_rad = members[i_memb]["outer_shape"]["rotation"]
                 members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
-            if "ring_stiffeners" in members[i_memb]["internal_structure"]:
-                if "spacing" in members[i_memb]["internal_structure"]["ring_stiffeners"]:
-                    spacing_rad = members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"]
-                    members[i_memb]["internal_structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
+            if "ring_stiffeners" in members[i_memb]["structure"]:
+                if "spacing" in members[i_memb]["structure"]["ring_stiffeners"]:
+                    spacing_rad = members[i_memb]["structure"]["ring_stiffeners"]["spacing"]
+                    members[i_memb]["structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
         return dict_v2p0
 
     def convert_airfoils(self, dict_v2p0):

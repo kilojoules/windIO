@@ -1593,7 +1593,7 @@ properties:
                                 - joint1
                                 - joint2
                                 - outer_shape
-                                - internal_structure
+                                - structure
                             optional:
                                 # TODO: Move these to the modeling file?
                                 - ca
@@ -1706,7 +1706,7 @@ properties:
                                             type: number
                                             description: Angle between principle axes of the cross-section and the member coordinate system.  Essentially the rotation of the member if both joints were placed on the global x-y axis with the first side length along the z-axis
                                             units: deg
-                                internal_structure:
+                                structure:
                                     # additionalProperties: True
                                     type: object
                                     required:
