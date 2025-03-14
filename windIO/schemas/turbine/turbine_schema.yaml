@@ -116,6 +116,11 @@ properties:
             blade:
                 type: object
                 description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape`, :code:`elastic_properties`, and :code:`structure`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, possibly curved, :code:`reference_axis`.
+                required:
+                    - reference_axis
+                    - outer_shape
+                optional:
+                    - structure
                 properties:
                     reference_axis:
                         type: object
@@ -226,17 +231,13 @@ properties:
                                                 type: number
                                                 minimum: 0.
                                                 maximum: 1.
-
-
-
                     elastic_properties:
                         $ref: "#/definitions/beam"
                     structure:
                         type: object
                         default: {}
-                        description: The field :code:`structure` contains the data to describe the internal structure of standard wind turbine blades. This is a fairly sophisticated process and the ontology proposed in this work supports different definitions. On the top level, the field :code:`structure` has three sub-components, namely the :code:`reference_axis`, which is usually defined equal to the :code:`reference_axis` in the field :code:`outer_shape`, the :code:`webs`, where the positions of the shear webs are defined, and the :code:`layers`, which describe all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position in the two-dimensional sections. Recently, the fields :code:`joint` and :code:`root` were added to support blades that are segmented spanwise and details about the blade root bolting.
+                        description: The field :code:`structure` contains the data to describe the internal structure of standard wind turbine blades. This is a fairly sophisticated process and the ontology proposed in this work supports different definitions. On the top level, the field :code:`structure` has two sub-components, namely the :code:`webs`, where the positions of the shear webs are defined, and the :code:`layers`, which describe all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position in the two-dimensional sections. Recently, the fields :code:`joint` and :code:`root` were added to support blades that are segmented spanwise and details about the blade root bolting.
                         required:
-                            - reference_axis
                             - layers
                         properties:
                             root:
@@ -257,8 +258,6 @@ properties:
                                         maximum: 1.e+10
                                         units: Pa
                                         description: Max stress on bolt
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
                             webs:
                                 type: array
                                 description: The field :code:`webs` consists of a list of entries, each representing a shear web defined in terms of :code:`name` and position.
@@ -2275,9 +2274,9 @@ properties:
                             description:
                                 type: string
                                 description: Text to identify the setup for the definition of the polars
-                            sets:
+                            re_sets:
                                 type: array
-                                description: Sets of polars. For each set, Reynolds number, lift, drag, and moment coefficients must be provided. Optionally, unsteady aerodynamic coefficients can be listed.
+                                description: Sets of polars at varying Reynolds. For each set, Reynolds number, lift, drag, and moment coefficients must be provided. Optionally, unsteady aerodynamic coefficients can be listed.
                                 items:
                                     type: object
                                     required:

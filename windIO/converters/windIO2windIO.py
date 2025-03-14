@@ -64,14 +64,14 @@ class v1p0_to_v2p0:
         # Start by changing name
         dict_v2p0["components"]["blade"]["outer_shape"] = dict_v2p0["components"]["blade"]["outer_shape_bem"]
         dict_v2p0["components"]["blade"].pop("outer_shape_bem")
-     
+        
         # Switch from pitch_axis to section_offset_x
         # First interpolate on chord grid
-        blade_bem = dict_v2p0["components"]["blade"]["outer_shape"]
-        pitch_axis_grid =  blade_bem["pitch_axis"]["grid"]
-        pitch_axis_values =  blade_bem["pitch_axis"]["values"]
-        chord_grid =  blade_bem["chord"]["grid"]
-        chord_values =  blade_bem["chord"]["values"]
+        blade_os = dict_v2p0["components"]["blade"]["outer_shape"]
+        pitch_axis_grid =  blade_os["pitch_axis"]["grid"]
+        pitch_axis_values =  blade_os["pitch_axis"]["values"]
+        chord_grid =  blade_os["chord"]["grid"]
+        chord_values =  blade_os["chord"]["values"]
         section_offset_x_grid = chord_grid
         pitch_axis_interp = np.interp(section_offset_x_grid,
                                       pitch_axis_grid,
@@ -79,17 +79,45 @@ class v1p0_to_v2p0:
                                       )
         # Now dimensionalize offset using chord
         section_offset_x_values = pitch_axis_interp * chord_values
-        dict_v2p0["components"]["blade"]["outer_shape"].pop("pitch_axis")
-        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"] = {}
-        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"]["grid"] = section_offset_x_grid
-        dict_v2p0["components"]["blade"]["outer_shape"]["section_offset_x"]["values"] = section_offset_x_values
+        blade_os.pop("pitch_axis")
+        blade_os["section_offset_x"] = {}
+        blade_os["section_offset_x"]["grid"] = section_offset_x_grid
+        blade_os["section_offset_x"]["values"] = section_offset_x_values
         
         # Convert twist from rad to deg
-        twist_rad = dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"]
-        dict_v2p0["components"]["blade"]["outer_shape"]["twist"]["values"] = np.rad2deg(twist_rad)
+        twist_rad = blade_os["twist"]["values"]
+        blade_os["twist"]["values"] = np.rad2deg(twist_rad)
 
         # Pop older ref axis
-        dict_v2p0["components"]["blade"]["outer_shape"].pop("reference_axis")
+        blade_os.pop("reference_axis")
+
+        # Restructure how airfoil spanwise positions are defined
+        n_af = len(blade_os["airfoil_position"]["grid"])
+        blade_os["airfoils"] = [{}] * n_af
+        for i in range(n_af):
+            blade_os["airfoils"][i]["name"] = blade_os["airfoil_position"]["labels"][i]
+            blade_os["airfoils"][i]["spanwise_position"] = blade_os["airfoil_position"]["grid"][i]
+            blade_os["airfoils"][i]["configuration"] = ["default"]
+            blade_os["airfoils"][i]["weight"] = [1.]
+
+
+        if "rthick" not in blade_os:
+            rthick_v1p0 = np.zeros(n_af)            
+            n_af_available = len(dict_v2p0["airfoils"])
+            for i in range(n_af):
+                for j in range(n_af_available):
+                    if blade_os["airfoil_position"]["labels"][i] == dict_v2p0["airfoils"][j]["name"]:
+                        rthick_v1p0[i] = dict_v2p0["airfoils"][j]["relative_thickness"]
+            # Use numpy polyfit
+            coeffs = np.polyfit(blade_os["airfoil_position"]["grid"], rthick_v1p0, deg=3)
+            poly = np.poly1d(coeffs)
+            rthick = poly(chord_grid)
+            rthick[rthick>1.]=1.
+            blade_os["rthick"] = {}
+            blade_os["rthick"]["grid"] = chord_grid
+            blade_os["rthick"]["values"] = rthick
+
+        blade_os.pop("airfoil_position")
 
         return dict_v2p0
     
@@ -183,6 +211,11 @@ class v1p0_to_v2p0:
         blade_beam.pop("twist")
         # Pop older ref axis
         blade_beam.pop("reference_axis")
+
+        dict_v2p0["components"]["blade"]["elastic_properties"]["stiffness_matrix"] = blade_beam["stiffness_matrix"]
+        dict_v2p0["components"]["blade"]["elastic_properties"]["inertia_matrix"] = blade_beam["inertia_matrix"]
+        dict_v2p0["components"]["blade"]["elastic_properties"]["structural_damping"] = blade_beam["structural_damping"]
+        dict_v2p0["components"]["blade"]["elastic_properties"].pop("six_x_six")
         
         return dict_v2p0
 
@@ -361,6 +394,8 @@ class v1p0_to_v2p0:
         # Airfoils: angle of attack in deg and cl, cd, cm tags
         for i_af in range(len(dict_v2p0["airfoils"])):
             af = dict_v2p0["airfoils"][i_af]
+            af["rthick"] = af["relative_thickness"]
+            af.pop("relative_thickness")
             for i_plr in range(len(af["polars"])):
                 plr = af["polars"][i_plr]
                 plr["cl"] = {}
@@ -387,16 +422,21 @@ class v1p0_to_v2p0:
                 plr["cm"]["values"] = deepcopy(plr["c_m"]["values"])
                 plr.pop("c_m")
             
-                plr["sets"] = [{}]
-                plr["sets"][0]["re"] = plr["re"]
+                plr["re_sets"] = [{}]
+                plr["re_sets"][0]["re"] = plr["re"]
                 plr.pop("re")
-                plr["sets"][0]["cl"] = plr["cl"]
+                plr["re_sets"][0]["cl"] = plr["cl"]
                 plr.pop("cl")
-                plr["sets"][0]["cd"] = plr["cd"]
+                plr["re_sets"][0]["cd"] = plr["cd"]
                 plr.pop("cd")
-                plr["sets"][0]["cm"] = plr["cm"]
+                plr["re_sets"][0]["cm"] = plr["cm"]
                 plr.pop("cm")
 
+                # To the first set, assign temporary tag default
+                if i_plr==0:
+                    af["polars"][0]["configuration"] = "default"
+                else:
+                    af["polars"][0]["configuration"] = "config%d"%i_plr
         return dict_v2p0
     
     def convert_materials(self, dict_v2p0):
