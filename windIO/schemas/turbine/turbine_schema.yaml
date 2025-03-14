@@ -146,23 +146,61 @@ properties:
                             - section_offset_x
                             - airfoils
                         properties:
-                            grid:
-                                $ref: "#/definitions/distributed_data/grid_nd"
-                            twist:
-                                description: Aerodynamic twist along blade span in degrees. Twist is generally positive toward blade root, and may become negative toward blade tip.
-                                $ref: "#/definitions/distributed_data/angle"
                             chord:
+                                type: object
                                 description: Chord in meters along blade span.
-                                $ref: "#/definitions/distributed_data/length"
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
+                            twist:
+                                type: object
+                                description: Aerodynamic twist along blade span in degrees. Twist is generally positive toward blade root, and may become negative toward blade tip.
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/angle"
                             rthick:
-                                description: Relative thickness, expressed between 0 and 1, along blade span.
-                                $ref: "#/definitions/distributed_data/grid_nd"
+                                type: object
+                                description: Relative thickness, expressed between 0 (flat plate) and 1 (cylinder), along blade span.
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
                             section_offset_x:
-                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the distance in meters along the chordline from the reference axis to the leading edge. 0 means that the airfoil is pinned at the leading edge, a positive offset means that the leading edge is upstream of the reference axis in local chordline coordinates, and a negative offset that the leading edge aft of the reference axis.
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                description: :code:`section_offset_x` controls the airfoil position relative to the reference axis, by specifying the distance in meters along the chordline from the reference axis to the leading edge. 0 means that the airfoil is pinned at the leading edge, a positive offset means that the leading edge is upstream of the reference axis in local chordline coordinates, and a negative offset that the leading edge aft of the reference axis.
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             section_offset_y:
-                                description: This parameter controls the airfoil position relative to the reference axis, by specifying the chordline normal distance in meters from the reference axis. 0 means that the reference axis lies on the airfoil chordline, a positive offset means that the chordline is shifted in the direction of the suction side relative to the reference axis, and a negative offset that the section is shifted in the direction of the pressure side of the airfoil.
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                description: :code:`section_offset_y` controls the airfoil position relative to the reference axis, by specifying the chordline normal distance in meters from the reference axis. 0 means that the reference axis lies on the airfoil chordline, a positive offset means that the chordline is shifted in the direction of the suction side relative to the reference axis, and a negative offset that the section is shifted in the direction of the pressure side of the airfoil.
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             airfoils:
                                 type: array
                                 description: List of airfoils and corresponding polars adopted along blade span. The airfoil positions must correspond to the :code:`rthick` field. For each airfoil, their spanwise position can be defined (if not defined :code:`rthick` will be used, if both are defined :code:`rthick` should dominate). Also, for each airfoil different sets of polars can be defined with an associated weight. The array of weights must sum up to 1. The weights help blend different polar sets, for example a 70% free transition / 30% fully turbulent.

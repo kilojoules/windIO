@@ -68,11 +68,7 @@ class v1p0_to_v2p0:
         # Start by changing name
         dict_v2p0["components"]["blade"]["outer_shape"] = dict_v2p0["components"]["blade"]["outer_shape_bem"]
         dict_v2p0["components"]["blade"].pop("outer_shape_bem")
-
-        # Now take common grid from chord
-        grid_chord = dict_v2p0["components"]["blade"]["outer_shape"]["chord"]["grid"]
-        dict_v2p0["components"]["blade"]["outer_shape"]["grid"] = grid_chord
-        
+     
         # Switch from pitch_axis to section_offset_x
         # First interpolate on chord grid
         blade_bem = dict_v2p0["components"]["blade"]["outer_shape"]
@@ -98,9 +94,12 @@ class v1p0_to_v2p0:
         return dict_v2p0
     
     def convert_blade_structure(self, dict_v2p0):
+        # Start by changing name
+        dict_v2p0["components"]["blade"]["structure"] = dict_v2p0["components"]["blade"]["internal_structure_2d_fem"]
+        dict_v2p0["components"]["blade"].pop("internal_structure_2d_fem")
         # Convert field `rotation` from rad to deg when defined in webs/layers
         # Also, switch label offset_y_pa to offset_y_ref_axis
-        blade_struct = dict_v2p0["components"]["blade"]["internal_structure_2d_fem"]
+        blade_struct = dict_v2p0["components"]["blade"]["structure"]
         for iweb in range(len(blade_struct["webs"])):
             if "rotation" in blade_struct["webs"][iweb]:
                 rotation_rad = blade_struct["webs"][iweb]["rotation"]["values"]
@@ -118,8 +117,11 @@ class v1p0_to_v2p0:
         return dict_v2p0
 
     def convert_elastic_properties(self, dict_v2p0):
+        # Start by changing name
+        dict_v2p0["components"]["blade"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties_mb"]
+        dict_v2p0["components"]["blade"].pop("elastic_properties_mb")
         # Redefine stiffness and inertia matrices listing each element individually as opposed to an array
-        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties_mb"]["six_x_six"]
+        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties"]["six_x_six"]
 
         # # Start by moving structural twist from rad to deg
         # if "values" in blade_beam["twist"]:
@@ -175,8 +177,6 @@ class v1p0_to_v2p0:
         blade_beam["structural_damping"]["mu"] = np.zeros(6)
 
         blade_beam.pop("twist")
-
-        dict_v2p0["components"]["blade"]["elastic_properties_mb"] = blade_beam
         
         return dict_v2p0
 
@@ -193,20 +193,20 @@ class v1p0_to_v2p0:
         # Split nacelle components
         v1p0_dt = deepcopy(dict_v2p0["components"]["nacelle"]["drivetrain"])
         dict_v2p0["components"]["drivetrain"] = {}
-        dict_v2p0["components"]["drivetrain"]["outer_shape_bem"] = {}
+        dict_v2p0["components"]["drivetrain"]["outer_shape"] = {}
         if "uptilt" in v1p0_dt:
             uptilt_rad = v1p0_dt["uptilt"]
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["uptilt"] = np.rad2deg(uptilt_rad)
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["uptilt"] = np.rad2deg(uptilt_rad)
         if "distance_tt_hub" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["distance_tt_hub"] = v1p0_dt["distance_tt_hub"]
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["distance_tt_hub"] = v1p0_dt["distance_tt_hub"]
         if "distance_hub2mb" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["distance_hub_mb"] = v1p0_dt["distance_hub2mb"]
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["distance_hub_mb"] = v1p0_dt["distance_hub2mb"]
         if "distance_mb2mb" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["distance_mb_mb"] = v1p0_dt["distance_mb2mb"]
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["distance_mb_mb"] = v1p0_dt["distance_mb2mb"]
         if "overhang" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["overhang"] = v1p0_dt["overhang"]
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["overhang"] = v1p0_dt["overhang"]
         if "drag_coefficient" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["outer_shape_bem"]["cd"] = v1p0_dt["drag_coefficient"]
+            dict_v2p0["components"]["drivetrain"]["outer_shape"]["cd"] = v1p0_dt["drag_coefficient"]
         
         dict_v2p0["components"]["drivetrain"]["gearbox"] = {}
         if "gear_ratio" in v1p0_dt:
@@ -304,16 +304,30 @@ class v1p0_to_v2p0:
         return dict_v2p0
 
     def convert_tower(self, dict_v2p0):
+        # Start by changing name
+        dict_v2p0["components"]["tower"]["outer_shape"] = dict_v2p0["components"]["tower"]["outer_shape_bem"]
+        dict_v2p0["components"]["tower"].pop("outer_shape_bem")
+        # Start by changing name
+        dict_v2p0["components"]["tower"]["structure"] = dict_v2p0["components"]["tower"]["internal_structure_2d_fem"]
+        dict_v2p0["components"]["tower"].pop("internal_structure_2d_fem")
+     
         # Tower and monopile drag_coefficient renamed cd
-        cd_tower = dict_v2p0["components"]["tower"]["outer_shape_bem"]["drag_coefficient"]
-        dict_v2p0["components"]["tower"]["outer_shape_bem"]["cd"] = cd_tower
-        dict_v2p0["components"]["tower"]["outer_shape_bem"].pop("drag_coefficient")
+        cd_tower = dict_v2p0["components"]["tower"]["outer_shape"]["drag_coefficient"]
+        dict_v2p0["components"]["tower"]["outer_shape"]["cd"] = cd_tower
+        dict_v2p0["components"]["tower"]["outer_shape"].pop("drag_coefficient")
         return dict_v2p0
 
     def convert_monopile(self, dict_v2p0):
-        cd_monopile = dict_v2p0["components"]["monopile"]["outer_shape_bem"]["drag_coefficient"]
-        dict_v2p0["components"]["monopile"]["outer_shape_bem"]["cd"] = cd_monopile
-        dict_v2p0["components"]["monopile"]["outer_shape_bem"].pop("drag_coefficient")
+        # Start by changing name
+        dict_v2p0["components"]["monopile"]["outer_shape"] = dict_v2p0["components"]["monopile"]["outer_shape_bem"]
+        dict_v2p0["components"]["monopile"].pop("outer_shape_bem")
+        # Start by changing name
+        dict_v2p0["components"]["monopile"]["structure"] = dict_v2p0["components"]["monopile"]["internal_structure_2d_fem"]
+        dict_v2p0["components"]["monopile"].pop("internal_structure_2d_fem")
+
+        cd_monopile = dict_v2p0["components"]["monopile"]["outer_shape"]["drag_coefficient"]
+        dict_v2p0["components"]["monopile"]["outer_shape"]["cd"] = cd_monopile
+        dict_v2p0["components"]["monopile"]["outer_shape"].pop("drag_coefficient")
         return dict_v2p0
 
     def convert_floating_platform(self, dict_v2p0):
