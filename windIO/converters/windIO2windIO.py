@@ -48,7 +48,7 @@ class v1p0_to_v2p0:
         grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["grid"]
         grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["grid"]
         grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["grid"]
-        common_grid = list(set(grid_x + grid_y + grid_z))
+        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
         values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["values"]
         values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["values"]
         values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["values"]
@@ -499,8 +499,8 @@ if __name__ == "__main__":
 
     turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 
-    path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"    
-    filename_v2p0 = "/Users/pbortolo/work/3_projects/5_IEAtask37/windIO/test/turbine/IEA-15-240-RWT.yaml"
+    path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
+    filename_v2p0 = turbine_reference_path / "IEA-15-240-RWT_v2p0.yaml"
     
     converter = v1p0_to_v2p0(path2yaml, filename_v2p0)
     converter.convert()
