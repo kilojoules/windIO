@@ -1,26 +1,13 @@
 import os
 from typing import Any
+from pathlib import Path
 
 import numpy as np
 from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 import xarray as xr
 
-def include(constructor, node):
-    filename = os.path.join(
-            os.path.dirname(constructor.loader.reader.stream.name), node.value
-        )
-    ext = os.path.splitext(filename)[1].lower()
-    if ext in [".yaml", ".yml"]:
-        return load_yaml(
-            filename, get_YAML()
-        )  # TODO: Make `get_YAML()` dynamic to make it possible to update
-    elif ext in [".nc"]:
-        return ds2yml(xr.open_dataset(filename))
-    else:
-        raise ValueError(f"Unsupported file extension: {ext}")
 
-    
 def fmt(v: Any) -> dict | list | str | float | int:
     """
     Formats a dictionary appropriately for yaml.load by converting Tuples to Lists.
@@ -52,7 +39,7 @@ def ds2yml(ds: xr.Dataset) -> dict:
         }
     )
 
-    
+
 def get_YAML(
     typ: str = "safe",
     write_numpy: bool = True,
@@ -60,7 +47,21 @@ def get_YAML(
     read_include: bool = True,
     n_list_flow_style: int = 1,
 ) -> YAML:
-    yaml_obj = YAML(typ=typ, pure=True) # kenloen TODO: Can only make it work with the pure-python version (`pure=True`) as I can not figure out how to extract the file name for the file being  
+    """Get `ruamel.yaml.YAML` instance default setting for windIO
+
+    Args:
+        typ (str, optional): ruamel.yaml.YAML `typ`. Defaults to "safe".
+        write_numpy (bool, optional): Flag for enabling the YAML parser to write numpy types. Defaults to True.
+        read_numpy (bool, optional): Flag for reading numpy list of numeric values to be converted to numpy arrays. Defaults to False.
+        read_include (bool, optional): Flag for enabling the `!include` constructor which enables reading others files just as embedded data. Defaults to True.
+        n_list_flow_style (int, optional): Integer which states which shape of lists of numeric data that should be written with flow-style (e.g. `x: [1, 2, ...]`). Defaults to 1.
+
+    Returns:
+        ruamel.yaml.YAML: Instance with defaults as described above.
+    """
+    yaml_obj = YAML(
+        typ=typ, pure=True
+    )  # kenloen TODO: Can only make it work with the pure-python version (`pure=True`) as I can not figure out how to extract the file name for the file being
     yaml_obj.default_flow_style = False
     yaml_obj.width = 1e6
     yaml_obj.allow_unicode = False
@@ -113,9 +114,22 @@ def get_YAML(
             raise ValueError
         except ValueError:
             return default_data
-    yaml_obj.Constructor.add_constructor('tag:yaml.org,2002:seq', numpy_constructor)
+
+    yaml_obj.Constructor.add_constructor("tag:yaml.org,2002:seq", numpy_constructor)
 
     if read_include:
+
+        def include(constructor, node):
+            filename = Path(constructor.loader.reader.stream.name).parent / node.value
+            ext = os.path.splitext(filename)[1].lower()
+            if ext in [".yaml", ".yml"]:
+                return load_yaml(
+                    filename, get_YAML()
+                )  # TODO: Make `get_YAML()` dynamic to make it possible to update
+            elif ext in [".nc"]:
+                return ds2yml(xr.open_dataset(filename))
+            else:
+                raise ValueError(f"Unsupported file extension: {ext}")
 
         yaml_obj.constructor.add_constructor("!include", include)
 
@@ -124,17 +138,16 @@ def get_YAML(
 
 def load_yaml(filename: str, loader=None) -> dict:
     """
-    Opens ``filename`` and loads the content into a dictionary with the ``yaml.load``
-    function from pyyaml.
+    Opens ``filename`` and loads the content into a dictionary with the ``get_YAML``
+    function from ruamel.yaml.YAML.
 
     Args:
-        filename (str): Path to the local file to be loaded.
-        loader (yaml.SafeLoader, optional): Defaults to XrResourceLoader.
+        filename (str): Path or file-handle to the local file to be loaded.
+        loader (ruamel.yaml.YAML, optional): Defaults to ``get_YAML()``.
 
     Returns:
         dict: Dictionary representation of the YAML file given in ``filename``.
     """
     if loader is None:
         loader = get_YAML()
-    with open(filename, "r") as fid:
-        return loader.load(fid)
+    return loader.load(filename)

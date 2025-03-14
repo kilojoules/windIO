@@ -7,8 +7,6 @@ from pathlib import Path, PosixPath, WindowsPath
 import jsonschema
 import json
 from urllib.parse import urljoin
-import xarray as xr
-from typing import Any
 
 ### API design
 import windIO.yaml
@@ -74,8 +72,8 @@ def _add_local_schemas_to(resolver, schema_folder, base_uri, schema_ext_lst=['.j
                     key = urljoin(base_uri, str(rel_path))
                     resolver.store[key] = schema_doc
                 # except (ScannerError, ParserError):
-                except Exception:
-                    print("Reading %s failed" % file)
+                except Exception as err:
+                    print(f"Reading {file} failed\nWith error:\n{err}")
 
 def validate(input: dict | str | Path, schema_type: str, restrictive: bool = True) -> None:
     """
