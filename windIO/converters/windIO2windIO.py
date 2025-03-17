@@ -10,6 +10,10 @@ class v1p0_to_v2p0:
         self.filename_v2p0 = filename_v2p0
 
     def convert(self):
+        print("Converter windIO v1.0 to v2.0 started.")
+
+        print("Load file %s:"%self.filename_v1p0)
+
         # Read the input yaml
         dict_v1p0 = windIO.load_yaml(self.filename_v1p0)
         
@@ -18,20 +22,55 @@ class v1p0_to_v2p0:
 
         # Add windIO version
         dict_v2p0["windIO_version"] = "2.0"
-        
-        dict_v2p0 = self.convert_blade(dict_v2p0)
-        dict_v2p0 = self.convert_nacelle(dict_v2p0)
-        dict_v2p0 = self.convert_tower(dict_v2p0)
+
+        try:
+            dict_v2p0 = self.convert_blade(dict_v2p0)
+            print("Blade converted successfully")
+        except:
+            print("Blade component could not be converted successfully. Please check.")
+        try:
+            dict_v2p0 = self.convert_nacelle(dict_v2p0)
+            print("Nacelle converted successfully")
+        except:
+            print("Nacelle component could not be converted successfully. Please check.")
+        try:
+            dict_v2p0 = self.convert_tower(dict_v2p0)
+            print("Tower converted successfully")
+        except:
+            print("Tower component could not be converted successfully. Please check.")
         if "monopile" in dict_v2p0["components"]:
-            dict_v2p0 = self.convert_monopile(dict_v2p0)
+            try:
+                dict_v2p0 = self.convert_monopile(dict_v2p0)
+                print("Monopile converted successfully")
+            except:
+                print("Monopile component could not be converted successfully. Please check.")
         if "floating_platform" in dict_v2p0["components"]:
-            dict_v2p0 = self.convert_floating_platform(dict_v2p0)
-        dict_v2p0 = self.convert_airfoils(dict_v2p0)
-        dict_v2p0 = self.convert_materials(dict_v2p0)
-        dict_v2p0 = self.convert_controls(dict_v2p0)
+            try:
+                dict_v2p0 = self.convert_floating_platform(dict_v2p0)
+                print("Floating platform converted successfully")
+            except:
+                print("Floating platform component could not be converted successfully. Please check.")
+        try:
+            dict_v2p0 = self.convert_airfoils(dict_v2p0)
+            print("Airfoil database converted successfully")
+        except:
+            print("Airfoil database could not be converted successfully. Please check.")
+        try:
+            dict_v2p0 = self.convert_materials(dict_v2p0)
+            print("Material database converted successfully")
+        except:
+            print("Material database could not be converted successfully. Please check.")
+        try:
+            dict_v2p0 = self.convert_controls(dict_v2p0)
+            print("Control block converted successfully")
+        except:
+            print("Control block database could not be converted successfully. Please check.")
 
         # Print out
+        print("New yaml file being generated: %s"%self.filename_v2p0)
         windIO.yaml.write_yaml(dict_v2p0, self.filename_v2p0)
+        
+        print("Converter windIO v1.0 to v2.0 ended.")
 
     def convert_blade(self, dict_v2p0):
         dict_v2p0 = self.convert_blade_reference_axis(dict_v2p0)
@@ -536,8 +575,11 @@ if __name__ == "__main__":
 
     turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 
-    path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
+    filename_v1p0 = "To_be_set"
     filename_v2p0 = turbine_reference_path / "IEA-15-240-RWT_v2p0.yaml"
     
-    converter = v1p0_to_v2p0(path2yaml, filename_v2p0)
+    if not os.path.exists(filename_v1p0):
+        raise Exception("Point to an existing yaml file that you want to convert from windIO v1.0 to v2.0.")
+
+    converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
     converter.convert()
