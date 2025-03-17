@@ -18,7 +18,7 @@ class v1p0_to_v2p0:
 
         # Add windIO version
         dict_v2p0["windIO_version"] = "2.0"
-            
+        
         dict_v2p0 = self.convert_blade(dict_v2p0)
         dict_v2p0 = self.convert_nacelle(dict_v2p0)
         dict_v2p0 = self.convert_tower(dict_v2p0)
@@ -345,30 +345,67 @@ class v1p0_to_v2p0:
         return dict_v2p0
 
     def convert_tower(self, dict_v2p0):
-        # Start by changing name
-        dict_v2p0["components"]["tower"]["outer_shape"] = dict_v2p0["components"]["tower"]["outer_shape_bem"]
-        dict_v2p0["components"]["tower"].pop("outer_shape_bem")
-        # Start by changing name
-        dict_v2p0["components"]["tower"]["structure"] = dict_v2p0["components"]["tower"]["internal_structure_2d_fem"]
-        dict_v2p0["components"]["tower"].pop("internal_structure_2d_fem")
-     
-        # Tower and monopile drag_coefficient renamed cd
-        cd_tower = dict_v2p0["components"]["tower"]["outer_shape"]["drag_coefficient"]
-        dict_v2p0["components"]["tower"]["outer_shape"]["cd"] = cd_tower
-        dict_v2p0["components"]["tower"]["outer_shape"].pop("drag_coefficient")
+        tower = dict_v2p0["components"]["tower"]
+        # Start by changing outer_shape_bem to outer_shape
+        tower["outer_shape"] = tower["outer_shape_bem"]
+        tower.pop("outer_shape_bem")
+        # Then change internal_structure_2d_fem to structure
+        tower["structure"] = tower["internal_structure_2d_fem"]
+        tower.pop("internal_structure_2d_fem")
+        # Now define common reference axis
+        tower["reference_axis"] = {}
+        old_axis = tower["outer_shape"]["reference_axis"]
+        grid_x = old_axis["x"]["grid"]
+        grid_y = old_axis["x"]["grid"]
+        grid_z = old_axis["x"]["grid"]
+        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
+        values_x = old_axis["x"]["values"]
+        values_y = old_axis["y"]["values"]
+        values_z = old_axis["z"]["values"]
+        # Take grid from z as common grid and interpolate linearly
+        tower["reference_axis"]["grid"] = common_grid
+        tower["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
+        tower["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
+        tower["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z) 
+        # Pop out older ref_axis
+        tower["outer_shape"].pop("reference_axis")
+        tower["structure"].pop("reference_axis")
+        # Rename drag_coeffcient to cd
+        cd_tower = tower["outer_shape"]["drag_coefficient"]
+        tower["outer_shape"]["cd"] = cd_tower
+        tower["outer_shape"].pop("drag_coefficient")
         return dict_v2p0
 
     def convert_monopile(self, dict_v2p0):
-        # Start by changing name
-        dict_v2p0["components"]["monopile"]["outer_shape"] = dict_v2p0["components"]["monopile"]["outer_shape_bem"]
-        dict_v2p0["components"]["monopile"].pop("outer_shape_bem")
-        # Start by changing name
-        dict_v2p0["components"]["monopile"]["structure"] = dict_v2p0["components"]["monopile"]["internal_structure_2d_fem"]
-        dict_v2p0["components"]["monopile"].pop("internal_structure_2d_fem")
-
-        cd_monopile = dict_v2p0["components"]["monopile"]["outer_shape"]["drag_coefficient"]
-        dict_v2p0["components"]["monopile"]["outer_shape"]["cd"] = cd_monopile
-        dict_v2p0["components"]["monopile"]["outer_shape"].pop("drag_coefficient")
+        monopile = dict_v2p0["components"]["monopile"]
+        # Start by changing outer_shape_bem to outer_shape
+        monopile["outer_shape"] = monopile["outer_shape_bem"]
+        monopile.pop("outer_shape_bem")
+        # Then change internal_structure_2d_fem to structure
+        monopile["structure"] = monopile["internal_structure_2d_fem"]
+        monopile.pop("internal_structure_2d_fem")
+        # Now define common reference axis
+        monopile["reference_axis"] = {}
+        old_axis = monopile["outer_shape"]["reference_axis"]
+        grid_x = old_axis["x"]["grid"]
+        grid_y = old_axis["x"]["grid"]
+        grid_z = old_axis["x"]["grid"]
+        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
+        values_x = old_axis["x"]["values"]
+        values_y = old_axis["y"]["values"]
+        values_z = old_axis["z"]["values"]
+        # Take grid from z as common grid and interpolate linearly
+        monopile["reference_axis"]["grid"] = common_grid
+        monopile["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
+        monopile["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
+        monopile["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z) 
+        # Pop out older ref_axis
+        monopile["outer_shape"].pop("reference_axis")
+        monopile["structure"].pop("reference_axis")
+        # Rename drag_coeffcient to cd
+        cd_monopile = monopile["outer_shape"]["drag_coefficient"]
+        monopile["outer_shape"]["cd"] = cd_monopile
+        monopile["outer_shape"].pop("drag_coefficient")
         return dict_v2p0
 
     def convert_floating_platform(self, dict_v2p0):

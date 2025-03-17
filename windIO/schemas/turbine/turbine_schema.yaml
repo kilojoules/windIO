@@ -1254,18 +1254,33 @@ properties:
                 type: object
                 description: Data describing the wind turbine tower.
                 required:
+                    - reference_axis
                     - outer_shape
-                    - structure
                 properties:
+                    reference_axis:
+                        type: object
+                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine tower are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at tower base for land-based turbines and at the mean sea level for offshore turbines. :code:`x` is parallel to the ground pointing downwind, :code:`y` is parallel to the ground and to the rotor plane, and :code:`z` is perpendicular to the ground pointing upwards. Standard towers are only defined along :code:`z`. Total tower length is computed by integrating the fields x, y, and z three-dimensionally.
+                        required:
+                            - grid
+                            - x
+                            - y
+                            - z
+                        additionalProperties: False
+                        properties:
+                            grid:
+                                $ref: "#/definitions/distributed_data/grid_nd"
+                            x:
+                                $ref: "#/definitions/distributed_data/length"
+                            y:
+                                $ref: "#/definitions/distributed_data/length"
+                            z:
+                                $ref: "#/definitions/distributed_data/length"
                     outer_shape:
                         type: object
                         required:
-                            - reference_axis
                             - outer_diameter
                             - cd
                         properties:
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
                             outer_diameter: 
                                 type: object
                                 description: Outer diameters of the tower defined from base (grid = 0) to top (grid = 1).
@@ -1292,7 +1307,6 @@ properties:
                     structure:
                         type: object
                         required:
-                            - reference_axis
                             - layers
                         optional:
                             - outfitting_factor
@@ -1304,8 +1318,6 @@ properties:
                                 minimum: 1.0
                                 maximum: 2.0
                                 default: 1.0
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
                             layers:
                                 type: array
                                 description: ...
@@ -1336,8 +1348,8 @@ properties:
             monopile:
                 type: object
                 required:
+                    - reference_axis
                     - outer_shape
-                    - structure
                 optional:
                     - transition_piece_mass
                     - transition_piece_cost
@@ -1361,15 +1373,30 @@ properties:
                         units: kg
                         minimum: 0.0
                         default: 0.0
+                    reference_axis:
+                        type: object
+                        description: The hydrodynamic, structural, and elastic characteristics of the wind turbine monopile are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at the mean sea level. :code:`x` is parallel to the sea level pointing downwind, :code:`y` is parallel to the sea level and to the rotor plane, and :code:`z` is perpendicular to the sea level pointing upwards. Standard monopiles are only defined along :code:`z`. Total monopile length is computed by integrating the fields x, y, and z three-dimensionally.
+                        required:
+                            - grid
+                            - x
+                            - y
+                            - z
+                        additionalProperties: False
+                        properties:
+                            grid:
+                                $ref: "#/definitions/distributed_data/grid_nd"
+                            x:
+                                $ref: "#/definitions/distributed_data/length"
+                            y:
+                                $ref: "#/definitions/distributed_data/length"
+                            z:
+                                $ref: "#/definitions/distributed_data/length"
                     outer_shape:
                         type: object
                         required:
-                            - reference_axis
                             - outer_diameter
                             - cd
                         properties:
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
                             outer_diameter:
                                 type: object
                                 description: Outer diameters of the monopile defined from base (grid = 0) to top (grid = 1).
@@ -1414,7 +1441,6 @@ properties:
                     structure:
                         type: object
                         required:
-                            - reference_axis
                             - layers
                         optional:
                             - outfitting_factor
@@ -1426,8 +1452,6 @@ properties:
                                 minimum: 1.0
                                 maximum: 2.0
                                 default: 1.0
-                            reference_axis:
-                                $ref: "#/definitions/distributed_data/axis_coordinates"
                             layers:
                                 type: array
                                 description: ...
@@ -3557,44 +3581,6 @@ definitions:
                 fixed:
                     type: string
                     description: Name of the layer to lock the edge
-        axis_coordinates:
-            type: object
-            description: For the blade, the reference system is located at blade root, with z aligned with the pitch axis, x pointing towards the suction sides of the airfoils (standard prebend will be negative) and y pointing to the trailing edge (standard sweep will be positive). The blade coordinate system is the one of `BeamDyn  <https://openfast.readthedocs.io/en/master/source/user/beamdyn/input_files.html#beamdyn-primary-input-file>`_ of OpenFAST and it is shown in the figure below. The consequences of this reference system is that standard wind turbine blades have positive twist inboard and close to zero or even slightly negative twist outboard, zero or negative x values for standard prebent blades, and positive y values for backward swept blades. The blade main direction is expressed along z, and total blade length must be computed integrating the fields x, y, and z three-dimensionally. For tower and moniopile, :code:`x` is parallel to the ground pointing downwind, :code:`y` is parallel to the ground and to the rotor plane, and :code:`z` is perpendicular to the ground pointing upwards. Standard monopiles are only defined along :code:`z`.
-            required:
-                - x
-                - y
-                - z
-            properties:
-                x:
-                    type: object
-                    required:
-                        - grid
-                        - values
-                    properties:
-                        grid:
-                            $ref: "#/definitions/distributed_data/grid_nd"
-                        values:
-                            $ref: "#/definitions/distributed_data/length"
-                y:
-                    type: object
-                    required:
-                        - grid
-                        - values
-                    properties:
-                        grid:
-                            $ref: "#/definitions/distributed_data/grid_nd"
-                        values:
-                            $ref: "#/definitions/distributed_data/length"
-                z:
-                    type: object
-                    required:
-                        - grid
-                        - values
-                    properties:
-                        grid:
-                            $ref: "#/definitions/distributed_data/grid_nd"
-                        values:
-                            $ref: "#/definitions/distributed_data/length"
     beam:
         type: object
         description: The equivalent elastic properties of a beam are defined in :code:`elastic_properties`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia.
