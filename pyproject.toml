@@ -27,7 +27,7 @@ classifiers = [
 ]
 dependencies = [
     'jsonschema',
-    'pyyaml',
+    'ruamel.yaml',
     'xarray',       # TODO: this is used to load netcdf files through the validation function XrResourceLoader
     "netcdf4",
 ]

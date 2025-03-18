@@ -1,16 +1,15 @@
 
 from __future__ import annotations
-import yaml
+from ruamel.yaml import YAML
 import os
 import copy
 from pathlib import Path, PosixPath, WindowsPath
 import jsonschema
 import json
 from urllib.parse import urljoin
-import xarray as xr
-from typing import Any
 
 ### API design
+import windIO.yaml
 import windIO.examples.plant
 import windIO.examples.turbine
 import windIO.schemas
@@ -20,71 +19,8 @@ import windIO.schemas.turbine       # in the calling code after only importing w
 plant_ex = windIO.examples.plant
 turbine_ex = windIO.examples.turbine
 schemas = windIO.schemas
+load_yaml = windIO.yaml.load_yaml
 ### API design
-
-
-class XrResourceLoader(yaml.SafeLoader):
-    """
-    This class is a custom loader for yaml files that also enables loading
-    NetCDF files. For pure YAML files, it behaves like the default yaml.SafeLoader.
-    For NetCDF files, it uses xarray to load the data and then converts it to a dictionary.
-    Software incorporating windIO generally will not need to use this class directly.
-    """
-    def __init__(self, stream):
-        self._root = os.path.split(stream.name)[0]
-        super().__init__(stream)
-
-    def include(self, node):
-        filename = os.path.join(self._root, self.construct_scalar(node))
-        ext = os.path.splitext(filename)[1].lower()
-        if ext in ['.yaml', '.yml']:
-            with open(filename, 'r') as f:
-                return yaml.load(f, XrResourceLoader)
-        elif ext in ['.nc']:
-            def fmt(v: Any) -> dict | list | str | float | int:
-                """
-                Formats a dictionary appropriately for yaml.load by converting Tuples to Lists.
-
-                Args:
-                    v (Any): Initially, a dictionary of inputs to format. Then, individual
-                        values within the dictionary.
-                """
-                if isinstance(v, dict):
-                    return {k: fmt(v) for k, v in v.items() if fmt(v) != {}}
-                elif isinstance(v, tuple):
-                    return list(v)
-                else:
-                    return v
-
-            def ds2yml(ds: xr.Dataset) -> dict:
-                """
-                Converts the input xr.Dataset to a format compatible with yaml.load.
-
-                Args:
-                    ds (xr.Dataset): NetCDF data loaded as a xr.Dataset
-                """
-                d = ds.to_dict()
-                return fmt({**{k: v['data'] for k, v in d['coords'].items()},
-                            **d['data_vars']})
-            return ds2yml(xr.open_dataset(filename))
-        else:
-            raise ValueError(f"Unsupported file extension: {ext}")
-XrResourceLoader.add_constructor('!include', XrResourceLoader.include)
-
-def load_yaml(filename: str, loader=XrResourceLoader) -> dict:
-    """
-    Opens ``filename`` and loads the content into a dictionary with the ``yaml.load``
-    function from pyyaml.
-
-    Args:
-        filename (str): Path to the local file to be loaded.
-        loader (yaml.SafeLoader, optional): Defaults to XrResourceLoader.
-
-    Returns:
-        dict: Dictionary representation of the YAML file given in ``filename``.
-    """
-    with open(filename) as fid:
-        return yaml.load(fid, loader)
 
 def enforce_no_additional_properties(schema):
     """Recursively set additionalProperties: false for all objects in the schema"""
@@ -131,13 +67,13 @@ def _add_local_schemas_to(resolver, schema_folder, base_uri, schema_ext_lst=['.j
                         if schema_path.suffix == '.json':
                             schema_doc = json.load(schema_file)
                         if schema_path.suffix in ['.yml', '.yaml']:
-                            schema_doc = yaml.safe_load(schema_file)
+                            schema_doc = load_yaml(schema_file)
 
                     key = urljoin(base_uri, str(rel_path))
                     resolver.store[key] = schema_doc
                 # except (ScannerError, ParserError):
-                except Exception:
-                    print("Reading %s failed" % file)
+                except Exception as err:
+                    print(f"Reading {file} failed\nWith error:\n{err}")
 
 def validate(input: dict | str | Path, schema_type: str, restrictive: bool = True) -> None:
     """
