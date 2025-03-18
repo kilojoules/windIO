@@ -9,10 +9,6 @@ from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 import xarray as xr
 
-from functools import reduce
-import operator
-import copy
-
 
 def fmt(v: Any) -> dict | list | str | float | int:
     """
