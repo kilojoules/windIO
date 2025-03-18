@@ -26,39 +26,42 @@ if __name__ == "__main__":
             "show_heading_numbers": True
         },
         # template_name="md_nested"
+        custom_template_path="jsfh_template/base.html"
     )
+
+    config.schema_title=False
 
     # Using the json file and config from above, create the docs web page
     base_path = Path(__file__).parent.parent
 
     # Generate the plant schema html
     # Split the output into a head and body file to include in the Sphinx docs
-    schema_html_path = Path("_static/plant_schema_doc.html")
+    schema_html_path = Path("_static/plant_schema.html")
     generate_from_filename(
         base_path / "windIO" / "schemas" / "plant" / "wind_energy_system.yaml",
         schema_html_path,
         config=config
     )
-    schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
+    #schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
 
-    schema_html_head = Path("_static/plant_schema_head.html")
-    schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
+    #schema_html_head = Path("_static/plant_schema_head.html")
+    #schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
     
-    schema_html_body = Path("_static/plant_schema_body.html")
-    schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))
+    #schema_html_body = Path("_static/plant_schema_body.html")
+    #schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))
 
     # Generate the turbine schema html
     # Split the output into a head and body file to include in the Sphinx docs
-    schema_html_path = Path("_static/turbine_schema_doc.html")
+    schema_html_path = Path("_static/turbine_schema.html")
     generate_from_filename(
         base_path / "windIO" / "schemas" / "turbine" / "IEAontology_schema.yaml",
         schema_html_path,
         config=config
     )
-    schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
+    #schema_html_soup = BeautifulSoup(schema_html_path.read_text(), "html.parser")
 
-    schema_html_head = Path("_static/turbine_schema_head.html")
-    schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
+    #schema_html_head = Path("_static/turbine_schema_head.html")
+    #schema_html_head.write_text(schema_html_soup.head.prettify(formatter="html"))
     
-    schema_html_body = Path("_static/turbine_schema_body.html")
-    schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))
+    #schema_html_body = Path("_static/turbine_schema_body.html")
+    #schema_html_body.write_text(schema_html_soup.body.prettify(formatter="html"))

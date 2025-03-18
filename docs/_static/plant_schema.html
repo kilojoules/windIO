@@ -1,26 +1,134 @@
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Overpass:300,400,600,800">
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-	<link rel="stylesheet" type="text/css" href="schema_doc.css">
-    <script src="https://use.fontawesome.com/facf9fa52c.js"></script>
-    <script src="schema_doc.min.js"></script>
-    <meta charset="utf-8"/>
-        
-    
-    <title>windIO: plant</title>
-</head>
-<body onload="anchorOnLoad();" id="root"><div class="text-right">
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse:not(.show)" aria-expanded="false">Expand all</button>
-            <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse.show" aria-expanded="false">Collapse all</button>
-        </div>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script>
+    $(document).on('click', 'a[href^="#"]', function(event) {
+  event.preventDefault();
+  history.pushState({}, '', this.href);
+});
 
-     <h1>windIO: plant</h1><span class="badge badge-dark value-type">Type: object</span><br/>
+function flashElement(elementId) {
+    // $( "#" + elementId ).fadeOut(100).fadeIn(200).fadeOut(100).fadeIn(500);
+    myElement = document.getElementById(elementId);
+    myElement.classList.add("jsfh-animated-property");
+    setTimeout(function() {
+        myElement.classList.remove("jsfh-animated-property");
+    }, 1000);
+}
+
+function setAnchor(anchorLinkDestination) {
+    // Set anchor link without reloading
+    history.pushState({}, '', anchorLinkDestination);
+}
+
+function anchorOnLoad() {
+    // Added to onload on body, checks if there is an anchor link and if so, expand
+    let linkTarget = decodeURIComponent(window.location.hash.split("?")[0].split("&")[0]);
+    if (linkTarget[0] === "#") {
+        linkTarget = linkTarget.substr(1);
+    }
+
+    if (linkTarget.length > 0) {
+        anchorLink(linkTarget);
+    }
+}
+
+function anchorLink(linkTarget) {
+    const target = $( "#" + linkTarget );
+    // Find the targeted element to expand and all its parents that can be expanded
+    target.parents().addBack().filter(".collapse:not(.show), .tab-pane, [role='tab']").each(
+        function(index) {
+            if($( this ).hasClass("collapse")) {
+                $( this ).collapse("show");
+            } else if ($( this ).hasClass("tab-pane")) {
+                // We have the pane and not the tab itself, find the tab
+                const tabToShow = $( "a[href='#" + $( this ).attr("id") + "']" );
+                if (tabToShow) {
+                    tabToShow.tab("show");
+                }
+            } else if ($( this ).attr("role") === "tab") {
+                // The tab is not a parent of underlying elements, the tab pane is
+                // However, it can still be linked directly
+                $( this ).tab("show");
+            }
+        }
+    );
+
+    // Wait a little so the user has time to see the page scroll
+    // Or maybe it is to be sure everything is expanded before scrolling and I was not able to bind to the bootstrap
+    // events in a way that works all the time, we may never know
+    setTimeout(function() {
+        let targetElement = document.getElementById(linkTarget);
+        if (targetElement) {
+            targetElement.scrollIntoView({ block: "center", behavior:"smooth" });
+            // Flash the element so that the user notices where the link points to
+            setTimeout(function() {
+                flashElement(linkTarget);
+            }, 500);
+        }
+    }, 1000);
+}
+</script>
+<style>
+.badge-warning {
+    background-color: var(--pst-color-warning);
+    color: var(--pst-color-warning-text)
+}
+
+.badge-success {
+    background-color: var(--pst-color-success);
+    color: var(--pst-color-success-text)
+}
+
+.badge-dark {
+    background-color: var(--pst-color-info);
+    color: var(--pst-color-info-text)
+}
+
+.badge {
+    --bs-badge-font-size: unset;
+    --bs-badge-color: var(--pst-color); 
+}
+
+.card h2, h4 {
+    margin: unset;
+}
+
+.list-group-item{
+    background-color: unset;
+    color: unset;
+}
+
+.card {
+    --bs-card-bg: var(--pst-color-surface); 
+    --bs-card-color: var(--pst-color); 
+}
+
+#expand_buttons {
+    display: inline;
+    float: right;
+}
+
+:root {
+    --bs-link-color: var(--pst-color-link);   
+    --bs-card-bg: var(--pst-color-background); 
+    --bs-body-bg: var(--pst-color-background); 
+    --bs-body-color: var(--pst-color); 
+    --bs-emphasis-color: var(--pst-color); 
+    --bs-border-color: var(--pst-color-border);
+    --bs-border-color-translucent: var(--pst-color-border);
+}
+
+</style>
+
+
+
+
+     <div id="expand_buttons">
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse:not(.show)" aria-expanded="false">Expand all</button>
+                        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target=".collapse.show" aria-expanded="false">Collapse all</button>
+                    </div><span class="badge badge-dark value-type">Type: object</span><br/>
 <span class="description"><p>A file used as input or output of a wind farm model</p>
 </span>
         
@@ -35,6 +143,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#name"
                         aria-expanded="" aria-controls="name" onclick="setAnchor('#name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#name">#</a>
             </h2>
         </div>
 
@@ -62,6 +171,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site"
                         aria-expanded="" aria-controls="site" onclick="setAnchor('#site')"><span class="property-name">site</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site">#</a>
             </h2>
         </div>
 
@@ -87,6 +197,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_name"
                         aria-expanded="" aria-controls="site_name" onclick="setAnchor('#site_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_name">#</a>
             </h2>
         </div>
 
@@ -114,6 +225,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries"
                         aria-expanded="" aria-controls="site_boundaries" onclick="setAnchor('#site_boundaries')"><span class="property-name">boundaries</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries">#</a>
             </h2>
         </div>
 
@@ -180,6 +292,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons"
                         aria-expanded="" aria-controls="site_boundaries_polygons" onclick="setAnchor('#site_boundaries_polygons')"><span class="property-name">polygons</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons">#</a>
             </h2>
         </div>
 
@@ -218,6 +331,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_x"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_x" onclick="setAnchor('#site_boundaries_polygons_items_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_x">#</a>
             </h2>
         </div>
 
@@ -245,6 +359,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_y"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_y" onclick="setAnchor('#site_boundaries_polygons_items_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_y">#</a>
             </h2>
         </div>
 
@@ -278,6 +393,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle"
                         aria-expanded="" aria-controls="site_boundaries_circle" onclick="setAnchor('#site_boundaries_circle')"><span class="property-name">circle</span></button>
+                <a class="headerlink" href="#site_boundaries_circle">#</a>
             </h2>
         </div>
 
@@ -303,6 +419,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center"
                         aria-expanded="" aria-controls="site_boundaries_circle_center" onclick="setAnchor('#site_boundaries_circle_center')"><span class="property-name">center</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center">#</a>
             </h2>
         </div>
 
@@ -328,6 +445,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center_x"
                         aria-expanded="" aria-controls="site_boundaries_circle_center_x" onclick="setAnchor('#site_boundaries_circle_center_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center_x">#</a>
             </h2>
         </div>
 
@@ -355,6 +473,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center_y"
                         aria-expanded="" aria-controls="site_boundaries_circle_center_y" onclick="setAnchor('#site_boundaries_circle_center_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center_y">#</a>
             </h2>
         </div>
 
@@ -386,6 +505,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_radius"
                         aria-expanded="" aria-controls="site_boundaries_circle_radius" onclick="setAnchor('#site_boundaries_circle_radius')"><span class="property-name">radius</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_radius">#</a>
             </h2>
         </div>
 
@@ -421,6 +541,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_exclusions"
                         aria-expanded="" aria-controls="site_exclusions" onclick="setAnchor('#site_exclusions')"><span class="property-name">exclusions</span></button>
+                <a class="headerlink" href="#site_exclusions">#</a>
             </h2>
         </div>
 
@@ -487,6 +608,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_exclusions_polygons"
                         aria-expanded="" aria-controls="site_exclusions_polygons" onclick="setAnchor('#site_exclusions_polygons')"><span class="property-name">polygons</span></button>
+                <a class="headerlink" href="#site_exclusions_polygons">#</a>
             </h2>
         </div>
 
@@ -528,6 +650,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_exclusions_circle"
                         aria-expanded="" aria-controls="site_exclusions_circle" onclick="setAnchor('#site_exclusions_circle')"><span class="property-name">circle</span></button>
+                <a class="headerlink" href="#site_exclusions_circle">#</a>
             </h2>
         </div>
 
@@ -553,6 +676,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center"
                         aria-expanded="" aria-controls="site_boundaries_circle_center" onclick="setAnchor('#site_boundaries_circle_center')"><span class="property-name">center</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center">#</a>
             </h2>
         </div>
 
@@ -578,6 +702,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center_x"
                         aria-expanded="" aria-controls="site_boundaries_circle_center_x" onclick="setAnchor('#site_boundaries_circle_center_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center_x">#</a>
             </h2>
         </div>
 
@@ -605,6 +730,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_center_y"
                         aria-expanded="" aria-controls="site_boundaries_circle_center_y" onclick="setAnchor('#site_boundaries_circle_center_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_center_y">#</a>
             </h2>
         </div>
 
@@ -636,6 +762,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_circle_radius"
                         aria-expanded="" aria-controls="site_boundaries_circle_radius" onclick="setAnchor('#site_boundaries_circle_radius')"><span class="property-name">radius</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_circle_radius">#</a>
             </h2>
         </div>
 
@@ -671,6 +798,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource"
                         aria-expanded="" aria-controls="site_energy_resource" onclick="setAnchor('#site_energy_resource')"><span class="property-name">energy_resource</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_energy_resource">#</a>
             </h2>
         </div>
 
@@ -696,6 +824,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_name"
                         aria-expanded="" aria-controls="site_energy_resource_name" onclick="setAnchor('#site_energy_resource_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_energy_resource_name">#</a>
             </h2>
         </div>
 
@@ -723,6 +852,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource" onclick="setAnchor('#site_energy_resource_wind_resource')"><span class="property-name">wind_resource</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource">#</a>
             </h2>
         </div>
 
@@ -808,6 +938,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_time"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_time" onclick="setAnchor('#site_energy_resource_wind_resource_time')"><span class="property-name">time</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_time">#</a>
             </h2>
         </div>
 
@@ -966,6 +1097,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction')"><span class="property-name">wind_direction</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction">#</a>
             </h2>
         </div>
 
@@ -1029,6 +1161,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -1069,6 +1202,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -1109,6 +1243,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -1135,6 +1270,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -1185,6 +1321,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_speed"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_speed" onclick="setAnchor('#site_energy_resource_wind_resource_wind_speed')"><span class="property-name">wind_speed</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_speed">#</a>
             </h2>
         </div>
 
@@ -1237,6 +1374,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_turbine"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_turbine" onclick="setAnchor('#site_energy_resource_wind_resource_wind_turbine')"><span class="property-name">wind_turbine</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_turbine">#</a>
             </h2>
         </div>
 
@@ -1395,6 +1533,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_x"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_x" onclick="setAnchor('#site_energy_resource_wind_resource_x')"><span class="property-name">x</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_x">#</a>
             </h2>
         </div>
 
@@ -1446,6 +1585,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_y"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_y" onclick="setAnchor('#site_energy_resource_wind_resource_y')"><span class="property-name">y</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_y">#</a>
             </h2>
         </div>
 
@@ -1497,6 +1637,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_height"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_height" onclick="setAnchor('#site_energy_resource_wind_resource_height')"><span class="property-name">height</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_height">#</a>
             </h2>
         </div>
 
@@ -1548,6 +1689,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_probability"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_probability" onclick="setAnchor('#site_energy_resource_wind_resource_probability')"><span class="property-name">probability</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_probability">#</a>
             </h2>
         </div>
 
@@ -1569,6 +1711,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_weibull_a"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_weibull_a" onclick="setAnchor('#site_energy_resource_wind_resource_weibull_a')"><span class="property-name">weibull_a</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_weibull_a">#</a>
             </h2>
         </div>
 
@@ -1613,6 +1756,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -1653,6 +1797,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -1693,6 +1838,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -1719,6 +1865,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -1756,6 +1903,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_weibull_k"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_weibull_k" onclick="setAnchor('#site_energy_resource_wind_resource_weibull_k')"><span class="property-name">weibull_k</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_weibull_k">#</a>
             </h2>
         </div>
 
@@ -1800,6 +1948,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -1840,6 +1989,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -1880,6 +2030,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -1906,6 +2057,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -1943,6 +2095,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_sector_probability"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_sector_probability" onclick="setAnchor('#site_energy_resource_wind_resource_sector_probability')"><span class="property-name">sector_probability</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_sector_probability">#</a>
             </h2>
         </div>
 
@@ -1988,6 +2141,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -2028,6 +2182,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -2068,6 +2223,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -2094,6 +2250,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -2131,6 +2288,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_turbulence_intensity"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_turbulence_intensity" onclick="setAnchor('#site_energy_resource_wind_resource_turbulence_intensity')"><span class="property-name">turbulence_intensity</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_turbulence_intensity">#</a>
             </h2>
         </div>
 
@@ -2175,6 +2333,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -2215,6 +2374,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -2255,6 +2415,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -2281,6 +2442,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -2318,6 +2480,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_reference_height"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_reference_height" onclick="setAnchor('#site_energy_resource_wind_resource_reference_height')"><span class="property-name">reference_height</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_reference_height">#</a>
             </h2>
         </div>
 
@@ -2344,6 +2507,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_shear"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_shear" onclick="setAnchor('#site_energy_resource_wind_resource_shear')"><span class="property-name">shear</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_shear">#</a>
             </h2>
         </div>
 
@@ -2372,6 +2536,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_LMO"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_LMO" onclick="setAnchor('#site_energy_resource_wind_resource_LMO')"><span class="property-name">LMO</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_LMO">#</a>
             </h2>
         </div>
 
@@ -2416,6 +2581,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -2456,6 +2622,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -2496,6 +2663,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -2522,6 +2690,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -2559,6 +2728,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_z0"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_z0" onclick="setAnchor('#site_energy_resource_wind_resource_z0')"><span class="property-name">z0</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_z0">#</a>
             </h2>
         </div>
 
@@ -2603,6 +2773,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -2643,6 +2814,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -2683,6 +2855,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -2709,6 +2882,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -2746,6 +2920,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_k"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_k" onclick="setAnchor('#site_energy_resource_wind_resource_k')"><span class="property-name">k</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_k">#</a>
             </h2>
         </div>
 
@@ -2790,6 +2965,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -2830,6 +3006,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -2870,6 +3047,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -2896,6 +3074,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -2933,6 +3112,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_epsilon"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_epsilon" onclick="setAnchor('#site_energy_resource_wind_resource_epsilon')"><span class="property-name">epsilon</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_epsilon">#</a>
             </h2>
         </div>
 
@@ -2977,6 +3157,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -3017,6 +3198,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -3057,6 +3239,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -3083,6 +3266,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -3120,6 +3304,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_potential_temperature"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_potential_temperature" onclick="setAnchor('#site_energy_resource_wind_resource_potential_temperature')"><span class="property-name">potential_temperature</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_potential_temperature">#</a>
             </h2>
         </div>
 
@@ -3164,6 +3349,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -3204,6 +3390,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -3244,6 +3431,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -3270,6 +3458,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -3307,6 +3496,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_friction_velocity"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_friction_velocity" onclick="setAnchor('#site_energy_resource_wind_resource_friction_velocity')"><span class="property-name">friction_velocity</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_friction_velocity">#</a>
             </h2>
         </div>
 
@@ -3351,6 +3541,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -3391,6 +3582,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -3431,6 +3623,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -3457,6 +3650,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -3494,6 +3688,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_ground_temperature"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_ground_temperature" onclick="setAnchor('#site_energy_resource_wind_resource_ground_temperature')"><span class="property-name">ground_temperature</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_ground_temperature">#</a>
             </h2>
         </div>
 
@@ -3539,6 +3734,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -3579,6 +3775,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -3619,6 +3816,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -3645,6 +3843,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -3682,6 +3881,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_stability"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_stability" onclick="setAnchor('#site_energy_resource_wind_resource_stability')"><span class="property-name">stability</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_stability">#</a>
             </h2>
         </div>
 
@@ -3727,6 +3927,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_data">#</a>
             </h2>
         </div>
 
@@ -3767,6 +3968,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i0_dims">#</a>
             </h2>
         </div>
 
@@ -3807,6 +4009,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data')"><span class="property-name">data</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_data">#</a>
             </h2>
         </div>
 
@@ -3833,6 +4036,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims" onclick="setAnchor('#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims')"><span class="property-name">dims</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_wind_direction_oneOf_i0_oneOf_i1_dims">#</a>
             </h2>
         </div>
 
@@ -3870,6 +4074,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_energy_resource_wind_resource_capping_inversion"
                         aria-expanded="" aria-controls="site_energy_resource_wind_resource_capping_inversion" onclick="setAnchor('#site_energy_resource_wind_resource_capping_inversion')"><span class="property-name">capping_inversion</span></button>
+                <a class="headerlink" href="#site_energy_resource_wind_resource_capping_inversion">#</a>
             </h2>
         </div>
 
@@ -3904,6 +4109,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_bathymetry"
                         aria-expanded="" aria-controls="site_bathymetry" onclick="setAnchor('#site_bathymetry')"><span class="property-name">bathymetry</span></button>
+                <a class="headerlink" href="#site_bathymetry">#</a>
             </h2>
         </div>
 
@@ -3927,6 +4133,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_bathymetry_coordinates"
                         aria-expanded="" aria-controls="site_bathymetry_coordinates" onclick="setAnchor('#site_bathymetry_coordinates')"><span class="property-name">coordinates</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_bathymetry_coordinates">#</a>
             </h2>
         </div>
 
@@ -3948,6 +4155,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_bathymetry_depth"
                         aria-expanded="" aria-controls="site_bathymetry_depth" onclick="setAnchor('#site_bathymetry_depth')"><span class="property-name">depth</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_bathymetry_depth">#</a>
             </h2>
         </div>
 
@@ -3993,6 +4201,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_elevation"
                         aria-expanded="" aria-controls="site_elevation" onclick="setAnchor('#site_elevation')"><span class="property-name">elevation</span></button>
+                <a class="headerlink" href="#site_elevation">#</a>
             </h2>
         </div>
 
@@ -4020,6 +4229,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_roads"
                         aria-expanded="" aria-controls="site_roads" onclick="setAnchor('#site_roads')"><span class="property-name">roads</span></button>
+                <a class="headerlink" href="#site_roads">#</a>
             </h2>
         </div>
 
@@ -4051,6 +4261,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm"
                         aria-expanded="" aria-controls="wind_farm" onclick="setAnchor('#wind_farm')"><span class="property-name">wind_farm</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm">#</a>
             </h2>
         </div>
 
@@ -4076,6 +4287,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_name"
                         aria-expanded="" aria-controls="wind_farm_name" onclick="setAnchor('#wind_farm_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_name">#</a>
             </h2>
         </div>
 
@@ -4103,6 +4315,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_layouts"
                         aria-expanded="" aria-controls="wind_farm_layouts" onclick="setAnchor('#wind_farm_layouts')"><span class="property-name">layouts</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_layouts">#</a>
             </h2>
         </div>
 
@@ -4126,6 +4339,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_layouts_initial_layout"
                         aria-expanded="" aria-controls="wind_farm_layouts_initial_layout" onclick="setAnchor('#wind_farm_layouts_initial_layout')"><span class="property-name">initial_layout</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_layouts_initial_layout">#</a>
             </h2>
         </div>
 
@@ -4150,6 +4364,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_layouts_initial_layout_coordinates"
                         aria-expanded="" aria-controls="wind_farm_layouts_initial_layout_coordinates" onclick="setAnchor('#wind_farm_layouts_initial_layout_coordinates')"><span class="property-name">coordinates</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_layouts_initial_layout_coordinates">#</a>
             </h2>
         </div>
 
@@ -4175,6 +4390,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_x"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_x" onclick="setAnchor('#site_boundaries_polygons_items_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_x">#</a>
             </h2>
         </div>
 
@@ -4202,6 +4418,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_y"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_y" onclick="setAnchor('#site_boundaries_polygons_items_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_y">#</a>
             </h2>
         </div>
 
@@ -4241,6 +4458,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines"
                         aria-expanded="" aria-controls="wind_farm_turbines" onclick="setAnchor('#wind_farm_turbines')"><span class="property-name">turbines</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines">#</a>
             </h2>
         </div>
 
@@ -4266,6 +4484,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_name"
                         aria-expanded="" aria-controls="wind_farm_turbines_name" onclick="setAnchor('#wind_farm_turbines_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_name">#</a>
             </h2>
         </div>
 
@@ -4293,6 +4512,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance" onclick="setAnchor('#wind_farm_turbines_performance')"><span class="property-name">performance</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance">#</a>
             </h2>
         </div>
 
@@ -4379,6 +4599,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Cp_curve"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Cp_curve" onclick="setAnchor('#wind_farm_turbines_performance_Cp_curve')"><span class="property-name">Cp_curve</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Cp_curve">#</a>
             </h2>
         </div>
 
@@ -4402,6 +4623,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Cp_curve_Cp_values"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Cp_curve_Cp_values" onclick="setAnchor('#wind_farm_turbines_performance_Cp_curve_Cp_values')"><span class="property-name">Cp_values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Cp_curve_Cp_values">#</a>
             </h2>
         </div>
 
@@ -4429,6 +4651,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Cp_curve_Cp_wind_speeds"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Cp_curve_Cp_wind_speeds" onclick="setAnchor('#wind_farm_turbines_performance_Cp_curve_Cp_wind_speeds')"><span class="property-name">Cp_wind_speeds</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Cp_curve_Cp_wind_speeds">#</a>
             </h2>
         </div>
 
@@ -4460,6 +4683,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_power_curve"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_power_curve" onclick="setAnchor('#wind_farm_turbines_performance_power_curve')"><span class="property-name">power_curve</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_power_curve">#</a>
             </h2>
         </div>
 
@@ -4483,6 +4707,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_power_curve_power_values"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_power_curve_power_values" onclick="setAnchor('#wind_farm_turbines_performance_power_curve_power_values')"><span class="property-name">power_values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_power_curve_power_values">#</a>
             </h2>
         </div>
 
@@ -4510,6 +4735,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_power_curve_power_wind_speeds"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_power_curve_power_wind_speeds" onclick="setAnchor('#wind_farm_turbines_performance_power_curve_power_wind_speeds')"><span class="property-name">power_wind_speeds</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_power_curve_power_wind_speeds">#</a>
             </h2>
         </div>
 
@@ -4541,6 +4767,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Ct_curve"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Ct_curve" onclick="setAnchor('#wind_farm_turbines_performance_Ct_curve')"><span class="property-name">Ct_curve</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Ct_curve">#</a>
             </h2>
         </div>
 
@@ -4564,6 +4791,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Ct_curve_Ct_values"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Ct_curve_Ct_values" onclick="setAnchor('#wind_farm_turbines_performance_Ct_curve_Ct_values')"><span class="property-name">Ct_values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Ct_curve_Ct_values">#</a>
             </h2>
         </div>
 
@@ -4591,6 +4819,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_Ct_curve_Ct_wind_speeds"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_Ct_curve_Ct_wind_speeds" onclick="setAnchor('#wind_farm_turbines_performance_Ct_curve_Ct_wind_speeds')"><span class="property-name">Ct_wind_speeds</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_Ct_curve_Ct_wind_speeds">#</a>
             </h2>
         </div>
 
@@ -4622,6 +4851,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_rated_wind_speed"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_rated_wind_speed" onclick="setAnchor('#wind_farm_turbines_performance_rated_wind_speed')"><span class="property-name">rated_wind_speed</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_rated_wind_speed">#</a>
             </h2>
         </div>
 
@@ -4648,6 +4878,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_cutin_wind_speed"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_cutin_wind_speed" onclick="setAnchor('#wind_farm_turbines_performance_cutin_wind_speed')"><span class="property-name">cutin_wind_speed</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_cutin_wind_speed">#</a>
             </h2>
         </div>
 
@@ -4674,6 +4905,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_cutout_wind_speed"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_cutout_wind_speed" onclick="setAnchor('#wind_farm_turbines_performance_cutout_wind_speed')"><span class="property-name">cutout_wind_speed</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_cutout_wind_speed">#</a>
             </h2>
         </div>
 
@@ -4700,6 +4932,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_rated_power"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_rated_power" onclick="setAnchor('#wind_farm_turbines_performance_rated_power')"><span class="property-name">rated_power</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_rated_power">#</a>
             </h2>
         </div>
 
@@ -4726,6 +4959,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_performance_generator_efficiency"
                         aria-expanded="" aria-controls="wind_farm_turbines_performance_generator_efficiency" onclick="setAnchor('#wind_farm_turbines_performance_generator_efficiency')"><span class="property-name">generator_efficiency</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_performance_generator_efficiency">#</a>
             </h2>
         </div>
 
@@ -4757,6 +4991,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_hub_height"
                         aria-expanded="" aria-controls="wind_farm_turbines_hub_height" onclick="setAnchor('#wind_farm_turbines_hub_height')"><span class="property-name">hub_height</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_hub_height">#</a>
             </h2>
         </div>
 
@@ -4783,6 +5018,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_rotor_diameter"
                         aria-expanded="" aria-controls="wind_farm_turbines_rotor_diameter" onclick="setAnchor('#wind_farm_turbines_rotor_diameter')"><span class="property-name">rotor_diameter</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_rotor_diameter">#</a>
             </h2>
         </div>
 
@@ -4809,6 +5045,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_turbines_TSR"
                         aria-expanded="" aria-controls="wind_farm_turbines_TSR" onclick="setAnchor('#wind_farm_turbines_TSR')"><span class="property-name">TSR</span></button>
+                <a class="headerlink" href="#wind_farm_turbines_TSR">#</a>
             </h2>
         </div>
 
@@ -4839,6 +5076,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_substations"
                         aria-expanded="" aria-controls="wind_farm_electrical_substations" onclick="setAnchor('#wind_farm_electrical_substations')"><span class="property-name">electrical_substations</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_substations">#</a>
             </h2>
         </div>
 
@@ -4874,6 +5112,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_substations_items_electrical_substation"
                         aria-expanded="" aria-controls="wind_farm_electrical_substations_items_electrical_substation" onclick="setAnchor('#wind_farm_electrical_substations_items_electrical_substation')"><span class="property-name">electrical_substation</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_substations_items_electrical_substation">#</a>
             </h2>
         </div>
 
@@ -4898,6 +5137,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_substations_items_electrical_substation_coordinates"
                         aria-expanded="" aria-controls="wind_farm_electrical_substations_items_electrical_substation_coordinates" onclick="setAnchor('#wind_farm_electrical_substations_items_electrical_substation_coordinates')"><span class="property-name">coordinates</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_substations_items_electrical_substation_coordinates">#</a>
             </h2>
         </div>
 
@@ -4923,6 +5163,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_x"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_x" onclick="setAnchor('#site_boundaries_polygons_items_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_x">#</a>
             </h2>
         </div>
 
@@ -4950,6 +5191,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#site_boundaries_polygons_items_y"
                         aria-expanded="" aria-controls="site_boundaries_polygons_items_y" onclick="setAnchor('#site_boundaries_polygons_items_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#site_boundaries_polygons_items_y">#</a>
             </h2>
         </div>
 
@@ -4981,6 +5223,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_substations_items_electrical_substation_capacity"
                         aria-expanded="" aria-controls="wind_farm_electrical_substations_items_electrical_substation_capacity" onclick="setAnchor('#wind_farm_electrical_substations_items_electrical_substation_capacity')"><span class="property-name">capacity</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_substations_items_electrical_substation_capacity">#</a>
             </h2>
         </div>
 
@@ -5018,6 +5261,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array" onclick="setAnchor('#wind_farm_electrical_collection_array')"><span class="property-name">electrical_collection_array</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array">#</a>
             </h2>
         </div>
 
@@ -5041,6 +5285,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_edges"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_edges" onclick="setAnchor('#wind_farm_electrical_collection_array_edges')"><span class="property-name">edges</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_edges">#</a>
             </h2>
         </div>
 
@@ -5068,6 +5313,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_cables"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_cables" onclick="setAnchor('#wind_farm_electrical_collection_array_cables')"><span class="property-name">cables</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_cables">#</a>
             </h2>
         </div>
 
@@ -5091,6 +5337,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_cables_cable_type"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_cables_cable_type" onclick="setAnchor('#wind_farm_electrical_collection_array_cables_cable_type')"><span class="property-name">cable_type</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_cables_cable_type">#</a>
             </h2>
         </div>
 
@@ -5118,6 +5365,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_cables_cross_section"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_cables_cross_section" onclick="setAnchor('#wind_farm_electrical_collection_array_cables_cross_section')"><span class="property-name">cross_section</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_cables_cross_section">#</a>
             </h2>
         </div>
 
@@ -5145,6 +5393,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_cables_capacity"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_cables_capacity" onclick="setAnchor('#wind_farm_electrical_collection_array_cables_capacity')"><span class="property-name">capacity</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_cables_capacity">#</a>
             </h2>
         </div>
 
@@ -5172,6 +5421,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#wind_farm_electrical_collection_array_cables_cost"
                         aria-expanded="" aria-controls="wind_farm_electrical_collection_array_cables_cost" onclick="setAnchor('#wind_farm_electrical_collection_array_cables_cost')"><span class="property-name">cost</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#wind_farm_electrical_collection_array_cables_cost">#</a>
             </h2>
         </div>
 
@@ -5211,6 +5461,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#attributes"
                         aria-expanded="" aria-controls="attributes" onclick="setAnchor('#attributes')"><span class="property-name">attributes</span></button>
+                <a class="headerlink" href="#attributes">#</a>
             </h2>
         </div>
 
@@ -5234,6 +5485,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#attributes_net_AEP"
                         aria-expanded="" aria-controls="attributes_net_AEP" onclick="setAnchor('#attributes_net_AEP')"><span class="property-name">net_AEP</span></button>
+                <a class="headerlink" href="#attributes_net_AEP">#</a>
             </h2>
         </div>
 
@@ -5260,6 +5512,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#attributes_gross_AEP"
                         aria-expanded="" aria-controls="attributes_gross_AEP" onclick="setAnchor('#attributes_gross_AEP')"><span class="property-name">gross_AEP</span></button>
+                <a class="headerlink" href="#attributes_gross_AEP">#</a>
             </h2>
         </div>
 
@@ -5286,6 +5539,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#attributes_array_efficiency"
                         aria-expanded="" aria-controls="attributes_array_efficiency" onclick="setAnchor('#attributes_array_efficiency')"><span class="property-name">array_efficiency</span></button>
+                <a class="headerlink" href="#attributes_array_efficiency">#</a>
             </h2>
         </div>
 
@@ -5312,6 +5566,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#attributes_analyses"
                         aria-expanded="" aria-controls="attributes_analyses" onclick="setAnchor('#attributes_analyses')"><span class="property-name">analyses</span></button>
+                <a class="headerlink" href="#attributes_analyses">#</a>
             </h2>
         </div>
 
@@ -5342,6 +5597,7 @@
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#optimisation"
                         aria-expanded="" aria-controls="optimisation" onclick="setAnchor('#optimisation')"><span class="property-name">optimisation</span></button>
+                <a class="headerlink" href="#optimisation">#</a>
             </h2>
         </div>
 
@@ -5363,7 +5619,7 @@
     </div>
 </div>
 
-    <footer>
-        <p class="generated-by-footer">Generated using <a href="https://github.com/coveooss/json-schema-for-humans">json-schema-for-humans</a> on 2025-03-13 at 14:10:42 -0500</p>
-    </footer></body>
-</html>
+
+<script defer>
+    anchorOnLoad();
+</script>
