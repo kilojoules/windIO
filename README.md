@@ -13,7 +13,7 @@ This software is a version 1.0
 
 ## Documentation and citation
 
-The online documentation can be accessed here <https://ieawindsystems.github.io/windio>
+The online documentation can be accessed here <https://ieawindsystems.github.io/windIO/>
 
 If you use this model in your research or publications, please cite this [IEA technical report](https://doi.org/10.2172/1868328):
 
