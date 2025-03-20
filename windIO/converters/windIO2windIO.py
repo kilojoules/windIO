@@ -82,20 +82,9 @@ class v1p0_to_v2p0:
     
     def convert_blade_reference_axis(self, dict_v2p0):
         
-        # New common ref axis for all blade subfields
-        dict_v2p0["components"]["blade"]["reference_axis"] = {}
-        grid_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["grid"]
-        grid_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["grid"]
-        grid_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["grid"]
-        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
-        values_x = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["x"]["values"]
-        values_y = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["y"]["values"]
-        values_z = dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"]["z"]["values"]
-        # Take grid from z as common grid and interpolate linearly
-        dict_v2p0["components"]["blade"]["reference_axis"]["grid"] = common_grid
-        dict_v2p0["components"]["blade"]["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
-        dict_v2p0["components"]["blade"]["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
-        dict_v2p0["components"]["blade"]["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z)     
+        # New common ref axis for all blade subfields, take the aero shape one by default
+        dict_v2p0["components"]["blade"]["reference_axis"] = deepcopy(dict_v2p0["components"]["blade"]["outer_shape_bem"]["reference_axis"])
+        dict_v2p0["components"]["blade"]["outer_shape_bem"].pop("reference_axis")
 
         return dict_v2p0
     
@@ -126,9 +115,6 @@ class v1p0_to_v2p0:
         # Convert twist from rad to deg
         twist_rad = blade_os["twist"]["values"]
         blade_os["twist"]["values"] = np.rad2deg(twist_rad)
-
-        # Pop older ref axis
-        blade_os.pop("reference_axis")
 
         # Restructure how airfoil spanwise positions are defined
         n_af = len(blade_os["airfoil_position"]["grid"])
@@ -194,7 +180,8 @@ class v1p0_to_v2p0:
         dict_v2p0["components"]["blade"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties_mb"]
         dict_v2p0["components"]["blade"].pop("elastic_properties_mb")
         # Redefine stiffness and inertia matrices listing each element individually as opposed to an array
-        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties"]["six_x_six"]
+        dict_v2p0["components"]["blade"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties"]["six_x_six"]
+        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties"]
 
         # # Start by moving structural twist from rad to deg
         # if "values" in blade_beam["twist"]:
@@ -253,10 +240,6 @@ class v1p0_to_v2p0:
         # Pop older ref axis
         blade_beam.pop("reference_axis")
 
-        dict_v2p0["components"]["blade"]["elastic_properties"]["stiffness_matrix"] = blade_beam["stiffness_matrix"]
-        dict_v2p0["components"]["blade"]["elastic_properties"]["inertia_matrix"] = blade_beam["inertia_matrix"]
-        dict_v2p0["components"]["blade"]["elastic_properties"]["structural_damping"] = blade_beam["structural_damping"]
-        dict_v2p0["components"]["blade"]["elastic_properties"].pop("six_x_six")
         
         return dict_v2p0
 
@@ -392,20 +375,7 @@ class v1p0_to_v2p0:
         tower["structure"] = tower["internal_structure_2d_fem"]
         tower.pop("internal_structure_2d_fem")
         # Now define common reference axis
-        tower["reference_axis"] = {}
-        old_axis = tower["outer_shape"]["reference_axis"]
-        grid_x = old_axis["x"]["grid"]
-        grid_y = old_axis["x"]["grid"]
-        grid_z = old_axis["x"]["grid"]
-        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
-        values_x = old_axis["x"]["values"]
-        values_y = old_axis["y"]["values"]
-        values_z = old_axis["z"]["values"]
-        # Take grid from z as common grid and interpolate linearly
-        tower["reference_axis"]["grid"] = common_grid
-        tower["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
-        tower["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
-        tower["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z) 
+        tower["reference_axis"] = deepcopy(tower["outer_shape"]["reference_axis"])
         # Pop out older ref_axis
         tower["outer_shape"].pop("reference_axis")
         tower["structure"].pop("reference_axis")
@@ -424,20 +394,7 @@ class v1p0_to_v2p0:
         monopile["structure"] = monopile["internal_structure_2d_fem"]
         monopile.pop("internal_structure_2d_fem")
         # Now define common reference axis
-        monopile["reference_axis"] = {}
-        old_axis = monopile["outer_shape"]["reference_axis"]
-        grid_x = old_axis["x"]["grid"]
-        grid_y = old_axis["x"]["grid"]
-        grid_z = old_axis["x"]["grid"]
-        common_grid = np.unique(np.concatenate((grid_x, grid_y, grid_z)))
-        values_x = old_axis["x"]["values"]
-        values_y = old_axis["y"]["values"]
-        values_z = old_axis["z"]["values"]
-        # Take grid from z as common grid and interpolate linearly
-        monopile["reference_axis"]["grid"] = common_grid
-        monopile["reference_axis"]["x"] = np.interp(common_grid, grid_x, values_x)
-        monopile["reference_axis"]["y"] = np.interp(common_grid, grid_y, values_y)
-        monopile["reference_axis"]["z"] = np.interp(common_grid, grid_z, values_z) 
+        monopile["reference_axis"] = deepcopy(monopile["outer_shape"]["reference_axis"])
         # Pop out older ref_axis
         monopile["outer_shape"].pop("reference_axis")
         monopile["structure"].pop("reference_axis")

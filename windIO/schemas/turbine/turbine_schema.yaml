@@ -115,7 +115,7 @@ properties:
         properties:
             blade:
                 type: object
-                description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape`, :code:`elastic_properties`, and :code:`structure`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, possibly curved, :code:`reference_axis`.
+                description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape`, :code:`elastic_properties`, and :code:`structure`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, usually curved, :code:`reference_axis`.
                 required:
                     - reference_axis
                     - outer_shape
@@ -124,22 +124,43 @@ properties:
                 properties:
                     reference_axis:
                         type: object
-                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine blade are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at blade root, with z aligned with the pitch axis, x pointing towards the suction sides of the airfoils (standard prebend will be negative) and y pointing to the trailing edge (standard sweep will be positive). The blade main direction is expressed along z, and total blade length must be computed integrating the fields x, y, and z three-dimensionally.
+                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine blade are defined at a common reference axis. The axis is defined with sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at blade root, with z aligned with the pitch axis, x pointing towards the suction sides of the airfoils (standard prebend will be negative) and y pointing to the trailing edge (standard sweep will be positive). The blade main direction is expressed along z, and total blade length must be computed integrating the fields x, y, and z three-dimensionally.
                         required:
-                            - grid
                             - x
                             - y
                             - z
                         additionalProperties: False
                         properties:
-                            grid:
-                                $ref: "#/definitions/distributed_data/grid_nd"
                             x:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             y:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             z:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                     outer_shape:
                         type: object
                         description: :code:`outer_shape` consists of a dictionary containing the data describing the outer shape of the blade.
@@ -1259,22 +1280,43 @@ properties:
                 properties:
                     reference_axis:
                         type: object
-                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine tower are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at tower base for land-based turbines and at the mean sea level for offshore turbines. :code:`x` is parallel to the ground pointing downwind, :code:`y` is parallel to the ground and to the rotor plane, and :code:`z` is perpendicular to the ground pointing upwards. Standard towers are only defined along :code:`z`. Total tower length is computed by integrating the fields x, y, and z three-dimensionally.
+                        description: The aerodynamic, structural, and elastic characteristics of the wind turbine tower are defined at a common reference axis. The axis is defined with sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at tower base for land-based turbines and at the mean sea level for offshore turbines. :code:`x` is parallel to the ground pointing downwind, :code:`y` is parallel to the ground and to the rotor plane, and :code:`z` is perpendicular to the ground pointing upwards. Standard towers are only defined along :code:`z`. Total tower length is computed by integrating the fields x, y, and z three-dimensionally.
                         required:
-                            - grid
                             - x
                             - y
                             - z
                         additionalProperties: False
                         properties:
-                            grid:
-                                $ref: "#/definitions/distributed_data/grid_nd"
                             x:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             y:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             z:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                     outer_shape:
                         type: object
                         required:
@@ -1375,22 +1417,43 @@ properties:
                         default: 0.0
                     reference_axis:
                         type: object
-                        description: The hydrodynamic, structural, and elastic characteristics of the wind turbine monopile are defined at a common reference axis. The axis is defined with a nondimensional :code:`grid` and sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at the mean sea level. :code:`x` is parallel to the sea level pointing downwind, :code:`y` is parallel to the sea level and to the rotor plane, and :code:`z` is perpendicular to the sea level pointing upwards. Standard monopiles are only defined along :code:`z`. Total monopile length is computed by integrating the fields x, y, and z three-dimensionally.
+                        description: The hydrodynamic, structural, and elastic characteristics of the wind turbine monopile are defined at a common reference axis. The axis is defined with sets of :code:`x`, :code:`y`, and :code:`z` points. The reference system for :code:`x`, :code:`y`, and :code:`z` is located at the mean sea level. :code:`x` is parallel to the sea level pointing downwind, :code:`y` is parallel to the sea level and to the rotor plane, and :code:`z` is perpendicular to the sea level pointing upwards. Standard monopiles are only defined along :code:`z`. Total monopile length is computed by integrating the fields x, y, and z three-dimensionally.
                         required:
-                            - grid
                             - x
                             - y
                             - z
                         additionalProperties: False
                         properties:
-                            grid:
-                                $ref: "#/definitions/distributed_data/grid_nd"
                             x:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             y:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                             z:
-                                $ref: "#/definitions/distributed_data/length"
+                                type: object
+                                required:
+                                    - grid
+                                    - values
+                                properties:
+                                    grid:
+                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                    values:
+                                        $ref: "#/definitions/distributed_data/length"
                     outer_shape:
                         type: object
                         required:
