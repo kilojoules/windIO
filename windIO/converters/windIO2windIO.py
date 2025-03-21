@@ -68,7 +68,7 @@ class v1p0_to_v2p0:
 
         # Print out
         print("New yaml file being generated: %s"%self.filename_v2p0)
-        windIO.yaml.get_YAML().dump(dict_v2p0, self.filename_v2p0)
+        windIO.yaml.write_yaml(dict_v2p0, self.filename_v2p0)
         
         print("Converter windIO v1.0 to v2.0 ended.")
 
@@ -532,7 +532,7 @@ if __name__ == "__main__":
 
     turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 
-    filename_v1p0 = "To_be_set"
+    filename_v1p0 = turbine_reference_path / "IEA-15-240-RWT.yaml"
     filename_v2p0 = turbine_reference_path / "IEA-15-240-RWT_v2p0.yaml"
     
     if not os.path.exists(filename_v1p0):
