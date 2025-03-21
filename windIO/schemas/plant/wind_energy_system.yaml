@@ -1,6 +1,6 @@
 input_format_version: 0
-title: IEA Wind Task 37 Wind Energy System Ontology version 0.1
-description: A file used as input of a wind farm model
+title: "windIO: plant"
+description: A file used as input or output of a wind farm model
 required:
   - name
   - site

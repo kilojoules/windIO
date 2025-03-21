@@ -72,7 +72,7 @@ def get_YAML(
     def list_rep(dumper, data):
         try:
             npdata = np.asanyarray(data)  # Convert to numpy
-            if np.isdtype(npdata.dtype, "numeric"):  # Test if data is numeric
+            if np.issubdtype(npdata.dtype, np.number):  # Test if data is numeric
                 if n_list_flow_style >= len(
                     npdata.shape
                 ):  # Test if n_list_flow_style is larger or equal to array shape
@@ -111,7 +111,7 @@ def get_YAML(
         try:
             if read_numpy:
                 npdata = np.asarray(default_data)
-                if np.isdtype(npdata.dtype, "numeric"):
+                if np.issubdtype(npdata.dtype, np.number):
                     return npdata
             raise ValueError
         except ValueError:
