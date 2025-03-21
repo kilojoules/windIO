@@ -25,30 +25,6 @@ def test_wind_farm_input(subtests):
         windIO.validate(config, "plant/wind_farm")
 
 
-@pytest.mark.skip(reason="initial_layout is depreciated")
-def test_wind_farm_invalid_inputs_layouts(subtests):
-    """
-    Test missing inputs for the wind_farm layouts property.
-    """
-    with subtests.test("missing layouts"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-    with subtests.test("missing layouts initial_layout"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]["initial_layout"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-    with subtests.test("missing layouts initial_layout coordinates"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]["initial_layout"]["coordinates"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-
 @pytest.mark.skip(reason="wind farm turbine has optional: true")
 def test_wind_farm_invalid_inputs_turbines(subtests):
     """
