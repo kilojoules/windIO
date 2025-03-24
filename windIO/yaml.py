@@ -70,6 +70,7 @@ def get_YAML(
     yaml_obj.default_flow_style = False
     yaml_obj.width = 1e6
     yaml_obj.allow_unicode = False
+    yaml_obj.indent(mapping=4, sequence=6, offset=3)
 
     # Write nested list of numbers with flow-style
     def list_rep(dumper, data):
@@ -171,11 +172,7 @@ def write_yaml(instance : dict, foutput : str) -> None:
     instance = remove_numpy(instance)
 
     # Write yaml with updated values
-    yaml = YAML()
-    yaml.default_flow_style = None
-    yaml.width = float("inf")
-    yaml.indent(mapping=4, sequence=6, offset=3)
-    yaml.allow_unicode = False
+    yaml = get_YAML()
     with open(foutput, "w", encoding="utf-8") as f:
         yaml.dump(instance, f)
 
