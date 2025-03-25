@@ -16,7 +16,7 @@ def test_windIOMetaSchema():
             ),
             var_none_with_units=dict(
                 type="number",
-                units="none"
+                units="dimensionless"
             )
         ),
         definitions=dict(
