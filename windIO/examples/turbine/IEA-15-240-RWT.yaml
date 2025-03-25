@@ -1,6 +1,15 @@
-name: IEA 15MW Offshore Reference Turbine, with taped chord tip design
 windIO_version: '2.0'
-assembly: {turbine_class: I, turbulence_class: B, drivetrain: direct_drive, rotor_orientation: Upwind, number_of_blades: 3, hub_height: 150.0, rotor_diameter: 242.23775645, rated_power: 15000000.0, lifetime: 25.0}
+name: IEA 15MW Offshore Reference Turbine, with taped chord tip design
+assembly:
+    turbine_class: I
+    turbulence_class: B
+    drivetrain: direct_drive
+    rotor_orientation: Upwind
+    number_of_blades: 3
+    hub_height: 150.0
+    rotor_diameter: 242.23775645
+    rated_power: 15000000.0
+    lifetime: 25.0
 components:
     blade:
         reference_axis:
@@ -26,43 +35,53 @@ components:
             airfoils:
                -  name: circular
                   spanwise_position: 0.0
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: circular
                   spanwise_position: 0.02
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: SNL-FFA-W3-500
                   spanwise_position: 0.15
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-360
                   spanwise_position: 0.24517031675566095
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-330blend
                   spanwise_position: 0.3288439506472435
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-301
                   spanwise_position: 0.4391793464459161
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-270blend
                   spanwise_position: 0.5376714071084352
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-241
                   spanwise_position: 0.6382076569163737
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-211
                   spanwise_position: 0.7717438522715817
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
                -  name: FFA-W3-211
                   spanwise_position: 1.0
-                  configuration: [default]
+                  configuration:
+                     -  default
                   weight: [1.0]
             rthick:
                 grid: *id001
@@ -361,8 +380,13 @@ components:
                   fiber_orientation:
                       grid: [0.0, 1.0]
                       values: [0.0, 0.0]
-            joint: {position: 0.0, mass: 0.0, cost: 0.0}
-            root: {d_f: 0.03, sigma_max: 675000000.0}
+            joint:
+                position: 0.0
+                mass: 0.0
+                cost: 0.0
+            root:
+                d_f: 0.03
+                sigma_max: 675000000.0
         elastic_properties:
             inertia_matrix:
                 grid: [0.0, 0.01, 0.02, 0.03, 0.04, 0.05, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1.0]
@@ -398,7 +422,23 @@ components:
                 K66: [87489183048.03288, 83285587642.82162, 79106159653.8364, 69973323042.1117, 61533150488.50107, 54135840079.7236, 38418612295.439545, 25428346793.25849, 8076640558.8585005, 2768066330.973254, 1026128471.8607168, 627053086.269001, 461211585.49078345, 364794590.1572093, 285660364.09887934, 220544333.37495336, 168037150.44173867, 128226839.00696014, 95377930.58201036, 71456369.55600888, 52519301.176315226, 38106482.51374478, 23330158.861795776, 13417874.462175902, 6805118.090718728, 71452.33631373737]
             structural_damping:
                 mu: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
-    hub: {diameter: 7.94, cone_angle: 4.0, flange_t2shell_t: 6.0, flange_OD2hub_D: 0.6, flange_ID2OD: 0.8, hub_blade_spacing_margin: 1.2, hub_stress_concentration: 3.0, n_front_brackets: 5, n_rear_brackets: 5, clearance_hub_spinner: 0.5, spin_hole_incr: 1.2, pitch_system_scaling_factor: 0.75, spinner_gust_ws: 70.0, hub_material: cast_iron, spinner_material: glass_uni, cd: 0.5}
+    hub:
+        diameter: 7.94
+        cone_angle: 4.0
+        flange_t2shell_t: 6.0
+        flange_OD2hub_D: 0.6
+        flange_ID2OD: 0.8
+        hub_blade_spacing_margin: 1.2
+        hub_stress_concentration: 3.0
+        n_front_brackets: 5
+        n_rear_brackets: 5
+        clearance_hub_spinner: 0.5
+        spin_hole_incr: 1.2
+        pitch_system_scaling_factor: 0.75
+        spinner_gust_ws: 70.0
+        hub_material: cast_iron
+        spinner_material: glass_uni
+        cd: 0.5
     tower:
         outer_shape:
             outer_diameter:
@@ -455,8 +495,16 @@ components:
                 grid: [0.0, 0.5, 0.6111111111111112, 0.7222222222222222, 0.8333333333333334, 0.9444444444444444, 1.0]
                 values: [-75.0, -30.0, -20.0, -10.0, 0.0, 10.0, 15.0]
     drivetrain:
-        outer_shape: {uptilt: 6.0, distance_tt_hub: 5.614, distance_hub_mb: 1.0, distance_mb_mb: 1.2, overhang: 12.0313, cd: 0.5}
-        gearbox: {gear_ratio: 1.0, efficiency: 1.0}
+        outer_shape:
+            uptilt: 6.0
+            distance_tt_hub: 5.614
+            distance_hub_mb: 1.0
+            distance_mb_mb: 1.2
+            overhang: 12.0313
+            cd: 0.5
+        gearbox:
+            gear_ratio: 1.0
+            efficiency: 1.0
         lss:
             diameter: [3.0, 3.0]
             wall_thickness: [0.1, 0.1]
@@ -470,8 +518,82 @@ components:
                 grid: [0.0, 1.0]
                 values: [0.05, 0.05]
             material: steel_drive
-        other_components: {mb1Type: CARB, mb2Type: SRB, uptower: true}
-        generator: {rho_Fe: 7700.0, rho_Fes: 7850.0, rho_Copper: 8900.0, rho_PM: 7450.0, B_r: 1.279, P_Fe0e: 1.0, P_Fe0h: 4.0, S_N: -0.002, alpha_p: 1.0995574287564276, b_r_tau_r: 0.45, b_ro: 0.004, b_s_tau_s: 0.45, b_so: 0.004, cofi: 0.9, freq: 60.0, h_i: 0.004, h_sy0: 0.0, h_w: 0.005, k_fes: 0.8, k_fillr: 0.55, k_fills: 0.65, k_s: 0.2, m: 3, mu_0: 1.2566370614359173e-06, mu_r: 1.06, phi: 90.0, q1: 5, q2: 4, ratio_mw2pp: 0.8, resist_Cu: 2.52e-08, y_tau_pr: 0.8333333, y_tau_p: 0.8, rad_ag: 5.12623359, len_s: 2.23961662, tau_p: 0.1610453779, tau_s: 0.1339360726, h_s: 0.3769449149, b_s: 0.05121796888, b_t: 0.08159225451, h_t: 0.3859449149, h_ys: 0.03618114528, h_yr: 0.0361759511, h_m: 0.0995385122, b_m: 0.1288363023, B_g: 1.38963289, B_symax: 1.63455514, B_rymax: 1.63478983, p: 100, R_s: 0.02457052, L_s: 0.01138752, S: 240, t_r: 0.0607657125, h_sr: 0.04677116325, t_s: 0.06065213554, h_ss: 0.04650825863, E_p: 1905.2558883257652, b: 2.0, c: 5.0, N_c: 2, B_tmax: 1.9, u_allow_pcent: 8.5, y_allow_pcent: 1.0, z_allow_deg: 0.05, sigma: 60000.0, h_0: 0.05, C_Cu: 4.786, C_Fe: 0.556, C_Fes: 0.50139, C_PM: 50.0, length: 2.15, type: PMSG_Outer}
+        other_components:
+            mb1Type: CARB
+            mb2Type: SRB
+            uptower: true
+        generator:
+            rho_Fe: 7700.0
+            rho_Fes: 7850.0
+            rho_Copper: 8900.0
+            rho_PM: 7450.0
+            B_r: 1.279
+            P_Fe0e: 1.0
+            P_Fe0h: 4.0
+            S_N: -0.002
+            alpha_p: 1.0995574287564276
+            b_r_tau_r: 0.45
+            b_ro: 0.004
+            b_s_tau_s: 0.45
+            b_so: 0.004
+            cofi: 0.9
+            freq: 60.0
+            h_i: 0.004
+            h_sy0: 0.0
+            h_w: 0.005
+            k_fes: 0.8
+            k_fillr: 0.55
+            k_fills: 0.65
+            k_s: 0.2
+            m: 3
+            mu_0: 1.2566370614359173e-06
+            mu_r: 1.06
+            phi: 90.0
+            q1: 5
+            q2: 4
+            ratio_mw2pp: 0.8
+            resist_Cu: 2.52e-08
+            y_tau_pr: 0.8333333
+            y_tau_p: 0.8
+            rad_ag: 5.12623359
+            len_s: 2.23961662
+            tau_p: 0.1610453779
+            tau_s: 0.1339360726
+            h_s: 0.3769449149
+            b_s: 0.05121796888
+            b_t: 0.08159225451
+            h_t: 0.3859449149
+            h_ys: 0.03618114528
+            h_yr: 0.0361759511
+            h_m: 0.0995385122
+            b_m: 0.1288363023
+            B_g: 1.38963289
+            B_symax: 1.63455514
+            B_rymax: 1.63478983
+            p: 100
+            R_s: 0.02457052
+            L_s: 0.01138752
+            S: 240
+            t_r: 0.0607657125
+            h_sr: 0.04677116325
+            t_s: 0.06065213554
+            h_ss: 0.04650825863
+            E_p: 1905.2558883257652
+            b: 2.0
+            c: 5.0
+            N_c: 2
+            B_tmax: 1.9
+            u_allow_pcent: 8.5
+            y_allow_pcent: 1.0
+            z_allow_deg: 0.05
+            sigma: 60000.0
+            h_0: 0.05
+            C_Cu: 4.786
+            C_Fe: 0.556
+            C_Fes: 0.50139
+            C_PM: 50.0
+            length: 2.15
+            type: PMSG_Outer
 airfoils:
    -  name: circular
       coordinates:
@@ -632,10 +754,77 @@ airfoils:
                       values: [0.0, 0.09142857142857111, 0.1828571428571434, 0.2742857142857145, 0.3657142857142855, 0.4031304636095545, 0.4081392053848416, 0.4131479471601289, 0.418156688935416, 0.4262712900595553, 0.4437034692302504, 0.461135648400946, 0.4785678275716412, 0.4960000067423368, 0.4883022318330648, 0.4678431517000181, 0.4480322988503198, 0.4369725143258274, 0.4259127298013352, 0.421499653933276, 0.4205848457791291, 0.4202386282975503, 0.4216794100726142, 0.4231201918476781, 0.4225819015145725, 0.4216313044922648, 0.4186442496773847, 0.4127722129896937, 0.4069001763020025, 0.3942614888768985, 0.3816228014517944, 0.3667605953544247, 0.3503288466648674, 0.3336237480028024, 0.3156065694727009, 0.2975893909425995, 0.2798918070549701, 0.2622959123717636, 0.2449149435317124, 0.2279423337936562, 0.2109697240555999, 0.1352478121095765, 0.0551741, 0.0321142, 0.01267890000000002, -0.002821250000000001, -0.0074129, -0.0110695, -0.01250065, -0.01177275, -0.01082065, -0.0276937, -0.05106789999999999, -0.0714813, -0.0917883, -0.1011907, -0.1098835, -0.1177635, -0.124769, -0.130977, -0.136484, -0.141299, -0.1454, -0.14875, -0.151175, -0.15262, -0.153103, -0.152545, -0.151206, -0.149693, -0.145621, -0.143578, -0.140948, -0.137106, -0.140821, -0.156927, -0.179786, -0.201472, -0.2240866097136903, -0.2461860684392151, -0.2613309888245065, -0.2764759092097978, -0.2906206368276409, -0.3042389471994587, -0.3178704108777556, -0.3315432135192723, -0.3452160161607889, -0.3584572127501313, -0.3716084914119372, -0.3840462584573971, -0.3954732173796998, -0.4069001763020025, -0.4127722129896937, -0.4186442496773847, -0.4216313044922648, -0.4225819015145725, -0.4231201918476781, -0.4216794100726143, -0.4202386282975503, -0.4205848457791291, -0.421499653933276, -0.4259127298013352, -0.4369725143258274, -0.4480322988503198, -0.4678431517000181, -0.4883022318330649, -0.4960000067423369, -0.4785678275716413, -0.461135648400946, -0.4437034692302504, -0.4262712900595553, -0.4352995460782729, -0.4531479471601288, -0.4709963482419844, -0.4888447493238403, -0.457142857142857, -0.3428571428571431, -0.2285714285714291, -0.1142857142857139, 0.0]
       rthick: 0.36
 materials:
-   -  {name: Gelcoat, orth: 0, rho: 1235.0, E: 3440000000.0, G: 1323000000.0, nu: 0.3, alpha: 0.0, Xt: 74, Xc: 87, S: 21260000.0, GIc: 303, GIIc: 3446, alp0: 53, ply_t: 0.0005, waste: 0.25, unit_cost: 7.23, manufacturing_id: 0}
-   -  {name: steel, description: Steel of the tower and monopile ASTM A572 Grade 50, source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=9ced5dc901c54bd1aef19403d0385d7f, orth: 0, rho: 7800, alpha: 0.0, E: 200000000000.0, nu: 0.3, G: 79300000000.0, GIc: 0, GIIc: 0, alp0: 0.0, Xt: 450000000.0, Xc: 450000000.0, S: 0, Xy: 345000000.0, m: 3, unit_cost: 0.7}
-   -  {name: steel_drive, description: Steel of the drivetrain ASTM 4140 40Cr1Mo28, source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=38108bfd64c44b4c9c6a02af78d5b6c6, orth: 0, rho: 7850, alpha: 0.0, E: 205000000000.0, nu: 0.3, G: 80000000000.0, GIc: 0, GIIc: 0, alp0: 0.0, Xt: 814000000.0, Xc: 814000000.0, S: 0, Xy: 485000000.0, m: 3, unit_cost: 0.9}
-   -  {name: cast_iron, description: Cast iron for hub and nacelle components, source: TODO, orth: 0, rho: 7200, alpha: 0.0, E: 118000000000.0, nu: 0.3, G: 47600000000.0, GIc: 0, GIIc: 0, alp0: 0.0, Xt: 310000000.0, Xc: 310000000.0, S: 0, Xy: 265000000.0, m: 3, unit_cost: 0.5}
+   -  name: Gelcoat
+      orth: 0
+      rho: 1235.0
+      E: 3440000000.0
+      G: 1323000000.0
+      nu: 0.3
+      alpha: 0.0
+      Xt: 74
+      Xc: 87
+      S: 21260000.0
+      GIc: 303
+      GIIc: 3446
+      alp0: 53
+      ply_t: 0.0005
+      waste: 0.25
+      unit_cost: 7.23
+      manufacturing_id: 0
+   -  name: steel
+      description: Steel of the tower and monopile ASTM A572 Grade 50
+      source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=9ced5dc901c54bd1aef19403d0385d7f
+      orth: 0
+      rho: 7800
+      alpha: 0.0
+      E: 200000000000.0
+      nu: 0.3
+      G: 79300000000.0
+      GIc: 0
+      GIIc: 0
+      alp0: 0.0
+      Xt: 450000000.0
+      Xc: 450000000.0
+      S: 0
+      Xy: 345000000.0
+      m: 3
+      unit_cost: 0.7
+   -  name: steel_drive
+      description: Steel of the drivetrain ASTM 4140 40Cr1Mo28
+      source: http://www.matweb.com/search/DataSheet.aspx?MatGUID=38108bfd64c44b4c9c6a02af78d5b6c6
+      orth: 0
+      rho: 7850
+      alpha: 0.0
+      E: 205000000000.0
+      nu: 0.3
+      G: 80000000000.0
+      GIc: 0
+      GIIc: 0
+      alp0: 0.0
+      Xt: 814000000.0
+      Xc: 814000000.0
+      S: 0
+      Xy: 485000000.0
+      m: 3
+      unit_cost: 0.9
+   -  name: cast_iron
+      description: Cast iron for hub and nacelle components
+      source: TODO
+      orth: 0
+      rho: 7200
+      alpha: 0.0
+      E: 118000000000.0
+      nu: 0.3
+      G: 47600000000.0
+      GIc: 0
+      GIIc: 0
+      alp0: 0.0
+      Xt: 310000000.0
+      Xc: 310000000.0
+      S: 0
+      Xy: 265000000.0
+      m: 3
+      unit_cost: 0.5
    -  name: glass_uni
       description: Vectorply E-LT-5500, Epikote MGS RIMR 135/Epicure MGS RIMH 1366 epoxy
       source: MSU composites database 3D property tests, Engineering Mechanics of Composite Materials, Daniel, I & Ishai, O., 1994, pg. 34
@@ -728,14 +917,120 @@ materials:
       area_density_dry: 1.4454324430914534
       roll_mass: 181.4368
       manufacturing_id: 2
-   -  {name: medium_density_foam, description: "Airex C70.130 PVC Foam, source 'https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf'", orth: 0.0, rho: 130.0, E: 129200000.0, G: 48946969.696969695, nu: 0.32, Xt: 2083000.0, Xc: 1563000.0, S: 1250000.0, GIc: 303, GIIc: 3446, alp0: 53, waste: 0.2, unit_cost: 13, manufacturing_id: 1}
-   -  {name: resin, description: epoxy, E: 1000000.0, nu: 0.3, G: 312500.0, GIc: 0, GIIc: 0, alp0: 0.0, Xt: 0, Xc: 0, S: 0, rho: 1150.0, alpha: 0.0, orth: 0, unit_cost: 3.63}
-   -  {name: adhesive, description: Sample adhesive, source: https://www.nrel.gov/docs/fy19osti/73585.pdf, orth: 0, rho: 1100, E: 4560000.0, nu: 0.49, alpha: 0.0, Xt: 690000.0, Xc: 400000.0, S: 310000.0, G: 1520000.0, unit_cost: 9.0}
+   -  name: medium_density_foam
+      description: Airex C70.130 PVC Foam, source 'https://www.3accorematerials.com/uploads/documents/TDS-AIREX-C70-E_1106.pdf'
+      orth: 0.0
+      rho: 130.0
+      E: 129200000.0
+      G: 48946969.696969695
+      nu: 0.32
+      Xt: 2083000.0
+      Xc: 1563000.0
+      S: 1250000.0
+      GIc: 303
+      GIIc: 3446
+      alp0: 53
+      waste: 0.2
+      unit_cost: 13
+      manufacturing_id: 1
+   -  name: resin
+      description: epoxy
+      E: 1000000.0
+      nu: 0.3
+      G: 312500.0
+      GIc: 0
+      GIIc: 0
+      alp0: 0.0
+      Xt: 0
+      Xc: 0
+      S: 0
+      rho: 1150.0
+      alpha: 0.0
+      orth: 0
+      unit_cost: 3.63
+   -  name: adhesive
+      description: Sample adhesive
+      source: https://www.nrel.gov/docs/fy19osti/73585.pdf
+      orth: 0
+      rho: 1100
+      E: 4560000.0
+      nu: 0.49
+      alpha: 0.0
+      Xt: 690000.0
+      Xc: 400000.0
+      S: 310000.0
+      G: 1520000.0
+      unit_cost: 9.0
 control:
-    supervisory: {Vin: 3.0, Vout: 25.0, maxTS: 95.0}
-    pitch: {ps_percent: 0.8, max_pitch: 89.95437383553924, max_pitch_rate: 2.0, min_pitch: 0.0}
-    torque: {tsr: 9.0, max_torque_rate: 1500000.0, VS_minspd: 4.999999999999999, VS_maxspd: 7.559999999999999}
-environment: {air_density: 1.225, air_dyn_viscosity: 1.81e-05, weib_shape_parameter: 2.0, air_speed_sound: 340.0, shear_exp: 0.12, water_density: 1025.0, water_dyn_viscosity: 0.0013351, soil_shear_modulus: 140000000.0, soil_poisson: 0.4, water_depth: 30.0, significant_wave_height: 4.52, significant_wave_period: 9.45}
-bos: {plant_turbine_spacing: 7, plant_row_spacing: 7, commissioning_pct: 0.01, decommissioning_pct: 0.15, distance_to_substation: 1.0, distance_to_interconnection: 8.5, interconnect_voltage: 130.0, distance_to_site: 115.0, distance_to_landfall: 50.0, port_cost_per_month: 2000000.0, site_auction_price: 100000000.0, site_assessment_plan_cost: 1000000.0, site_assessment_cost: 25000000.0, construction_operations_plan_cost: 2500000.0, boem_review_cost: 0.0, design_install_plan_cost: 2500000.0}
-costs: {wake_loss_factor: 0.15, fixed_charge_rate: 0.056, bos_per_kW: 4053.0, opex_per_kW: 137.0, turbine_number: 40.0, labor_rate: 58.8, painting_rate: 30.0, blade_mass_cost_coeff: 14.6, hub_mass_cost_coeff: 3.9, pitch_system_mass_cost_coeff: 22.1, spinner_mass_cost_coeff: 11.1, lss_mass_cost_coeff: 11.9, bearing_mass_cost_coeff: 4.5, gearbox_mass_cost_coeff: 12.9, hss_mass_cost_coeff: 6.8, generator_mass_cost_coeff: 12.4, bedplate_mass_cost_coeff: 2.9, yaw_mass_cost_coeff: 8.3, converter_mass_cost_coeff: 18.8, transformer_mass_cost_coeff: 18.8, hvac_mass_cost_coeff: 124.0, cover_mass_cost_coeff: 5.7, elec_connec_machine_rating_cost_coeff: 41.85, platforms_mass_cost_coeff: 17.1, tower_mass_cost_coeff: 2.9, controls_machine_rating_cost_coeff: 21.15, crane_cost: 12000.0}
-
+    supervisory:
+        Vin: 3.0
+        Vout: 25.0
+        maxTS: 95.0
+    pitch:
+        ps_percent: 0.8
+        max_pitch: 89.95437383553924
+        max_pitch_rate: 2.0
+        min_pitch: 0.0
+    torque:
+        tsr: 9.0
+        max_torque_rate: 1500000.0
+        VS_minspd: 4.999999999999999
+        VS_maxspd: 7.559999999999999
+environment:
+    air_density: 1.225
+    air_dyn_viscosity: 1.81e-05
+    weib_shape_parameter: 2.0
+    air_speed_sound: 340.0
+    shear_exp: 0.12
+    water_density: 1025.0
+    water_dyn_viscosity: 0.0013351
+    soil_shear_modulus: 140000000.0
+    soil_poisson: 0.4
+    water_depth: 30.0
+    significant_wave_height: 4.52
+    significant_wave_period: 9.45
+bos:
+    plant_turbine_spacing: 7
+    plant_row_spacing: 7
+    commissioning_pct: 0.01
+    decommissioning_pct: 0.15
+    distance_to_substation: 1.0
+    distance_to_interconnection: 8.5
+    interconnect_voltage: 130.0
+    distance_to_site: 115.0
+    distance_to_landfall: 50.0
+    port_cost_per_month: 2000000.0
+    site_auction_price: 100000000.0
+    site_assessment_plan_cost: 1000000.0
+    site_assessment_cost: 25000000.0
+    construction_operations_plan_cost: 2500000.0
+    boem_review_cost: 0.0
+    design_install_plan_cost: 2500000.0
+costs:
+    wake_loss_factor: 0.15
+    fixed_charge_rate: 0.056
+    bos_per_kW: 4053.0
+    opex_per_kW: 137.0
+    turbine_number: 40.0
+    labor_rate: 58.8
+    painting_rate: 30.0
+    blade_mass_cost_coeff: 14.6
+    hub_mass_cost_coeff: 3.9
+    pitch_system_mass_cost_coeff: 22.1
+    spinner_mass_cost_coeff: 11.1
+    lss_mass_cost_coeff: 11.9
+    bearing_mass_cost_coeff: 4.5
+    gearbox_mass_cost_coeff: 12.9
+    hss_mass_cost_coeff: 6.8
+    generator_mass_cost_coeff: 12.4
+    bedplate_mass_cost_coeff: 2.9
+    yaw_mass_cost_coeff: 8.3
+    converter_mass_cost_coeff: 18.8
+    transformer_mass_cost_coeff: 18.8
+    hvac_mass_cost_coeff: 124.0
+    cover_mass_cost_coeff: 5.7
+    elec_connec_machine_rating_cost_coeff: 41.85
+    platforms_mass_cost_coeff: 17.1
+    tower_mass_cost_coeff: 2.9
+    controls_machine_rating_cost_coeff: 21.15
+    crane_cost: 12000.0
