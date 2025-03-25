@@ -1,3 +1,4 @@
+windIO_version: '2.0'
 name: IEA 15MW Offshore Reference Turbine, with taped chord tip design
 assembly:
     turbine_class: I
@@ -1262,4 +1263,3 @@ costs:
     tower_mass_cost_coeff: 2.9
     controls_machine_rating_cost_coeff: 21.15
     crane_cost: 12000.0
-windIO_version: '2.0'

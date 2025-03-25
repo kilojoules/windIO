@@ -43,6 +43,7 @@ def test_write_list_flow_style():
         out = StringIO()
         yml_obj = windIO.YAML(typ="safe", pure=True)
         yml_obj.default_flow_style = flow_style
+        yml_obj.indent(mapping=4, sequence=6, offset=3)
         yml_obj.dump(data, out)
         return out.getvalue()
 
