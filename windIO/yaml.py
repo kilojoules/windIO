@@ -8,10 +8,6 @@ import numpy as np
 from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 import xarray as xr
-from functools import reduce
-import operator
-import copy
-
 
 def fmt(v: Any) -> dict | list | str | float | int:
     """
@@ -71,6 +67,7 @@ def get_YAML(
     yaml_obj.width = 1e6
     yaml_obj.allow_unicode = False
     yaml_obj.indent(mapping=4, sequence=6, offset=3)
+    yaml_obj.sort_base_mapping_type_on_output = False
 
     # Write nested list of numbers with flow-style
     def list_rep(dumper, data):
