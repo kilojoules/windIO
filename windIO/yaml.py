@@ -9,7 +9,6 @@ from ruamel.yaml import YAML
 from ruamel.yaml.constructor import SafeConstructor
 import xarray as xr
 
-
 def fmt(v: Any) -> dict | list | str | float | int:
     """
     Formats a dictionary appropriately for yaml.load by converting Tuples to Lists.
@@ -67,12 +66,14 @@ def get_YAML(
     yaml_obj.default_flow_style = False
     yaml_obj.width = 1e6
     yaml_obj.allow_unicode = False
+    yaml_obj.indent(mapping=4, sequence=6, offset=3)
+    yaml_obj.sort_base_mapping_type_on_output = False
 
     # Write nested list of numbers with flow-style
     def list_rep(dumper, data):
         try:
             npdata = np.asanyarray(data)  # Convert to numpy
-            if np.isdtype(npdata.dtype, "numeric"):  # Test if data is numeric
+            if np.issubdtype(npdata.dtype, np.number):  # Test if data is numeric
                 if n_list_flow_style >= len(
                     npdata.shape
                 ):  # Test if n_list_flow_style is larger or equal to array shape
@@ -111,7 +112,7 @@ def get_YAML(
         try:
             if read_numpy:
                 npdata = np.asarray(default_data)
-                if np.isdtype(npdata.dtype, "numeric"):
+                if np.issubdtype(npdata.dtype, np.number):
                     return npdata
             raise ValueError
         except ValueError:
@@ -153,3 +154,20 @@ def load_yaml(filename: str, loader=None) -> dict:
     if loader is None:
         loader = get_YAML()
     return loader.load(filename)
+
+def write_yaml(instance : dict, foutput : str) -> None:
+    """
+    Writes a dictionary to a YAML file using the ruamel.yaml library.
+
+    Args:
+        instance (dict): Dictionary to be written to the YAML file.
+        foutput (str): Path to the output YAML file.
+
+    Returns:
+        None
+    """
+    # Write yaml with updated values
+    yaml = get_YAML()
+    with open(foutput, "w", encoding="utf-8") as f:
+        yaml.dump(instance, f)
+ 

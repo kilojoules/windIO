@@ -44,7 +44,7 @@ if __name__ == "__main__":
     # Generate the turbine schema html
     schema_html_path = Path("_static/turbine_schema.html")
     generate_from_filename(
-        base_path / "windIO" / "schemas" / "turbine" / "IEAontology_schema.yaml",
+        base_path / "windIO" / "schemas" / "turbine" / "turbine_schema.yaml",
         schema_html_path,
         config=config
     )
