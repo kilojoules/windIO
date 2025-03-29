@@ -609,10 +609,10 @@ properties:
                                         minimum: 0
                                     inertia:
                                         type: array
-                                        description: Mass moment of inertia of the component modeled as a point
+                                        description: Mass moment of inertia of the component modeled as a point. The inertia is defined at the center of mass.
                                         items:
                                             type: number
-                                            units: kgm2
+                                            units: kg*m^2
                                             minItems: 6
                                             maxItems: 6
                                             uniqueItems: false
@@ -3976,7 +3976,7 @@ definitions:
                 default: 0.
             inertia:
                 type: array
-                description: Mass moment of inertia of the component modeled as a point
+                description: Mass moment of inertia of the component modeled as a point. The inertia is defined at the center of mass.
                 default: [0., 0., 0., 0., 0., 0.]
                 items:
                     type: number
