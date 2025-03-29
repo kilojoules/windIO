@@ -3984,7 +3984,6 @@ definitions:
                     minItems: 6
                     maxItems: 6
                     uniqueItems: false
-                    minimum: 0.
             location:
                 type: array
                 description: Location of the point mass with respect to the coordinate system
