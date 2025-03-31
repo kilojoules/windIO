@@ -2,14 +2,22 @@
 windIO: a community-focused data I/O format
 ===========================================
 
-The repository defines two frameworks defining the inputs and outputs for systems engineering
-MDAO of wind turbine and plants.
-The github repository is `here <https://github.com/IEAWindSystems/windIO>`_.
-The frameworks are implemented in two yaml-schemas, one for the turbine and one for the plant,
-to enforce an ontology of how data should be organized.
-The reference wind turbines designed within the IEA Wind Systems Engineering Task
-are checked against the schema through unit testing.
-You can access the yaml files at the following links:
+windIO is a data format for inputs and outputs to wind energy system computational models.
+Historically, it has focused on systems engineering models, but it has been adopted in other
+topic areas of wind energy modeling, as well.
+The windIO data format is a community-focused effort to standardize the data format for wind energy
+system models, and we encourage collaboration.
+The github repository is at https://github.com/IEAWindSystems/windIO and the
+online documentation is at https://ieawindsystems.github.io/windIO.
+
+This windIO repository including the following:
+
+- Schema defining windIO components describing wind turbines and wind plants
+- Python library for validating files relative to the schema and loading the data into a Python dictionary
+- windIO input files for test-case wind turbine and wind plant models
+
+Reference wind turbines designed within the IEA Wind Systems Engineering Task
+are available at the following links:
 
 - `IEA onshore 3.4 MW  <https://github.com/IEAWindTask37/IEA-3.4-130-RWT/blob/master/yaml/IEA-3.4-130-RWT.yaml>`_
 - `IEA offshore 10.0 MW  <https://github.com/IEAWindTask37/IEA-10.0-198-RWT/blob/master/yaml/IEA-10-198-RWT.yaml>`_
@@ -17,7 +25,18 @@ You can access the yaml files at the following links:
 - `IEA 22-MW offshore <https://github.com/IEAWindSystems/IEA-22-280-RWT>`_
 - `IEA Wind 740-10-MW Reference Offshore Wind Plants <https://github.com/IEAWindSystems/IEA-Wind-740-10-ROWP/blob/main/README.md>`_
 
-   Author: `IEA Wind Task 37 Team <mailto:pietro.bortolotti@nrel.gov>`_
+If you use this model in your research or publications, please cite this [IEA technical report](https://doi.org/10.2172/1868328):
+
+   @article{osti_1868328,
+      title = {System Modeling Frameworks for Wind Turbines and Plants: Review and Requirements Specifications},
+      author = {Bortolotti, Pietro and Bay, Christopher and Barter, Garrett and Gaertner, Evan and Dykes, Katherine and McWilliam, Michael and Friis-Moller, Mikkel and Molgaard Pedersen, Mads and Zahle, Frederik},
+      doi = {10.2172/1868328},
+      place = {United States},
+      year = {2022},
+      month = {5}
+   }
+
+Author: `IEA Wind Task 37 Team <mailto:pietro.bortolotti@nrel.gov>`_
 
 Installation
 ------------
