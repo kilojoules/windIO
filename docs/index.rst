@@ -59,6 +59,9 @@ Software library reference
 .. automodule:: windIO
    :members:
 
+.. automodule:: windIO.yaml
+   :members:
+
 
 Contents
 --------
