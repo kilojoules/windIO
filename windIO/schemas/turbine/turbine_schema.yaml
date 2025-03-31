@@ -813,7 +813,7 @@ properties:
                         B_r:
                             type: number
                             default: 1.2
-                            units: Tesla
+                            units: T
                             description: Words
                             minimum: 0.0
                         P_Fe0e:
@@ -2709,7 +2709,7 @@ properties:
                 fiber_density:
                     type: number
                     description: Density of the fibers of a composite material. Standard glass fiber has a fiber density of approximately 2600 kg/m3, while standard carbon fiber has a fiber density of approximately 1800 kg/m3.
-                    units: kg/m3
+                    units: kg/m^3
                     minimum : 0
                     maximum: 10000
                 area_density_dry:
