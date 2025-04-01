@@ -97,7 +97,7 @@ properties:
             lifetime:
                 type: number
                 description: Turbine design lifetime in years.
-                units: years
+                units: yr
                 minimum: 0
                 default: 25.0
     components:
@@ -456,7 +456,7 @@ properties:
                     diameter:
                         type: number
                         description: This is the outer diameter of the hub. It is also the diameter of the circle centered at the rotor apex and connecting the blade root centers.
-                        units: meter
+                        units: m
                         minimum: 0.
                         maximum: 30.
                     cone_angle:
@@ -632,7 +632,7 @@ properties:
                             length:
                                 type: number
                                 description: Length of the low speed shaft
-                                units: meter
+                                units: m
                                 minimum: 0.
                                 maximum: 10.
                                 default: 1.5
@@ -670,7 +670,7 @@ properties:
                             length:
                                 type: number
                                 description: Length of the high speed shaft
-                                units: meter
+                                units: m
                                 minimum: 0.
                                 maximum: 10.
                                 default: 1.5
@@ -2985,7 +2985,7 @@ properties:
             air_pressure:
                 type: number
                 description: Atmospheric pressure of air
-                units: kg/(ms^2)
+                units: kg/(m*s^2)
                 minimum: 0
                 maximum: 1.e+6
                 default: 1.035e+5
