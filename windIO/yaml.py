@@ -147,7 +147,7 @@ def load_yaml(filename: str, loader=None) -> dict:
 
     Args:
         filename (str): Path or file-handle to the local file to be loaded.
-        loader (ruamel.yaml.YAML, optional): Defaults to ``_get_YAML()``.
+        loader (ruamel.yaml.YAML, optional): Defaults to SafeLoader.
 
     Returns:
         dict: Dictionary representation of the YAML file given in ``filename``.
