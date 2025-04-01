@@ -2748,7 +2748,7 @@ properties:
                     description: Fracture angle under pure transverse compression.
                     units: deg
                 A:
-                    description: Fatigue S/N curve fitting parameter S=A*N^(-1/m).
+                    description: Fatigue S/N curve fitting parameter S=A*N^(-1/m). An array can be defined as a function of R (for composites) or as a function of number of cycles N (for multi-segment S-N curves, such as for metals).
                     oneOf:
                         - type: number
                           units: none
@@ -2758,13 +2758,11 @@ properties:
                           items:
                             type: number
                             units: none
-                            minItems: 3
-                            maxItems: 3
                             uniqueItems: false
                             minimum: 0
                             default: 0.0
                 m:
-                    description: Fatigue S/N curve fitting parameter S=A*N^(-1/m)
+                    description: Fatigue S/N curve fitting parameter S=A*N^(-1/m). An array can be defined as a function of R (for composites) or as a function of number of cycles N (for multi-segment S-N curves, such as for metals).
                     oneOf:
                         - type: number
                           units: none
@@ -2774,14 +2772,12 @@ properties:
                           items:
                             type: number
                             units: none
-                            minItems: 3
-                            maxItems: 3
                             uniqueItems: false
                             minimum: 0
                             maximum: 1000
                             default: 1.0
                 R:
-                    description: Fatigue stress ratio
+                    description: Fatigue stress ratio. An array can be defined to build Goodman-correction diagrams. 
                     oneOf:
                         - type: number
                           units: none
@@ -2790,12 +2786,24 @@ properties:
                           items:
                             type: number
                             units: none
-                            minItems: 3
-                            maxItems: 3
                             uniqueItems: false
                             minimum: -100
                             maximum: 100
                             default: -1.0
+                N:
+                    description: Number of cycles for fatigue failure. An array can be defined to support multi-segment S-N curves such as for metals. 
+                    oneOf:
+                        - type: integer
+                          units: none
+                          default: 1
+                        - type: array
+                          items:
+                            type: integer
+                            units: none
+                            uniqueItems: false
+                            minimum: 1
+                            maximum: 1e+10
+                            default: 1
     control:
         # additionalProperties: True
         type: object
