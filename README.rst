@@ -10,7 +10,7 @@ system models, and we encourage collaboration.
 The github repository is at https://github.com/IEAWindSystems/windIO and the
 online documentation is at https://ieawindsystems.github.io/windIO.
 
-This windIO repository including the following:
+The windIO repository includes the following:
 
 - Schema defining windIO components describing wind turbines and wind plants
 - Python library for validating files relative to the schema and loading the data into a Python dictionary
