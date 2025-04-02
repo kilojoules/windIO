@@ -78,8 +78,9 @@ Software library reference
 .. automodule:: windIO
    :members:
 
-.. automodule:: windIO.yaml
-   :members:
+   windIO.validate
+   windIO.load_yaml
+   windIO.write_yaml
 
 
 Contents
