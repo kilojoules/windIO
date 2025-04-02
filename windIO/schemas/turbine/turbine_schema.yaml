@@ -599,7 +599,7 @@ properties:
                                     torsional_damping:
                                         type: number
                                         description: Equivalent torsional damping of the gearbox. This parameter is often required by aeroelastic solvers
-                                        units: (N*m/(rad/s)
+                                        units: N*m/(rad/s)
                                         minimum: 0
                                         default: 1.E+7
                                     mass:
