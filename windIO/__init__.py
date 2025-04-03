@@ -14,10 +14,8 @@ import windIO.examples.plant
 import windIO.examples.turbine
 import windIO.schemas
 
-plant_ex = windIO.examples.plant
-turbine_ex = windIO.examples.turbine
-schemas = windIO.schemas
-load_yaml = windIO.yaml.load_yaml
+from .examples import plant as plant_ex, turbine as turbine_ex
+from windIO.yaml import load_yaml, write_yaml
 ### API design
 
 def _enforce_no_additional_properties(schema):

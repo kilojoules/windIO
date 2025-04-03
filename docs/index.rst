@@ -27,6 +27,8 @@ are available at the following links:
 
 If you use this model in your research or publications, please cite this [IEA technical report](https://doi.org/10.2172/1868328):
 
+.. code-block:: bibtex
+   
    @article{osti_1868328,
       title = {System Modeling Frameworks for Wind Turbines and Plants: Review and Requirements Specifications},
       author = {Bortolotti, Pietro and Bay, Christopher and Barter, Garrett and Gaertner, Evan and Dykes, Katherine and McWilliam, Michael and Friis-Moller, Mikkel and Molgaard Pedersen, Mads and Zahle, Frederik},
@@ -76,11 +78,7 @@ Software library reference
 --------------------------
 
 .. automodule:: windIO
-   :members:
-
-   windIO.validate
-   windIO.load_yaml
-   windIO.write_yaml
+   :members: validate, load_yaml, write_yaml
 
 
 Contents
