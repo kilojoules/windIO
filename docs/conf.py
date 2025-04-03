@@ -67,7 +67,8 @@ html_static_path = ['_static']
 #
 html_theme = 'pydata_sphinx_theme'
 
-html_theme_options = {
+html_theme_options = {}
+html_theme_options["analytics"] = {
     "google_analytics_id": "G-8GPVFR9N4C",
 }
 
