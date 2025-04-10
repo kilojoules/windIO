@@ -30,9 +30,9 @@ are available at the following links:
 
 If you use this model in your research or publications, please cite the DOI from Zenodo:
 
-DOI: `10.5281/zenodo.15191297 <https://doi.org/10.5281/zenodo.15191297>`
+DOI: `10.5281/zenodo.15191297 <https://doi.org/10.5281/zenodo.15191297>`_
 
-Alternatively, you can cite this older `IEA technical report <https://doi.org/10.2172/1868328>`:
+Alternatively, you can cite this older `IEA technical report <https://doi.org/10.2172/1868328>`_:
 
    @article{osti_1868328,
       title = {System Modeling Frameworks for Wind Turbines and Plants: Review and Requirements Specifications},
