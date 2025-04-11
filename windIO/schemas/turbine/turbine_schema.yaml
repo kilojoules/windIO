@@ -2962,6 +2962,7 @@ properties:
                         units: deg/s
                         minimum: 0
                         maximum: 30.
+                        default: 1.
     environment:
         type: object
         description: The field :code:`environment` includes the data characterizing air and water where the wind turbine operates.
