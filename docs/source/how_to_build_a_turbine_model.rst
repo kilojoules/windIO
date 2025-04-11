@@ -220,3 +220,40 @@ The `materials` section of the turbine YAML file provides detailed specification
     :language: yaml
     :lines: 878-901
 
+Control
+-------
+The `control` section of the turbine YAML file provides detailed specifications for the wind turbine control system. It includes the following subfields:
+- `supervisory`: Defines the parameters of the supervisory control system
+- `pitch`: Defines the parameters of the pitch control system
+- `torque`: Defines the parameters of the torque control system
+- `yaw`: Defines the parameters of the yaw control system
+
+The details of each field are discussed in the page :doc:`detailed_turbine_documentation`. An example of the `control` section of the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 970-984
+
+Environment
+-----------
+The `environment` section of the turbine YAML file provides detailed specifications for the environmental conditions and parameters faced by the wind turbine. The details of each field are discussed in the page :doc:`detailed_turbine_documentation`. An example of the `environment` section of the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 985-997
+
+Balance of System (BoS)
+-----------------------
+The `bos` section of the turbine YAML file provides detailed specifications for the balance of system inputs. The details of each field are discussed in the page :doc:`detailed_turbine_documentation`. An example of the `bos` section of the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 998-1014
+
+Costs
+-----
+The `costs` section of the turbine YAML file provides detailed specifications for the capital and operational expenditures of the wind turbine. The details of each field are discussed in the page :doc:`detailed_turbine_documentation`. An example of the `costs` section of the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 1015-1042

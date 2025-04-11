@@ -2950,6 +2950,18 @@ properties:
                         units: rpm
                         minimum: 0
                         default: 100.
+            yaw:
+                type: object
+                description: Yaw system data.
+                required:
+                    - yaw_rate
+                properties:
+                    yaw_rate:
+                        type: number
+                        description: Maximum yaw rate of the wind turbine.
+                        units: deg/s
+                        minimum: 0
+                        maximum: 30.
     environment:
         type: object
         description: The field :code:`environment` includes the data characterizing air and water where the wind turbine operates.
