@@ -34,8 +34,13 @@ ere is an example of the `assembly` section from the IEA-15MW turbine YAML file:
     :language: yaml
     :lines: 3-12
 
+Next, let's look at the `components` section, which describes the individual components of the turbine.
+
+Components
+----------
+
 Blade
------
+~~~~~
 
 The `blade` section of the turbine YAML file provides detailed specifications for the wind turbine blade. It is divided into the following subfields:
 
@@ -97,7 +102,7 @@ The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
     :lines: 383-417
 
 Hub
----
+~~~
 
 The `hub` section of the turbine YAML file provides detailed specifications for the wind turbine hub. Only a few fields are required, namely `diameter`, `cone_angle`, and drag coefficient `cd`. Users can also decide to simply define the `elastic_properties`. The hub of the IEA-15MW turbine is defined as shown below. Note that many inputs are optional and currently only used by NREL's systems engineering tool WISDEM, which was used to design the IEA-15MW turbine.
 
@@ -106,7 +111,7 @@ The `hub` section of the turbine YAML file provides detailed specifications for 
     :lines: 418-438
 
 Drivetrain
-----------
+~~~~~~~~~~
 The `drivetrain` section of the turbine YAML file provides detailed specifications for the wind turbine drivetrain. It includes the following subfields:
 - `outer_shape`: Defines the outer shape of the nacelle
 - `lss`: Defines the low-speed shaft
@@ -125,7 +130,7 @@ Users should refer to the :doc:`detailed_turbine_documentation` for the details 
     :lines: 439-542
 
 Yaw
----
+~~~
 The `yaw` section of the turbine YAML file provides detailed specifications for the wind turbine yaw system. Currently it only includes the equivalent `elastic_properties` of the yaw system. The yaw system of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
@@ -133,7 +138,7 @@ The `yaw` section of the turbine YAML file provides detailed specifications for 
     :lines: 543-547
 
 Tower
------
+~~~~~
 The `tower` section of the turbine YAML file provides detailed specifications for the wind turbine tower. It includes the following subfields:
 - `reference_axis`: Defines the reference axis of the tower in the tower base coordinate system. This axis is used as the basis for defining both the tower geometry and structural properties.
 - `outer_shape`: Defines the outer shape of the tower
@@ -145,7 +150,7 @@ The `tower` section of the turbine YAML file provides detailed specifications fo
     :lines: 548-573
 
 Monopile
---------
+~~~~~~~~
 The `monopile` section of the turbine YAML file provides detailed specifications for the wind turbine monopile, when present. It includes the following subfields:
 - `reference_axis`: Defines the reference axis of the monopile in the tower base coordinate system. This axis is used as the basis for defining both the monopile geometry and structural properties.
 - `outer_shape`: Defines the outer shape of the monopile
@@ -157,7 +162,7 @@ The `monopile` section of the turbine YAML file provides detailed specifications
     :lines: 574-602
 
 Floating platform
--------------------
+~~~~~~~~~~~~~~~~~
 The `floating_platform` section of the turbine YAML file provides detailed specifications for the wind turbine floating platform, when present. It includes the following subfields:
 - `transition_piece_mass`
 - `transition_piece_cost`
@@ -173,7 +178,7 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
 Mooring
--------
+~~~~~~~
 The `mooring` section of the turbine YAML file provides detailed specifications for the floating wind turbine mooring system, when present. It includes the following subfields:
 - `nodes`: Defines the nodes of the mooring system
 - `lines`: Defines the lines of the mooring system
@@ -187,3 +192,31 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
     :lines: 767-819
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
+
+Airfoils
+---------------
+The `airfoils` section of the turbine YAML file provides a database of airfoil coordinates, polars, and unsteady aero parameters. Each aifoil includes the following subfields:
+- `coordinates`: Defines the coordinates of the airfoils
+- `aerodynamic_center`: Defines the chordwise position of aerodynamic center of the airfoils
+- `rthick`: Defines the relative thickness of the airfoils
+- `polars`: Defines the polars of the airfoils
+
+Multiple sets of `polars` can be defined for each airfoil at varying conditions, for example distinguishing wind tunnel conditions and numerical results, or different roughness conditions. Also, for each configuration, multiple sets of polars can be defined at varying Reynolds number. Note that for every set of polars the user can opt to specify the unsteady parameters often required by aeroelastic models.
+
+An example of the `FFA-W3-211` airfoil used in the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 642-661
+
+Note that in this example only one configuration of polars at a single Re number is defined. The user can define multiple configurations by adding more entries to the `polars` field. The `polars` field is a list of dictionaries, where each dictionary represents a different configuration of polars. Multiple sets of polars for the same configuration under different Re numbers can be defined by adding more entries to the `re_sets` field. The `re_sets` field is a second list of dictionaries, where each dictionary represents polars at varying Reynolds.
+
+Materials
+---------
+
+The `materials` section of the turbine YAML file provides detailed specifications for the materials used in the wind turbine. The details of each entry are discussed in the page :doc:`detailed_turbine_documentation`. An example of the material `glass_biax` used in the IEA-15MW turbine is shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 878-901
+
