@@ -12,4 +12,86 @@ Here we will walk through the YAML file of the IEA-15MW turbine, which is locate
 
 The YAML file is divided into several sections, each describing a different part of the turbine model.
 The top level sections are as follows:
-- `windIO_version`: This section describes the overall turbine model and its components.
+- `windIO_version`: Version of windIO used.
+- `assembly`: The field assembly includes nine entries that aim at describing the overall configuration of the wind turbine
+  and its components.
+- `components`: Specifications for individual components like blades, tower, and nacelle.
+- `airfoils`: Database of airfoil coordinates, polars, and unsteady aero parameters.
+- `materials`: Database of materials used in the turbine model.
+- `control`: Control system.
+- `environment`: Environmental conditions and parameters.
+- `bos`: Balance of system inputs.
+- `costs`: CapEx and OpEx cost inputs.
+
+Note that many text editors allow you to "fold" sections of the YAML file for easier navigation.
+Folding collapses sections of the file, making it easier to focus on specific parts of the turbine model.
+For example, you can fold the `components` section to hide its details while working on the `assembly` section.
+Consult your text editor's documentation to learn how to use this feature.
+H
+ere is an example of the `assembly` section from the IEA-15MW turbine YAML file:
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 3-12
+
+Blade
+-----
+
+The `blade` section of the turbine YAML file provides detailed specifications for the wind turbine blade. It is divided into the following subfields:
+
+- `reference_axis`: Defines the reference axis of the blade in the blade root coordinate system. This axis is used as the basis for defining both the blade geometry and structural properties.
+- `outer_shape`: Describes the external geometry of the blade, including airfoil profiles and their distribution along the blade span. It also includes the blending of airfoil polars.
+- `structure`: Specifies the internal structure of the blade, including shear webs and composite material layers.
+- `elastic_properties`: Defines the stiffness and inertia properties of the blade, which are critical for structural dynamic analysis.
+
+An image representing the `reference_axis` of the blade is shown below.
+
+.. image:: source/image/reference_axis.png
+   :width: 600 px
+   :align: center
+   :alt: Reference axis of the blade
+
+This is how it looks for the IEA-15:
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 15-24
+
+
+Next, the `outer_shape` is defined. Here, follow the  :doc:`detailed_turbine_documentation` for the details. It is important to note that each quantity that is distributed along the span is defined in terms of pairs of `grid` and `values`. The field `grid` maps the distribution of the quantity along the span, while `values` defines the value of the quantity at each grid point. The grid is defined in terms of a list of values, which are normalized to the 3D curvilinear blade length.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 25-88
+
+The `structure` section describes the inner structure of the blade. It includes the two fields:
+- `webs`
+- `layers`
+
+The `webs` field describes the shear webs of the blade, whereas the `layers` field describes the layers of composite materials that make up the blade. Each layer has an associated material and thickness. `layers` can belong to the outer mold line as well as to the shear webs. In the latter case they have a `web` tag.
+The definition of the chordwise positions of layers and webs is done in different ways. The primary way to define the position of a web or of a layer is to define its `start_nd_arc` and `end_nd_arc` positions. These are the normalized distance along the blade length from the trailing edge suction side to the trailing edge pressure side. The `start_nd_arc` and `end_nd_arc` values are defined in terms of a list of values, which are apped to the usual `grid` that follows the 3D curvilinear blade length.
+
+The image below shows `start_nd_arc` and `end_nd_arc`:
+
+.. image:: source/image/structure1.png
+   :width: 600 px
+   :align: center
+   :alt: Definition of `start_nd_arc` and `end_nd_arc`
+
+
+The `structure` field often grows quite extensively. For the IEA-15MW turbine, it is defined as follows:
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 89-382
+
+The fourth and last field of the `blade` component is the `elastic_properties`, whose subfields are:
+- `inertia_matrix`: Defines the inertia properties of the blade, including mass and moment of inertia.
+- `stiffness_matrix`: Defines the stiffness properties of the blade, including bending and torsional stiffness.
+- `structural_damping`: Defines the structural damping properties of the blade, currently in Rayleigh format `mu`.
+
+The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 383-417
