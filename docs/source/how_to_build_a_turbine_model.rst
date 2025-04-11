@@ -95,3 +95,95 @@ The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
 .. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
     :lines: 383-417
+
+Hub
+---
+
+The `hub` section of the turbine YAML file provides detailed specifications for the wind turbine hub. Only a few fields are required, namely `diameter`, `cone_angle`, and drag coefficient `cd`. Users can also decide to simply define the `elastic_properties`. The hub of the IEA-15MW turbine is defined as shown below. Note that many inputs are optional and currently only used by NREL's systems engineering tool WISDEM, which was used to design the IEA-15MW turbine.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 418-438
+
+Drivetrain
+----------
+The `drivetrain` section of the turbine YAML file provides detailed specifications for the wind turbine drivetrain. It includes the following subfields:
+- `outer_shape`: Defines the outer shape of the nacelle
+- `lss`: Defines the low-speed shaft
+- `hss`: Defines the high-speed shaft, when present
+- `gearbox`: Defines the gearbox, when present
+- `generator`: Defines the generator
+- `nose`: Defines the nose
+- `bedplate`: Defines the bedplate
+- `other_components`: Defines the auxiliary components of the nacelle
+- `elastic_properties`: Defines the equivalent elastic properties of the nacelle
+
+Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield. The drivetrain of the IEA-15MW turbine is defined as shown below. Note that many inputs are optional and currently only used by NREL's systems engineering tool WISDEM, which was used to design the IEA-15MW turbine.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 439-542
+
+Yaw
+---
+The `yaw` section of the turbine YAML file provides detailed specifications for the wind turbine yaw system. Currently it only includes the equivalent `elastic_properties` of the yaw system. The yaw system of the IEA-15MW turbine is defined as shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 543-547
+
+Tower
+-----
+The `tower` section of the turbine YAML file provides detailed specifications for the wind turbine tower. It includes the following subfields:
+- `reference_axis`: Defines the reference axis of the tower in the tower base coordinate system. This axis is used as the basis for defining both the tower geometry and structural properties.
+- `outer_shape`: Defines the outer shape of the tower
+- `structure`: Defines the inner structure of the tower
+- `elastic_properties`: Defines the equivalent elastic properties of the tower
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 548-573
+
+Monopile
+--------
+The `monopile` section of the turbine YAML file provides detailed specifications for the wind turbine monopile, when present. It includes the following subfields:
+- `reference_axis`: Defines the reference axis of the monopile in the tower base coordinate system. This axis is used as the basis for defining both the monopile geometry and structural properties.
+- `outer_shape`: Defines the outer shape of the monopile
+- `structure`: Defines the inner structure of the monopile
+- `elastic_properties`: Defines the equivalent elastic properties of the monopile
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 574-602
+
+Floating platform
+-------------------
+The `floating_platform` section of the turbine YAML file provides detailed specifications for the wind turbine floating platform, when present. It includes the following subfields:
+- `transition_piece_mass`
+- `transition_piece_cost`
+- `joints`
+- `members`
+
+The floating platform of the IEA-15MW turbine is defined as shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
+    :language: yaml
+    :lines: 574-766
+
+Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
+
+Mooring
+-------
+The `mooring` section of the turbine YAML file provides detailed specifications for the floating wind turbine mooring system, when present. It includes the following subfields:
+- `nodes`: Defines the nodes of the mooring system
+- `lines`: Defines the lines of the mooring system
+- `line_types`: Defines the characteristics of the lines
+- `anchor_types`: Defines the characteristics of the anchors
+
+The floating platform of the IEA-15MW turbine is defined as shown below.
+
+.. literalinclude:: ../../../examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
+    :language: yaml
+    :lines: 767-819
+
+Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
