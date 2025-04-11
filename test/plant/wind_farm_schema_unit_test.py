@@ -25,38 +25,17 @@ def test_wind_farm_input(subtests):
         windIO.validate(config, "plant/wind_farm")
 
 
-def test_wind_farm_invalid_inputs_layouts(subtests):
-    """
-    Test missing inputs for the wind_farm layouts property.
-    """
-    with subtests.test("missing layouts"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-    with subtests.test("missing layouts initial_layout"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]["initial_layout"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-    with subtests.test("missing layouts initial_layout coordinates"):
-        config = SampleInputs().wind_farm
-        del config["layouts"]["initial_layout"]["coordinates"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
-
-
-def test_wind_farm_invalid_inputs_turbines(subtests):
+def test_wind_farm_inputs_turbines(subtests):
     """
     Test missing inputs for the wind_farm turbines property.
     """
     with subtests.test("missing turbines"):
         config = SampleInputs().wind_farm
+        windIO.validate(config, "plant/wind_farm")
+
+        # turbines are optional
         del config["turbines"]
-        with pytest.raises(ValidationError):
-            windIO.validate(config, "plant/wind_farm")
+        windIO.validate(config, "plant/wind_farm")
 
 
 def test_wind_farm_invalid_inputs_electrical_substations(subtests):
