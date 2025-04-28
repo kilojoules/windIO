@@ -39,19 +39,16 @@ properties:
               type: array
               items:
                 type: integer
-              optional: true
 
   turbines:
     description: (Optional) The full turbine definition for the entire wind farm
     $ref: "turbine.yaml#"
-    optional: true
 
   turbine_types:
     description: (Optional) List of turbine types used for layouts. Required if turbine_types is used in layouts.
     type: object
     additionalProperties:
       $ref: "turbine.yaml#"
-    optional: true
 
   electrical_substations:
     description: Information about electrical substations
