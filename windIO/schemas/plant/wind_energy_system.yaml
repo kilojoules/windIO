@@ -33,15 +33,6 @@ properties:
           name:
             title: Flow model name
             type: string
-            enum:
-              [
-                "foxes",
-                "pyWake",
-                "pyWakeEllipSys",
-                "code_saturne",
-                "wayve",
-                "floris",
-              ]
       analysis:
         properties:
           wind_deficit_model:
@@ -52,27 +43,20 @@ properties:
               name:
                 title: Wake model name
                 type: string
-                enum:
-                  [
-                    "Jensen",
-                    "Bastankhah2014",
-                    "Bastankhah2016",
-                    "TurbOPark",
-                    "SuperGaussian",
-                  ]
+                enum: ["Jensen", "Bastankhah2014", "Bastankhah2016", "TurbOPark", "SuperGaussian"]
               wake_expansion_coefficient:
                 title: wake expansion coefficient
                 type: object
                 properties:
-                  k_a:
-                    title: Wake expansion coefficient
-                    type: number # (default 0.04)
-                  k_b:
-                    title: Factor to multiply TI
-                    type: number # (default 0)
-                  free_stream_ti:
-                    title: Flag deciding to use freestream or waked TI
-                    type: boolean # (default to False)
+                   k_a:
+                      title: Wake expansion coefficient
+                      type: number # (default 0.04)
+                   k_b:
+                      title: Factor to multiply TI
+                      type: number # (default 0)
+                   free_stream_ti:
+                      title: Flag deciding to use freestream or waked TI
+                      type: boolean # (default to False)
               ceps:
                 title: Bastankhah c_epsilon factor
                 type: number
@@ -81,14 +65,13 @@ properties:
                 type: boolean
 
           axial_induction_model:
-            title: axial induction model
-            type: string
-            enum: ["1D", "Madsen"]
+              title: axial induction model
+              type: string
+              enum: ["1D", "Madsen"]
 
           deflection_model:
             title: Deflection model
             description: defines the deviation of the path of the wake centerline in the crossflow direction (only for wake steering)
-            #description: Deflection model used in AEP calculations
             type: object
             properties:
               name:
@@ -108,15 +91,7 @@ properties:
               name:
                 title: Turbulence model name
                 type: string
-                enum:
-                  [
-                    "STF2005",
-                    "STF2017",
-                    "IEC-TI-2019",
-                    "CrespoHernandez",
-                    "GCL",
-                    "None",
-                  ]
+                enum: ["STF2005", "STF2017", "IEC-TI-2019", "CrespoHernandez", "GCL", "None"]
                 # Q: IEC versus Franson
                 # note: We assume same shape as wind deficit for now
               coefficents:
@@ -156,13 +131,14 @@ properties:
                 type: string
                 enum: ["center", "grid"]
               wake_averaging: # velocity and TI averaging
-                title: Averaging model for wake velocity and TI
+                title: Averaging model for wake velocity and TI deficit
                 type: string
-                enum: ["center", "grid"] # Assume the grid is not used for tophat model because analytic solution is available
+                enum: ["center", 'grid'] 
               wind_speed_exponent_for_power:
                 type: number
               wind_speed_exponent_for_ct:
                 type: number
+
 
           blockage_model:
             title: Blockage model
@@ -172,14 +148,7 @@ properties:
               name:
                 title: Blockage model name
                 type: string
-                enum:
-                  [
-                    "None",
-                    "RankineHalfBody",
-                    "Rathmann",
-                    "SelfSimilarityDeficit",
-                    "SelfSimilarityDeficit2020",
-                  ]
+                enum: ['None', 'RankineHalfBody', 'Rathmann', 'SelfSimilarityDeficit', 'SelfSimilarityDeficit2020']
               parameters:
                 title: Blockage Model Parameters
                 type: array
@@ -233,7 +202,7 @@ properties:
           run_type:
             title: type of run with the flow api
             type: string
-            enum: ["simulate", "postprocess"]
+            enum: ['simulate','postprocess']
 
           layers_description:
             title: description of the layers needed for the APM model
@@ -257,18 +226,18 @@ properties:
                   mfp_type:
                     title: type of APM momentum flux parametrization
                     type: string
-                    enum: [None, "constant_flux"]
+                    enum: [None, 'constant_flux']
                   apm_mfp_settings:
                     title: APM momentum flux parametrization settings
                     description: settings for APM momentum flux parametrization (only used when mfp_type is "constant_flux")
                     type: object
                     properties:
-                      a_mfp:
-                        title: momentum flux scaling parameter
-                        type: number # (default 0.120)
-                      d_mfp:
-                        title: momentum flux IBL growth scaling parameter
-                        type: number # (default 27.80)
+                       a_mfp:
+                          title: momentum flux scaling parameter
+                          type: number # (default 0.120)
+                       d_mfp:
+                          title: momentum flux IBL growth scaling parameter
+                          type: number # (default 27.80)
               apm_disp_stresses:
                 title: dispersive stresses parametrization
                 type: object
@@ -276,7 +245,7 @@ properties:
                   ds_type:
                     title: type of APM dispersive stresses parametrization
                     type: string
-                    enum: [None, "subgrid"]
+                    enum: [None, 'subgrid']
 
           apm_grid:
             title: settings for the APM grid
@@ -295,22 +264,17 @@ properties:
                 title: APM grid filter length
                 type: number # (default 1.e3)
 
-          wake_tool:
-            title: choice of wake tool for coupling to wayve
-            type: string
-            enum: ["pywake", "foxes", "wayve"]
-
           wm_coupling:
-            title: settings for wake model coupling in wayve
+            title: settings for wake model coupling in high-fidelity atmospheric models
             type: object
             properties:
               method:
                 title: wake model coupling method
                 description: wake model coupling method (see https://dx.doi.org/10.1088/1742-6596/2767/9/092079)
                 type: string
-                enum: ["VM", "PB", "US"] # (default "PB")
+                enum: ["VM", "PB", "US"]  # (default "PB")
               settings:
-                title: method-specific settings for wake model coupling in wayve
+                title: method-specific settings for wake model coupling in atmospheric model
                 type: object
                 properties:
                   alpha:
@@ -321,6 +285,10 @@ properties:
                     title: Upstream distance
                     description: Upstream distance where the background velocity is evaluated. Has to be specified when using "US", no effect otherwise.
                     type: number # (default 1.e3)
+              wake_tool:
+                  title: choice of wake tool for coupling to atmospheric flow model
+                  type: string
+
               subgrid:
                 title: settings for the subgrid on which wake model velocities are defined
                 type: object
@@ -333,37 +301,71 @@ properties:
                     title: Ratio of average turbine diameter to subgrid spacing
                     type: number # (default 8)
 
+
       #~~
       model_outputs_specification:
         title: Outputs
         description: Output parameters and configurations for the wind energy system
         type: object
-        additionalProperties: false
         required:
-          - cases_run
+          - run_configuration
         properties:
           output_folder:
             title: output folder name
             description: name of the folder where the output files are written
             type: string
-
-          cases_run:
-            title: Handling of the timeseries runs
-            type: object
-            additionalProperties: false
-            properties:
-              all_occurences:
-                title: active to run all the occurences from the time series
-                type: boolean
-              subset:
-                title: list of times to run
-                type: array
+                  
+          run_configuration:
+            title: Handling of simulation runs
+            oneOf:
+              - required: ["times_run"]
+                properties:
+                  times_run:
+                    title: Time-based run configuration
+                    type: object
+                    properties:
+                      all_occurences:
+                        title: active to run all the occurences from the time series
+                        type: boolean
+                      subset:
+                        title: list of times to run
+                        type: array
+                        items:
+                          oneOf:
+                           - type: string
+                             format: date-time
+                           - type: integer
+              - required: ["wind_speeds_run", "directions_run"]
+                properties:
+                  wind_speeds_run:
+                    title: Wind speeds configuration
+                    type: object
+                    properties:
+                      all_values:
+                        title: run all available wind speeds
+                        type: boolean
+                      specific_values:
+                        title: specific wind speeds to run
+                        type: array
+                        items:
+                          type: number
+                  directions_run:
+                    title: Wind directions configuration
+                    type: object
+                    properties:
+                      all_values:
+                        title: run all available wind directions
+                        type: boolean
+                      specific_values:
+                        title: specific wind directions to run
+                        type: array
+                        items:
+                          type: number
 
           turbine_outputs:
             title: outputs related to each turbine
             description: outputs for each turbine as the individual turbine power, velocity..
             type: object
-            additionalProperties: false
             properties:
               turbine_nc_filename:
                 title: Name of the file that will contain the turbine outputs
@@ -380,7 +382,6 @@ properties:
             title: configuration of the flow field outputs
             description: flow field output variables and files
             type: object
-            additionalProperties: false
             properties:
               report:
                 title: Report
@@ -396,17 +397,15 @@ properties:
                 type: array
                 items:
                   type: string
-
               z_planes:
                 title: planes at which the flow field variables will be stored
                 description: description of vertical planes
                 type: object
-                additionalProperties: false
                 properties:
                   z_sampling:
                     title: type of vertical discretization
                     type: string
-                    enum: ["hub_heights", "plane_list"]
+                    enum: ['hub_heights', 'plane_list']
                   z_list:
                     title: z plane values for sample type 'grid'
                     type: array
@@ -415,7 +414,7 @@ properties:
                   xy_sampling:
                     title: type of horizontal discretization
                     type: string
-                    enum: ["grid", "original_grid"]
+                    enum: ['grid', 'original_grid']
                   x_bounds:
                     title: x bounds for sample type 'grid'
                     type: array
@@ -439,12 +438,12 @@ properties:
                     title: y grid spacing for sample type 'grid'
                     type: number
 
-      outputs:
+      outputs:  
         title: Outputs
         description: Output parameters and configurations for the wind energy system
         type: object
         properties:
-          name: # New property added
+          name:  # New property added
             title: Output Name
             description: Name for the output configuration
             type: string
@@ -465,6 +464,7 @@ properties:
                 type: array
                 items:
                   type: string
+
 
   optimisation:
     properties:

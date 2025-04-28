@@ -49,13 +49,13 @@ def test_write_list_flow_style():
 
     # WithOUT flow style
     out1 = StringIO()
-    windIO.yaml.get_YAML(n_list_flow_style=0).dump(data, out1)
+    windIO.yaml._get_YAML(n_list_flow_style=0).dump(data, out1)
     str_data1 = out1.getvalue()
     assert str_data1 == get_yaml_str(data)
 
     # With flow-style for 1D numeric array
     out1 = StringIO()
-    windIO.yaml.get_YAML(n_list_flow_style=1).dump(data, out1)
+    windIO.yaml._get_YAML(n_list_flow_style=1).dump(data, out1)
     str_data1 = out1.getvalue()
     n1D = 10
     i1D = 0
@@ -67,7 +67,7 @@ def test_write_list_flow_style():
 
     # With flow-style for 2D numeric array
     out1 = StringIO()
-    windIO.yaml.get_YAML(n_list_flow_style=2).dump(data, out1)
+    windIO.yaml._get_YAML(n_list_flow_style=2).dump(data, out1)
     str_data1 = out1.getvalue()
     n1D = 2
     i1D = 0
@@ -86,7 +86,7 @@ def test_write_list_flow_style():
 
     # With flow-style for 3D numeric array
     out1 = StringIO()
-    windIO.yaml.get_YAML(n_list_flow_style=3).dump(data, out1)
+    windIO.yaml._get_YAML(n_list_flow_style=3).dump(data, out1)
     str_data1 = out1.getvalue()
     n1D = 2
     i1D = 0
@@ -138,12 +138,12 @@ def test_write_numpy():
     tfile = StringIO()
 
     # Write data to "file"
-    windIO.yaml.get_YAML().dump(din, tfile)
+    windIO.yaml._get_YAML().dump(din, tfile)
     # Reset file location
     tfile.seek(0)
 
     # Convert "file" to python data withOUT numpy reader 
-    dout = windIO.yaml.get_YAML().load(tfile)
+    dout = windIO.yaml._get_YAML().load(tfile)
 
     # Asserting that dicts are equal
     assert_equal_dicts(test_data, dout)
@@ -160,8 +160,8 @@ def test_include():
         key_name, sub_filename = [el.strip() for el in lines[7].split("!include")]
         key_name = key_name.strip(":")
         lines.pop(7)
-        out_wo_inc = windIO.yaml.get_YAML().load("\n".join(lines))
-        out_wo_inc[key_name] = windIO.yaml.get_YAML().load(Path(filename).parent / sub_filename)
+        out_wo_inc = windIO.yaml._get_YAML().load("\n".join(lines))
+        out_wo_inc[key_name] = windIO.yaml._get_YAML().load(Path(filename).parent / sub_filename)
 
     out = windIO.load_yaml(filename)
     assert_equal_dicts(out, out_wo_inc)
@@ -173,9 +173,9 @@ def test_include():
         key_name, sub_filename = [el.strip() for el in lines[1].split("!include")]
         key_name = key_name.strip(":")
         lines.pop(1)
-        out_wo_inc = windIO.yaml.get_YAML().load("\n".join(lines))
-        out_wo_inc[key_name] = windIO.yaml.ds2yml(xr.open_dataset(Path(filename).parent / sub_filename))
-    out = windIO.yaml.get_YAML().load(
+        out_wo_inc = windIO.yaml._get_YAML().load("\n".join(lines))
+        out_wo_inc[key_name] = windIO.yaml._ds2yml(xr.open_dataset(Path(filename).parent / sub_filename))
+    out = windIO.yaml._get_YAML().load(
         base_path / "plant_energy_resource/GriddedResource_nc.yaml"
     )
     assert_equal_dicts(out, out_wo_inc)
@@ -191,10 +191,10 @@ def test_numpy_read():
         e=["test1", "test2"]
     )
     str_repr = StringIO()
-    windIO.yaml.get_YAML().dump(test_data, str_repr)
+    windIO.yaml._get_YAML().dump(test_data, str_repr)
     str_repr.seek(0)
 
-    data = windIO.yaml.get_YAML(read_numpy=True).load(str_repr)
+    data = windIO.yaml._get_YAML(read_numpy=True).load(str_repr)
     assert isinstance(data["a"], np.ndarray), "`a` should be numpy array"
     assert len(data["a"].shape) == 1, "`a` shape should be 1D"
     assert isinstance(data["b"], np.ndarray), "`b` should be numpy array"

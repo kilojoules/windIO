@@ -1,3 +1,6 @@
+.. image:: https://zenodo.org/badge/DOI/10.5281/zenodo.15191297.svg
+  :target: https://doi.org/10.5281/zenodo.15191297
+  :alt: DOI
 
 windIO: a community-focused data I/O format for wind energy systems
 ===================================================================
@@ -10,7 +13,7 @@ system models, and we encourage collaboration.
 The github repository is at https://github.com/IEAWindSystems/windIO and the
 online documentation is at https://ieawindsystems.github.io/windIO.
 
-This windIO repository including the following:
+The windIO repository includes the following:
 
 - Schema defining windIO components describing wind turbines and wind plants
 - Python library for validating files relative to the schema and loading the data into a Python dictionary
@@ -75,19 +78,3 @@ The suggested method of incorporating windIO into your code is:
    windIO.load_yaml("path/to/input.yaml")
 
    # Conversion to your software's data structures here
-
-Software library reference
---------------------------
-
-.. automodule:: windIO
-   :members: validate, load_yaml, write_yaml
-
-
-Contents
---------
-.. toctree::
-   :maxdepth: 3
-
-   source/turbine_schema
-   source/plant_schema
-   source/developer_guide

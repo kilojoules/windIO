@@ -1,12 +1,11 @@
 # Draft schema definition for outputs
+input_format_version: 0
 title: Outputs
 type: object
 description: >
   The outputs generated from the energy resource model, including flow fields
   and power tables. Each output type can be specified with detailed attributes
   and properties.
-
-additionalProperties: false
 
 # PROPERTIES
 properties:
@@ -19,7 +18,6 @@ properties:
     type: object
     description: >
       The flow field outputs including coordinates (time, x, y, z) and physical fields.
-    additionalProperties: false
     required:
       - time
       - x
@@ -82,7 +80,6 @@ properties:
     description: >
       The turbine_data table outputs including time, wind speed (ws), wind direction (wd),
       power, and effective wind speed.
-    additionalProperties: false
     anyOf:
       - required:
           - time

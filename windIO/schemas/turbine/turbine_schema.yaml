@@ -14,16 +14,17 @@ required:
     - name
     - windIO_version
     - components
-    - materials
     - assembly
 optional:
     - comments
-    - environment
     - airfoils
+    - materials
     - control
+    - environment
     - bos
     - costs
-# additionalProperties: true
+    - outputs
+additionalProperties: False
 properties:
     comments:
         description: Text field to describe the wind turbine, the changes to previous versions, etc,
@@ -121,6 +122,7 @@ properties:
                     - outer_shape
                 optional:
                     - structure
+                    - elastic_properties
                 properties:
                     reference_axis:
                         type: object
@@ -472,8 +474,8 @@ properties:
                         minimum: 0
                         maximum: 2.
                     elastic_properties:
-                        $ref: "#/definitions/point_mass"
-                        description: Point mass modeling the full hub system, which includes the hub, the spinner, the blade bearings, the pitch actuators, the cabling. The properties are defined in the hub-aligned coordinate system, which is centered at the rotor apex and has x aligned along the (possibly tilted) shaft, y parallel to the ground, and z pointing upwards (including the rotor tilt). The rotational inertia of the hub system is around x, so the first term of the inertia vector.
+                        $ref: "#/definitions/rigid_body"
+                        description: Rigid body modeling the full hub system, which includes the hub, the spinner, the blade bearings, the pitch actuators, the cabling. The properties are defined in the hub-aligned coordinate system, which is centered at the rotor apex and has x aligned along the (possibly tilted) shaft, y parallel to the ground, and z pointing upwards (including the rotor tilt). The rotational inertia of the hub system is around x, so the first term of the inertia vector.
             drivetrain:
                 type: object
                 properties:
@@ -618,7 +620,7 @@ properties:
                                             uniqueItems: false
                                     location:
                                         type: array
-                                        description: Location of the point mass with respect to the coordinate system
+                                        description: Location of the rigid body with respect to the coordinate system
                                         items:
                                             type: number
                                             units: m
@@ -812,8 +814,8 @@ properties:
                                 description: If power electronics are located uptower (True) or at tower base (False)
                                 default: True                  
                             elastic_properties:
-                                $ref: "#/definitions/point_mass"
-                                description: Point mass modeling the assembly of brake, hvac, converter, transformer, and main bearings. Their inertia is defined with respect to the tower top coordinate system.
+                                $ref: "#/definitions/rigid_body"
+                                description: Rigid body modeling the assembly of brake, hvac, converter, transformer, and main bearings. Their inertia is defined with respect to the tower top coordinate system.
                     generator:
                       properties:                       
                         type:
@@ -1305,19 +1307,19 @@ properties:
                         #   maximum: 100.0
                         #   description: Words
                         elastic_properties:
-                            $ref: "#/definitions/point_mass"
-                            description: Point mass modeling the generator. The properties are defined in the generator coordinate system, which is centered at the center of the generator, and has x aligned along the shaft pointing downwind, y parallel to the ground, and z pointing upwards (tilted, if tilt is present). The rotational inertia of the generator is around the x axis.
+                            $ref: "#/definitions/rigid_body"
+                            description: Rigid body modeling the generator. The properties are defined in the generator coordinate system, which is centered at the center of the generator, and has x aligned along the shaft pointing downwind, y parallel to the ground, and z pointing upwards (tilted, if tilt is present). The rotational inertia of the generator is around the x axis.
 
                     elastic_properties:
-                        $ref: "#/definitions/point_mass"
-                        description: Point mass modeling the overall drivetrain, excluding hub and yaw systems. The properties are defined in the tower-top coordinate system, which is centered at the center of the tower top, and has x aligned along the prevailing wind direction, y parallel to the ground, and z pointing upwards.
+                        $ref: "#/definitions/rigid_body"
+                        description: Rigid body modeling the overall drivetrain, excluding hub and yaw systems. The properties are defined in the tower-top coordinate system, which is centered at the center of the tower top, and has x aligned along the prevailing wind direction, y parallel to the ground, and z pointing upwards.
             yaw:
                 type: object
                 description: Data describing the yaw system located at tower top.
                 properties:
                     elastic_properties:
-                        $ref: "#/definitions/point_mass"
-                        description: Point mass modeling the yaw system. The properties are defined in the tower-top coordinate system, which is centered at the center of the tower top, and has x aligned along the prevailing wind direction, y parallel to the ground, and z pointing upwards.
+                        $ref: "#/definitions/rigid_body"
+                        description: Rigid body modeling the yaw system. The properties are defined in the tower-top coordinate system, which is centered at the center of the tower top, and has x aligned along the prevailing wind direction, y parallel to the ground, and z pointing upwards.
             tower:
                 type: object
                 description: Data describing the wind turbine tower.
@@ -2948,6 +2950,19 @@ properties:
                         units: rpm
                         minimum: 0
                         default: 100.
+            yaw:
+                type: object
+                description: Yaw system data.
+                required:
+                    - yaw_rate
+                properties:
+                    yaw_rate:
+                        type: number
+                        description: Maximum yaw rate of the wind turbine.
+                        units: deg/s
+                        minimum: 0
+                        maximum: 30.
+                        default: 1.
     environment:
         type: object
         description: The field :code:`environment` includes the data characterizing air and water where the wind turbine operates.
@@ -3969,7 +3984,7 @@ definitions:
                             units: kg
                             minItems: 2
                             uniqueItems: false
-    point_mass:
+    rigid_body:
         type: object
         required:
             - location
@@ -3978,13 +3993,13 @@ definitions:
         properties:
             mass:
                 type: number
-                description: Mass of the component modeled as a point.
+                description: Mass of the component modeled as a rigid body.
                 units: kg
                 minimum: 0.
                 default: 0.
             inertia:
                 type: array
-                description: Mass moment of inertia of the component modeled as a point.
+                description: Mass moment of inertia of the component modeled as a rigid body.
                 default: [0., 0., 0., 0., 0., 0.]
                 items:
                     type: number
@@ -3994,7 +4009,7 @@ definitions:
                     uniqueItems: false
             location:
                 type: array
-                description: Location of the point mass with respect to the coordinate system.
+                description: Location of the rigid body with respect to the coordinate system.
                 default: [0., 0., 0.]
                 items:
                     type: number

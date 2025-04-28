@@ -17,7 +17,7 @@ properties:
 
   layouts:
     description: Position of wind turbines. Supports single or multiple layouts.
-    oneOf: # Allow either single layout as an object or multiple layouts as an array
+    oneOf:  # Allow either single layout as an object or multiple layouts as an array
       - type: object
         required:
           - coordinates
@@ -39,21 +39,19 @@ properties:
               type: array
               items:
                 type: integer
-
-  turbine:
-    description: (Optional) A single turbine model used for the entire wind farm
-    $ref: "turbine.yaml#"
+              optional: true
 
   turbines:
     description: (Optional) The full turbine definition for the entire wind farm
-    type: object
-    additionalProperties: true
+    $ref: "turbine.yaml#"
+    optional: true
 
   turbine_types:
     description: (Optional) List of turbine types used for layouts. Required if turbine_types is used in layouts.
     type: object
     additionalProperties:
       $ref: "turbine.yaml#"
+    optional: true
 
   electrical_substations:
     description: Information about electrical substations
