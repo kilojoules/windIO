@@ -134,3 +134,4 @@ dmypy.json
 
 # Generated converter yamls
 test/turbine/*.yaml
+.DS_Store
