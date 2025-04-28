@@ -49,7 +49,7 @@ The `blade` section of the turbine YAML file provides detailed specifications fo
 
 An image representing the `reference_axis` of the blade is shown below.
 
-.. image:: source/image/reference_axis.png
+.. image:: images/reference_axis.png
    :width: 600 px
    :align: center
    :alt: Reference axis of the blade
@@ -76,7 +76,7 @@ The definition of the chordwise positions of layers and webs is done in differen
 
 The image below shows `start_nd_arc` and `end_nd_arc`:
 
-.. image:: source/image/structure1.png
+.. image:: images/structure1.png
    :width: 600 px
    :align: center
    :alt: Definition of `start_nd_arc` and `end_nd_arc`
