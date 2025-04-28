@@ -5,7 +5,7 @@
 .. image:: docs/logo/windIO_logo.png
    :alt: windIO Logo
    :align: center
-   :width: 300px
+   :width: 100px
 
 windIO: a community-focused data I/O format for wind energy systems
 ===================================================================
