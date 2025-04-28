@@ -2,6 +2,11 @@
   :target: https://doi.org/10.5281/zenodo.15191297
   :alt: DOI
 
+.. image:: docs/logo/windIO_logo.png
+   :alt: windIO Logo
+   :align: center
+   :width: 300px
+
 windIO: a community-focused data I/O format for wind energy systems
 ===================================================================
 
