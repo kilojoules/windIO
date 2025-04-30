@@ -37,8 +37,7 @@ Alternatively, you can cite this older `IEA technical report <https://doi.org/10
       doi = {10.2172/1868328},
       place = {United States},
       year = {2022},
-      month = {5}
-   }
+      month = {5}}
 
 Author: `IEA Wind Task 37 and 55 Teams <mailto:pietro.bortolotti@nrel.gov>`_
 
@@ -89,5 +88,7 @@ Contents
    :maxdepth: 3
 
    source/turbine_schema
+   source/how_to_build_a_turbine_model
+   source/detailed_turbine_documentation
    source/plant_schema
    source/developer_guide
