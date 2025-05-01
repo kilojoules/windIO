@@ -5,6 +5,7 @@ import pytest
 from jsonschema.exceptions import ValidationError
 
 import windIO
+from windIO.validator import registry
 
 from .conftest import SampleInputs
 
@@ -112,10 +113,6 @@ def test_plant_valid_schema():
         path2schema = schema_base / fschema
 
         schema = windIO.load_yaml(path2schema)
-
-        base_uri = "https://www.example.com/schemas/"
-        resolver = jsonschema.RefResolver(base_uri=base_uri, referrer=schema)
-        schema_folder = Path(path2schema).parent
-        windIO._add_local_schemas_to(resolver, schema_folder, base_uri)
-        windIO.schemas.windIOMetaSchema.resolver = resolver
+        
+        windIO.schemas.windIOMetaSchema.registry = registry
         windIO.schemas.windIOMetaSchema.check_schema(schema)
