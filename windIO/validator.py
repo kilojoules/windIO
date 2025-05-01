@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path, PosixPath, WindowsPath
 from referencing import Registry, Resource
 from referencing.exceptions import NoSuchResource
