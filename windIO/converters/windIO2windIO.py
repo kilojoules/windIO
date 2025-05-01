@@ -476,9 +476,9 @@ class v1p0_to_v2p0:
 
                 # To the first set, assign temporary tag default
                 if i_plr==0:
-                    af["polars"][0]["configuration"] = "default"
+                    af["polars"][i_plr]["configuration"] = "default"
                 else:
-                    af["polars"][0]["configuration"] = "config%d"%i_plr
+                    af["polars"][i_plr]["configuration"] = "config%d"%i_plr
         return dict_v2p0
     
     def convert_materials(self, dict_v2p0):
