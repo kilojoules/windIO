@@ -1,4 +1,5 @@
 import os
+import traceback
 from copy import deepcopy
 import numpy as np
 import windIO
@@ -26,45 +27,61 @@ class v1p0_to_v2p0:
         try:
             dict_v2p0 = self.convert_blade(dict_v2p0)
             print("Blade converted successfully")
-        except:
-            print("Blade component could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Blade component could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_nacelle(dict_v2p0)
             print("Nacelle converted successfully")
-        except:
-            print("Nacelle component could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Nacelle component could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_tower(dict_v2p0)
             print("Tower converted successfully")
-        except:
-            print("Tower component could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Tower component could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         if "monopile" in dict_v2p0["components"]:
             try:
                 dict_v2p0 = self.convert_monopile(dict_v2p0)
                 print("Monopile converted successfully")
-            except:
-                print("Monopile component could not be converted successfully. Please check.")
+            except Exception as e:
+                print(traceback.format_exc())
+                print("⚠️ Monopile component could not be converted successfully. Please check.")
+                print(f"Error details: {e}")
         if "floating_platform" in dict_v2p0["components"]:
             try:
                 dict_v2p0 = self.convert_floating_platform(dict_v2p0)
                 print("Floating platform converted successfully")
-            except:
-                print("Floating platform component could not be converted successfully. Please check.")
+            except Exception as e:
+                print(traceback.format_exc())
+                print("⚠️ Floating platform component could not be converted successfully. Please check.")
+                print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_airfoils(dict_v2p0)
             print("Airfoil database converted successfully")
-        except:
-            print("Airfoil database could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Airfoil database could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_materials(dict_v2p0)
             print("Material database converted successfully")
-        except:
-            print("Material database could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Material database could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_controls(dict_v2p0)
             print("Control block converted successfully")
-        except:
-            print("Control block database could not be converted successfully. Please check.")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Control block database could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
 
         # Print out
         print("New yaml file being generated: %s"%self.filename_v2p0)
@@ -343,23 +360,24 @@ class v1p0_to_v2p0:
         if "uptower" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["uptower"] = v1p0_dt["uptower"]
         
-        dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
-        if "generator_length" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
-        if "generator_radius_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["generator"]["radius"] = v1p0_dt["generator_radius_user"]
-        if "generator_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["generator"]["mass"] = v1p0_dt["generator_mass_user"]
-        if "rpm_efficiency_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["generator"]["rpm_efficiency"] = v1p0_dt["rpm_efficiency_user"]
-        v1p0_gen = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
-        if "generator_type" in v1p0_gen:
-            dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_gen["generator_type"]
-            dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_type")
+        if "generator" in dict_v2p0["components"]["nacelle"]:
+            dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
+            if "generator_length" in v1p0_dt:
+                dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
+            if "generator_radius_user" in v1p0_dt:
+                dict_v2p0["components"]["drivetrain"]["generator"]["radius"] = v1p0_dt["generator_radius_user"]
+            if "generator_mass_user" in v1p0_dt:
+                dict_v2p0["components"]["drivetrain"]["generator"]["mass"] = v1p0_dt["generator_mass_user"]
+            if "rpm_efficiency_user" in v1p0_dt:
+                dict_v2p0["components"]["drivetrain"]["generator"]["rpm_efficiency"] = v1p0_dt["rpm_efficiency_user"]
+            v1p0_gen = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
+            if "generator_type" in v1p0_gen:
+                dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_gen["generator_type"]
+                dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_type")
 
-        if "phi" in dict_v2p0["components"]["drivetrain"]["generator"]:
-            phi_rad = dict_v2p0["components"]["drivetrain"]["generator"]["phi"]
-            dict_v2p0["components"]["drivetrain"]["generator"]["phi"] = np.rad2deg(phi_rad)
+            if "phi" in dict_v2p0["components"]["drivetrain"]["generator"]:
+                phi_rad = dict_v2p0["components"]["drivetrain"]["generator"]["phi"]
+                dict_v2p0["components"]["drivetrain"]["generator"]["phi"] = np.rad2deg(phi_rad)
 
         dict_v2p0["components"].pop("nacelle")
 
