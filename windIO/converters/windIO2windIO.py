@@ -24,13 +24,13 @@ class v1p0_to_v2p0:
         # Copy the input windio dict
         dict_v2p0.update(deepcopy(dict_v1p0))
 
-        # try:
-        dict_v2p0 = self.convert_blade(dict_v2p0)
-        print("Blade converted successfully")
-        # except Exception as e:
-        #     print(traceback.format_exc())
-        #     print("⚠️ Blade component could not be converted successfully. Please check.")
-        #     print(f"Error details: {e}")
+        try:
+            dict_v2p0 = self.convert_blade(dict_v2p0)
+            print("Blade converted successfully")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Blade component could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_nacelle(dict_v2p0)
             print("Nacelle converted successfully")
