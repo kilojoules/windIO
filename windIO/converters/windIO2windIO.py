@@ -210,6 +210,21 @@ class v1p0_to_v2p0:
             end_anchor_handle = "not_defined"
             start_fixed = None
             end_fixed = None
+
+            layer["name"] = name
+            if is_web:
+                layer["start_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][0]
+                layer["end_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][-1]
+            else:
+                layer["start_nd_grid"] = layer_v1p0["thickness"]["grid"][0]
+                layer["end_nd_grid"] = layer_v1p0["thickness"]["grid"][-1]
+
+            zeros_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+                          "values": [0.0, 0.0]}
+            ones_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+                          "values": [1.0, 1.0]}
+            dummy_dict = {"grid": "N/A",
+                          "values": "N/A"}
             # move definition of start_nd_arc and end_nd_arc to anchors
             if "start_nd_arc" in layer_v1p0:
                 if "fixed" in layer_v1p0["start_nd_arc"]:
@@ -261,6 +276,9 @@ class v1p0_to_v2p0:
                     raise ValueError("width is not defined for %s, required when midpoint_nd_arc is defined" % layer_v1p0["name"])
             else:
                 if "width" in layer_v1p0:
+                    if anchor is None:
+                        anchor = {}
+                    anchor["name"] = name
                     anchor["width"] = {}
                     anchor["width"].update(layer_v1p0["width"])
                     if start_fixed and end_fixed:
@@ -272,12 +290,22 @@ class v1p0_to_v2p0:
                             "name": start_anchor_name,
                             "handle": start_anchor_handle
                         }}
-                    elif end_fixed:
+                    else:
+                        anchor["start_nd_arc"] = dummy_dict
+                        print("start_nd_arc not found for %s, adding dummy values!" % name)
+                    if end_fixed:
                         anchor["width"]["defines"] = "start_nd_arc"
-                        anchor["width"] = {"anchor": {
+                        anchor["end_nd_arc"] = {"anchor": {
                             "name": end_anchor_name,
                             "handle": end_anchor_handle
                         }}
+                    else:
+                        anchor["end_nd_arc"] = dummy_dict
+                        print("end_nd_arc not found for %s, adding dummy values!" % name)
+                    # anchor["width"] = {"anchor": {
+                    #     "name": end_anchor_name,
+                    #     "handle": end_anchor_handle
+                    # }}
             if "rotation" in layer_v1p0 and "offset_y_pa" in layer_v1p0:
                 print("Found offset_y_pa in %s. Assuming rotation to be equal to blade twist!" % layer_v1p0["name"])
                 # construct plane_intersection section with zero rotation
@@ -294,13 +322,6 @@ class v1p0_to_v2p0:
                 isect["offset"] = layer_v1p0["offset_y_pa"]
                 
             # make cross-reference in web to the anchors
-            layer["name"] = name
-            if is_web:
-                layer["start_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][-1]
-            else:
-                layer["start_nd_grid"] = layer_v1p0["thickness"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["thickness"]["grid"][-1]
             layer.setdefault("start_nd_arc", {}).setdefault("anchor", {})
             layer["start_nd_arc"]["anchor"]["name"] = start_anchor_name
             layer["start_nd_arc"]["anchor"]["handle"] = start_anchor_handle
@@ -308,10 +329,6 @@ class v1p0_to_v2p0:
             layer["end_nd_arc"]["anchor"]["name"] = end_anchor_name
             layer["end_nd_arc"]["anchor"]["handle"] = end_anchor_handle
 
-            zeros_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
-                          "values": [0.0, 0.0]}
-            ones_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
-                          "values": [1.0, 1.0]}
             if is_web:
                 web_anchor_start = {}
                 web_anchor_start["name"] = "%s_upper" % name
