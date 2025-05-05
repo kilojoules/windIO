@@ -201,8 +201,6 @@ class v1p0_to_v2p0:
 
         def convert_arcs(layer_v1p0, anchors, is_web=False):
 
-            anchor_names = [a["name"] for a in anchors]
-
             name = layer_v1p0["name"]
             layer = {}
             anchor = None
@@ -297,21 +295,59 @@ class v1p0_to_v2p0:
                 
             # make cross-reference in web to the anchors
             layer["name"] = name
+            if is_web:
+                layer["start_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][0]
+                layer["end_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][-1]
+            else:
+                layer["start_nd_grid"] = layer_v1p0["thickness"]["grid"][0]
+                layer["end_nd_grid"] = layer_v1p0["thickness"]["grid"][-1]
             layer.setdefault("start_nd_arc", {}).setdefault("anchor", {})
             layer["start_nd_arc"]["anchor"]["name"] = start_anchor_name
             layer["start_nd_arc"]["anchor"]["handle"] = start_anchor_handle
             layer.setdefault("end_nd_arc", {}).setdefault("anchor", {})
             layer["end_nd_arc"]["anchor"]["name"] = end_anchor_name
             layer["end_nd_arc"]["anchor"]["handle"] = end_anchor_handle
+
+            zeros_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+                          "values": [0.0, 0.0]}
+            ones_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+                          "values": [1.0, 1.0]}
+            if is_web:
+                web_anchor_start = {}
+                web_anchor_start["name"] = "%s_upper" % name
+                web_anchor_start["start_nd_arc"] = zeros_dict
+                web_anchor_end = {}
+                web_anchor_end["name"] = "%s_lower" % name
+                web_anchor_end["start_nd_arc"] = ones_dict
+                layer["anchors"] = [web_anchor_start, web_anchor_end]
+
+            if "web" in layer_v1p0:
+                anchor_name = layer_v1p0["web"]
+                layer["web"] = layer_v1p0["web"]
+                layer["start_nd_arc"]["anchor"]["name"] = anchor_name + "_upper"
+                layer["start_nd_arc"]["anchor"]["handle"] = "start_nd_arc"
+                layer["end_nd_arc"]["anchor"]["name"] = anchor_name + "_lower"
+                layer["end_nd_arc"]["anchor"]["handle"] = "start_nd_arc"
+            if not is_web:
+                layer["material"] = layer_v1p0["material"]
+                layer["thickness"] = layer_v1p0["thickness"]
+                layer["fiber_orientation"] = layer_v1p0.get("fiber_orientation", zeros_dict)
+                if "n_plies" in layer_v1p0:
+                    layer["n_plies"] = layer_v1p0["n_plies"]
+
             return layer, anchor
         
         for web_v1p0 in webs_v1p0:
-            web, anchor = convert_arcs(web_v1p0, blade_struct["anchors"], is_web=True)
+            web, anchor = convert_arcs(web_v1p0,
+                                       blade_struct["anchors"],
+                                       is_web=True)
             if anchor is not None:
                 blade_struct["anchors"].append(anchor)
             blade_struct["webs"].append(web)
         for layer_v1p0 in layers_v1p0:
-            layer, anchor = convert_arcs(layer_v1p0, blade_struct["anchors"])
+            layer, anchor = convert_arcs(layer_v1p0,
+                                         blade_struct["anchors"],
+                                         is_web=False)
             if anchor is not None:
                 blade_struct["anchors"].append(anchor)
             blade_struct["layers"].append(layer)
