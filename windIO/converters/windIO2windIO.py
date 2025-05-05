@@ -24,13 +24,13 @@ class v1p0_to_v2p0:
         # Copy the input windio dict
         dict_v2p0.update(deepcopy(dict_v1p0))
 
-        try:
-            dict_v2p0 = self.convert_blade(dict_v2p0)
-            print("Blade converted successfully")
-        except Exception as e:
-            print(traceback.format_exc())
-            print("⚠️ Blade component could not be converted successfully. Please check.")
-            print(f"Error details: {e}")
+        # try:
+        dict_v2p0 = self.convert_blade(dict_v2p0)
+        print("Blade converted successfully")
+        # except Exception as e:
+        #     print(traceback.format_exc())
+        #     print("⚠️ Blade component could not be converted successfully. Please check.")
+        #     print(f"Error details: {e}")
         try:
             dict_v2p0 = self.convert_nacelle(dict_v2p0)
             print("Nacelle converted successfully")
@@ -172,13 +172,150 @@ class v1p0_to_v2p0:
         # Convert field `rotation` from rad to deg when defined in webs/layers
         # Also, switch label offset_y_pa to offset_y_reference_axis
         blade_struct = dict_v2p0["components"]["blade"]["structure"]
-        for iweb in range(len(blade_struct["webs"])):
-            if "rotation" in blade_struct["webs"][iweb]:
-                rotation_rad = blade_struct["webs"][iweb]["rotation"]["values"]
-                blade_struct["webs"][iweb]["rotation"]["values"] = np.rad2deg(rotation_rad)
-            if "offset_y_pa" in blade_struct["webs"][iweb]:
-                blade_struct["webs"][iweb]["offset_y_reference_axis"] = blade_struct["webs"][iweb]["offset_y_pa"]
-                blade_struct["webs"][iweb].pop("offset_y_pa")
+        layers_v1p0 = deepcopy(dict_v2p0["components"]["blade"]["structure"]["layers"])
+        webs_v1p0 = deepcopy(dict_v2p0["components"]["blade"]["structure"]["webs"])
+
+        # construct new sub-sections
+        blade_struct["anchors"] = []
+        te_anchor = {"name": "TE",
+                     "start_nd_arc": {
+                         "grid": [0., 1.],
+                         "values": [0.0, 0.0]
+                        },
+                     "end_nd_arc": {
+                         "grid": [0., 1.],
+                         "values": [1.0, 1.0]
+                        }
+                     }
+        le_anchor = {"name": "LE",
+                     "start_nd_arc": {
+                         "grid": [0., 1.],
+                         "values": [0.5, 0.5]
+                        },
+                     }
+        blade_struct["anchors"].append(te_anchor)
+        blade_struct["anchors"].append(le_anchor)
+        print("Warning: Adding LE anchor with dummy values, update manually!")
+        blade_struct["webs"] = []
+        blade_struct["layers"] = []
+
+        def convert_arcs(layer_v1p0, anchors, is_web=False):
+
+            anchor_names = [a["name"] for a in anchors]
+
+            name = layer_v1p0["name"]
+            layer = {}
+            anchor = None
+            start_anchor_name = "not_defined"
+            start_anchor_handle = "not_defined"
+            end_anchor_name = "not_defined"
+            end_anchor_handle = "not_defined"
+            start_fixed = None
+            end_fixed = None
+            # move definition of start_nd_arc and end_nd_arc to anchors
+            if "start_nd_arc" in layer_v1p0:
+                if "fixed" in layer_v1p0["start_nd_arc"]:
+                    start_fixed = layer_v1p0["start_nd_arc"]["fixed"]
+                    # we don't construct a new anchor but reference an existing one
+                    start_anchor_name = layer_v1p0["start_nd_arc"]["fixed"]
+                    if start_fixed == "TE":
+                        start_anchor_handle = "start_nd_arc"
+                    else:
+                        start_anchor_handle = "end_nd_arc"
+                else:
+                    if anchor is None:
+                        anchor = {}
+                    anchor["name"] = name
+                    anchor["start_nd_arc"] = layer_v1p0["start_nd_arc"]
+                    start_anchor_name = layer_v1p0["name"]
+                    start_anchor_handle = "start_nd_arc"
+            if "end_nd_arc" in layer_v1p0:
+                if "fixed" in layer_v1p0["end_nd_arc"]:
+                    # we don't construct a new anchor but reference an existing one
+                    end_fixed = layer_v1p0["end_nd_arc"]["fixed"]
+                    end_anchor_name = layer_v1p0["end_nd_arc"]["fixed"]
+                    if end_fixed == "TE":
+                        end_anchor_handle = "end_nd_arc"
+                    else:
+                        end_anchor_handle = "start_nd_arc"
+                else:
+                    try:
+                        if anchor is None:
+                            anchor = {}
+                        anchor["name"] = name
+                        anchor["end_nd_arc"] = layer_v1p0["end_nd_arc"]
+                        end_anchor_name = layer_v1p0["name"]
+                        end_anchor_handle = "end_nd_arc"
+                    except Exception as e:
+                        print(traceback.format_exc())
+                        print("⚠️ Required field end_nd_arc not found for %s. Please check." % layer_v1p0["name"])
+                        print(f"Error details: {e}")
+            if "midpoint_nd_arc" in layer_v1p0:
+                if "fixed" in layer_v1p0["midpoint_nd_arc"]:
+                    anchor["midpoint_nd_arc"] = {}
+                    anchor["midpoint_nd_arc"]["anchor"] = {"name": layer_v1p0["midpoint_nd_arc"]["fixed"],
+                                                           "handle": "start_nd_arc"}
+                if "width" in layer_v1p0:
+                    anchor["width"] = {}
+                    anchor["width"]["defines"] = "both"
+                    anchor["width"].update(layer_v1p0["width"])
+                else:
+                    raise ValueError("width is not defined for %s, required when midpoint_nd_arc is defined" % layer_v1p0["name"])
+            else:
+                if "width" in layer_v1p0:
+                    anchor["width"] = {}
+                    anchor["width"].update(layer_v1p0["width"])
+                    if start_fixed and end_fixed:
+                        raise ValueError("entity %s cannot define fixtures and both start and end"
+                                        " and also define a width" % layer_v1p0["name"])
+                    if start_fixed:
+                        anchor["width"]["defines"] = "end_nd_arc"
+                        anchor["start_nd_arc"] = {"anchor": {
+                            "name": start_anchor_name,
+                            "handle": start_anchor_handle
+                        }}
+                    elif end_fixed:
+                        anchor["width"]["defines"] = "start_nd_arc"
+                        anchor["width"] = {"anchor": {
+                            "name": end_anchor_name,
+                            "handle": end_anchor_handle
+                        }}
+            if "rotation" in layer_v1p0 and "offset_y_pa" in layer_v1p0:
+                print("Found offset_y_pa in %s. Assuming rotation to be equal to blade twist!" % layer_v1p0["name"])
+                # construct plane_intersection section with zero rotation
+                isect = anchor["plane_intersection"] = {}
+                if is_web:
+                    isect["side"] = "both"
+                    isect["defines"] = "start_end_nd_arc"
+                else:
+                    isect["side"] = layer_v1p0["side"]
+                    isect["defines"] = "midpoint_nd_arc"
+                isect["plane_type1"] = {"anchor_curve": "reference_axis",
+                                        "anchors_nd_grid": [0.0, 1.0],
+                                        "rotation": 0.0}
+                isect["offset"] = layer_v1p0["offset_y_pa"]
+                
+            # make cross-reference in web to the anchors
+            layer["name"] = name
+            layer.setdefault("start_nd_arc", {}).setdefault("anchor", {})
+            layer["start_nd_arc"]["anchor"]["name"] = start_anchor_name
+            layer["start_nd_arc"]["anchor"]["handle"] = start_anchor_handle
+            layer.setdefault("end_nd_arc", {}).setdefault("anchor", {})
+            layer["end_nd_arc"]["anchor"]["name"] = end_anchor_name
+            layer["end_nd_arc"]["anchor"]["handle"] = end_anchor_handle
+            return layer, anchor
+        
+        for web_v1p0 in webs_v1p0:
+            web, anchor = convert_arcs(web_v1p0, blade_struct["anchors"], is_web=True)
+            if anchor is not None:
+                blade_struct["anchors"].append(anchor)
+            blade_struct["webs"].append(web)
+        for layer_v1p0 in layers_v1p0:
+            layer, anchor = convert_arcs(layer_v1p0, blade_struct["anchors"])
+            if anchor is not None:
+                blade_struct["anchors"].append(anchor)
+            blade_struct["layers"].append(layer)
+
         for ilayer in range(len(blade_struct["layers"])):
             if "rotation" in blade_struct["layers"][ilayer]:
                 rotation_rad = blade_struct["layers"][ilayer]["rotation"]["values"]
