@@ -47,9 +47,12 @@ The `blade` section of the turbine YAML file provides detailed specifications fo
 - `structure`: Specifies the internal structure of the blade, including shear webs and composite material layers.
 - `elastic_properties`: Defines the stiffness and inertia properties of the blade, which are critical for structural dynamic analysis.
 
+reference_axis
+++++++++++++++
+
 An image representing the `reference_axis` of the blade is shown below.
 
-.. image:: images/reference_axis.png
+.. image:: images/chord_reference_system.svg
    :width: 600 px
    :align: center
    :alt: Reference axis of the blade
@@ -61,26 +64,293 @@ This is how it looks for the IEA-15:
     :lines: 15-24
 
 
-Next, the `outer_shape` is defined. Here, follow the  :doc:`detailed_turbine_documentation` for the details. It is important to note that each quantity that is distributed along the span is defined in terms of pairs of `grid` and `values`. The field `grid` maps the distribution of the quantity along the span, while `values` defines the value of the quantity at each grid point. The grid is defined in terms of a list of values, which are normalized to the 3D curvilinear blade length.
+outer_shape
++++++++++++
+
+Next, the `outer_shape` is defined. Here, follow the  :doc:`detailed_turbine_documentation` for the details. 
+It is important to note that each quantity that is distributed along the span is defined in terms of pairs of `grid` and `values`.
+The field `grid` maps the distribution of the quantity along the curved length of the reference axis,
+while `values` defines the value of the quantity at each grid point.
+The grid is defined in terms of a list of values, which are normalized to the 3D curvilinear blade length.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
     :lines: 25-88
 
-The `structure` section describes the inner structure of the blade. It includes the two fields:
-- `webs`
-- `layers`
+The outer surface used to generate computational meshes for the internal blade structure or high-fidelity aerodynamic modelling 
+is defined in `components.blade.outer_shape.surface`. 
+This object is defined discretely as a block-structured surface grid with the following structure:
 
-The `webs` field describes the shear webs of the blade, whereas the `layers` field describes the layers of composite materials that make up the blade. Each layer has an associated material and thickness. `layers` can belong to the outer mold line as well as to the shear webs. In the latter case they have a `web` tag.
-The definition of the chordwise positions of layers and webs is done in different ways. The primary way to define the position of a web or of a layer is to define its `start_nd_arc` and `end_nd_arc` positions. These are the normalized distance along the blade length from the trailing edge suction side to the trailing edge pressure side. The `start_nd_arc` and `end_nd_arc` values are defined in terms of a list of values, which are apped to the usual `grid` that follows the 3D curvilinear blade length.
 
-The image below shows `start_nd_arc` and `end_nd_arc`:
+.. code-block:: yaml
 
-.. image:: images/structure1.png
+    outer_shape:
+        surface:
+            grid: [0.0, 0.1, ...., 1.0]
+            x: 
+                - [...]  # x-coordinates for section 1
+                - [...]  # x-coordinates for section nsec
+            y:
+                - [...]
+                - [...]
+            z:
+                - [...]
+                - [...]
+
+which will map to a (n_pts, nsec) 2D array where `n_pts` is the number of nodes in the cross-sections along the blade.
+We define a local curvilinear mapping that in the spanwise direction follows the :code:`grid` used for the
+:code:`reference_axis`.
+In the direction along the local cross-section surface arc the field :code:`nd_arc_position` is defined as 0.0 at the trailing edge midpoint,
+travelling along the suction side, to the leading edge and pressure side, and is 1.0 at the trailing edge midpoint, see below sketch.
+
+.. image:: images/airfoil_nd_arc.svg
    :width: 600 px
    :align: center
-   :alt: Definition of `start_nd_arc` and `end_nd_arc`
+   :alt: Definition of `nd_arc` along an airfoil's surface.
 
+To compute the curve fraction, it is recommended to use an analytical spline evaluation of the curve as basis rather than the discrete points.
+
+structure
++++++++++
+
+The field :code:`components.blade.structure` contains the data to describe the internal composite structure of wind turbine blades.
+Defining the structural geometry of a blade is a sophisticated process and the windIO ontology supports different parameterization types
+that primarily targets conceptual design.
+On the top level, the field :code:`blade.structure` has the sub-sections:
+
+* :code:`anchors`: Defines anchor lines, planes and curves used to place the layup within the outer mold line (OML),
+* :code:`webs`: (Optional) Defines the placement and geometry of the shear webs, 
+* :code:`layers`: Defines all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position. 
+* :code:`joints`: (Optional) Defines spanwise segmentation of blades.
+* :code:`elastic_properties``: Defines the elastic properties of a beam-representation of the blade.
+
+Anchors are used to define references for placement of layers, shear webs and other main features of the blade structure.
+
+
+Below list summarises the characteristics and rules for anchors:
+
+* Anchors replace the previous positioning of layers using :code:`start_nd_arc` and :code:`end_nd_arc` in a layer field,
+  and add the possibility of defining additional convenient planes and arc positions for placing layers.
+* Anchors do not need to coincide with layer edges, but can define layer centers or other convenient positions,
+* Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the `start_nd_arc` and `end_nd_arc` fields,
+* Convenient schemas are available to define arc positions resulting from plane and ruled surface intersections.
+* Anchors do not need to be defined along the entire spanwise grid of the blade.
+* Anchors can cross and coincide, but this may pose challenges in mesh generation.
+* The previously defined `offset_y_pa` has been deprecated, and hasa been replaced with `plane_intersection`.
+
+The below list defines anchor names that are pre-defined but can be overwitten explicitly by the user:
+
+:code:`name: TE`
+    Trailing edge of the blade cross-sections, defined as the midpoint
+    between the first and last point of the local cross-section, following the above sketch TE defines two values 
+    `start_nd_arc`=0.0 and `end_nd_arc`=1.0.
+:code:`name: TE_SS`
+    Suction side trailing edge of the blade cross-sections, defined by the
+    first point of the local cross-section.
+:code:`name: TE_PS`
+    Pressure side trailing edge of the blade cross-sections, defined by the
+    last point of the local cross-section.
+
+In windIO v1.0, the leading-edge `LE` was pre-defined, however, in windIO 2.0,
+the user has to explicitly define this field as an anchor to avoid any ambiguities.
+
+Anchors are defined as a list and the :code:`name` and :code:`start_nd_arc` fields are required.
+Depending on the anchor type :code:`end_nd_arc` can also be defined for the anchor.
+Below we construct a user-defined leading edge mold split,
+that only defines a single arc position along the span, :code:`start_nd_arc`:
+
+.. code-block:: yaml
+
+        -   name: le_mold_split
+            start_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.47, 0.49]
+
+
+An anchor can itself be anchored to another anchor using the :code:`anchor` keyword referencing the string name of
+the anchor.
+To offset the anchor relative another anchor, this can be done using
+the non-dimensional arc position or a dimensioned offset along the mold surface, which can be both positive and negative.
+
+.. code-block:: yaml
+
+        -   name: te_ud_ss_midpoint
+            start_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.13, 0.13]
+            offset_nd_arc:
+                defines: start_nd_arc
+                anchor:
+                    name: TE_SS
+                    handle: start_nd_arc
+                grid: [0.0, 1.0]
+                values: [0.13, 0.13]
+
+Or as an offset dimensioned in meters:
+
+.. code-block:: yaml
+
+        -   name: te_reinforcement_ss
+            start_nd_arc:
+                anchor:
+                    name: TE
+                    handle: start_nd_arc
+            end_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.13, 0.13]
+            offset_arc:
+                defines: end_nd_arc
+                anchor:
+                    name: TE_SS
+                    side: start_nd_arc
+                grid: [0.0, 1.0]
+                values: [0.3, 0.3]
+
+
+Anchors can also be defined from plane intersections, which is convenient for defining spar caps
+that are typically straight or tapered, or shear webs that similarly intersect the surface with straight intersections.
+Below we define the suction side spar cap, where the plane intersection defines the `midpoint_nd_arc`,
+which combined with the `width` field results in `start_nd_arc` and `end_nd_arc` forming a constant width patch along the span
+(note that the numbers in the fields are arbitrary).
+
+.. code-block::yaml
+
+        -   name: spar_cap_ss
+            start_nd_arc:
+                grid: [0., 1.0]
+                values: [0.31, 0.33]
+            end_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.6, 0.6]
+            plane_intersection:
+                side: suction
+                defines: midpoint_nd_arc
+                plane_type1:
+                    anchor_curve: reference_axis
+                    anchors_nd_grid: [0.0, 1.0]
+                    rotation: 0.0
+                offset:
+                    grid: [0.0, 1.0]
+                    values: [0.4, 0.0]
+            width:
+                grid: [0.0, 1.0]
+                values: [1.0, 1.0]
+
+
+
+
+.. image:: images/airfoil_midpoint_nd_arc.svg
+   :width: 600 px
+   :align: center
+   :alt: Example of anchor placement using `midpoint_nd_arc` and `width`.
+
+
+The above definition can also be split into two anchors, one that defines the midpoint of the spar cap, and a second one that uses this curve as an anchor, and defining a width,
+computes the two edges of the cap.
+
+.. code-block::yaml
+
+        -   name: spar_cap_ss_center
+            start_nd_arc:
+                grid: [0., 1.0]
+                values: [0.45, 0.45]
+            plane_intersection:
+                side: suction
+                defines: start_nd_arc
+                plane_type1:
+                    anchor_curve: reference_axis
+                    anchors_nd_grid: [0.0, 1.0]
+                    rotation: 0.0
+                offset:
+                    grid: [0.0, 1.0]
+                    values: [0.0, 0.0]
+
+        -   name: spar_cap_ss
+            start_nd_arc:
+                grid: [0., 1.0]
+                values: [0.31, 0.33]
+            end_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.6, 0.6]
+            midpoint_nd_arc:
+                anchor:
+                    name: spar_cap_center
+                    handle: start_nd_arc
+            width:
+                grid: [0.0, 1.0]
+                values: [1.0, 1.0]
+
+Below we show how to define anchors for a shear web:
+
+.. code-block::yaml
+
+        -   name: front_web
+            start_nd_arc:
+                grid: [0., 1.0]
+                values: [0.31, 0.33]
+            end_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.6, 0.6]
+            plane_intersection:
+                side: both
+                defines: start_end_nd_arc
+                intersection_type1:
+                    anchor_curve: reference_axis
+                    anchors_nd_grid: [0.0, 1.0]
+                    rotation: 0.0
+                offset:
+                    grid: [0.05, 0.95]
+                    values: [0.4, 0.0]
+
+The `intersection_type1` intersection is performed as follows:
+
+* Starting from the blade root coordinate system, rotate the lofted blade by the amount defined in :code:`rotation` around the blade `z`-axis using a right-handed rule.
+* Interpolate the `x`, `y`, `z` coordinates of the :code:`anchor_curve` curve at the `anchors_nd_grid` non-dimensional arc positions,
+  resulting in two points in space.
+* Construct a plane spanning the two points, and with a normal vector in the y-z plane perpendicular to the line connecting the two points.
+* Offset the plane along the plane normal vector by the amount defined in `offset`. If the offset is not linear, the plane effectively becomes a ruled surface.
+* Intersect the plane with the blade surface and compute the `position_nd_arc` of the intersection curve along the span.
+
+The `side` indicates whether to intersect either the suction or pressure side, or both.
+`defines` takes the value `start_end_nd_arc` if the resulting intersection results directly in the `start_nd_arc` and `end_nd_arc`,
+or takes the value `midpoint_nd_arc` if it is used in combination with the `width` field and so forth.
+
+An alternative and also convenient method to define features in the blade is to intersect the blade with a ruled surface.
+In the present implementation the ruled surface is constructed from an offset normal to the anchor curve in the y-z plane.
+
+An example of this type of intersection is given below to compute the location of a
+trailing edge shear web with a constant offset from the (curved) trailing edge.
+The intersection type is referred to as `intersection_type2`:
+
+.. code-block::yaml
+
+        -   name: te_web
+            start_nd_arc:
+                grid: [0., 1.0]
+                values: [0.05, 0.1]
+            end_nd_arc:
+                grid: [0., 1.0]
+                values: [0.95, 0.9]
+            plane_intersection:
+                side: both
+                defines: start_end_nd_arc
+                intersection_type2:
+                    anchor_curve: TE
+                    rotation: 0.0
+                offset:
+                    grid: [0.0, 1.0]
+                    values: [0.6, 0.6]
+
+This intersection is performed as follows:
+
+* Starting from the blade root coordinate system, rotate the lofted blade by the amount defined in :code:`rotation` around the blade root `z`-axis using a right-handed rule.
+* In the y-z plane construct an offset curve normal to the anchor curve.
+* Construct the ruled surface by extrapolating the offset curve along the `x`-axis.
+* Intersect the ruled surface with the blade surface and compute the `position_nd_arc` of the intersection curve.
+
+If the resulting intersection is not defined along the entire span of the blade, the last valid intersection point found should be used.
+That would in the case of an intersection surface extending beyond the trailing edge, result in the curve coinciding with
+the maximum `y`-coordinate of the blade cross-sections, or conversely if it extends beyond the leading edge, the minimum `y`-coordinates of the sections.
 
 The `structure` field often grows quite extensively. For the IEA-15MW turbine, it is defined as follows:
 

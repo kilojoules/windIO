@@ -274,38 +274,37 @@ class v1p0_to_v2p0:
                     anchor["width"].update(layer_v1p0["width"])
                 else:
                     raise ValueError("width is not defined for %s, required when midpoint_nd_arc is defined" % layer_v1p0["name"])
-            else:
-                if "width" in layer_v1p0:
-                    if anchor is None:
-                        anchor = {}
-                    anchor["name"] = name
-                    anchor["width"] = {}
-                    anchor["width"].update(layer_v1p0["width"])
-                    if start_fixed and end_fixed:
-                        raise ValueError("entity %s cannot define fixtures and both start and end"
-                                        " and also define a width" % layer_v1p0["name"])
-                    if start_fixed:
-                        anchor["width"]["defines"] = "end_nd_arc"
-                        anchor["start_nd_arc"] = {"anchor": {
-                            "name": start_anchor_name,
-                            "handle": start_anchor_handle
-                        }}
-                    else:
-                        anchor["start_nd_arc"] = dummy_dict
-                        print("start_nd_arc not found for %s, adding dummy values!" % name)
-                    if end_fixed:
-                        anchor["width"]["defines"] = "start_nd_arc"
-                        anchor["end_nd_arc"] = {"anchor": {
-                            "name": end_anchor_name,
-                            "handle": end_anchor_handle
-                        }}
-                    else:
-                        anchor["end_nd_arc"] = dummy_dict
-                        print("end_nd_arc not found for %s, adding dummy values!" % name)
-                    # anchor["width"] = {"anchor": {
-                    #     "name": end_anchor_name,
-                    #     "handle": end_anchor_handle
-                    # }}
+            if "width" in layer_v1p0:
+                if anchor is None:
+                    anchor = {}
+                anchor["name"] = name
+                anchor["width"] = {}
+                anchor["width"].update(layer_v1p0["width"])
+                if start_fixed and end_fixed:
+                    raise ValueError("entity %s cannot define fixtures and both start and end"
+                                    " and also define a width" % layer_v1p0["name"])
+                if start_fixed:
+                    anchor["width"]["defines"] = "end_nd_arc"
+                    anchor["start_nd_arc"] = {"anchor": {
+                        "name": start_anchor_name,
+                        "handle": start_anchor_handle
+                    }}
+                # else:
+                #     anchor["start_nd_arc"] = dummy_dict
+                #     print("start_nd_arc not found for %s, adding dummy values!" % name)
+                if end_fixed:
+                    anchor["width"]["defines"] = "start_nd_arc"
+                    anchor["end_nd_arc"] = {"anchor": {
+                        "name": end_anchor_name,
+                        "handle": end_anchor_handle
+                    }}
+                # else:
+                #     anchor["end_nd_arc"] = dummy_dict
+                #     print("end_nd_arc not found for %s, adding dummy values!" % name)
+                # anchor["width"] = {"anchor": {
+                #     "name": end_anchor_name,
+                #     "handle": end_anchor_handle
+                # }}
             if "rotation" in layer_v1p0 and "offset_y_pa" in layer_v1p0:
                 print("Found offset_y_pa in %s. Assuming rotation to be equal to blade twist!" % layer_v1p0["name"])
                 # construct plane_intersection section with zero rotation
