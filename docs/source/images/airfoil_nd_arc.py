@@ -237,7 +237,7 @@ def plot_start_end_nd_arcTE(ax):
 
     return ax
 
-if False:
+if True:
     fig, ax = plt.subplots(figsize=(10, 4))
     ax = plot_af(ax)
     ax = plot_start_end_nd_arcTE(ax)
@@ -248,7 +248,7 @@ if False:
 
 # fixed+offset
 
-if False:
+if True:
     fig, ax = plt.subplots(figsize=(10, 4))
     ax = plot_af(ax)
 
@@ -293,7 +293,7 @@ if False:
 
 # midpoint+width
 
-if False:
+if True:
     fig, ax = plt.subplots(figsize=(10, 4))
     ax = plot_af(ax)
 
@@ -337,7 +337,7 @@ if False:
 
 
 # start_nd_arc + offset
-if False:
+if True:
     fig, ax = plt.subplots(figsize=(10, 4))
     ax = plot_af(ax)
 
@@ -485,7 +485,7 @@ if True:
     arrow = FancyArrowPatch(
     (0.45*np.cos(np.deg2rad(rot_angle-1)), 0.45*np.sin(np.deg2rad(rot_angle-1))), (0.45, 0.01),
     connectionstyle="arc3,rad=0.1",
-    arrowstyle="<->",
+    arrowstyle="<-",
     mutation_scale=10,
     linewidth=2, color='blue'
     )
@@ -598,7 +598,7 @@ if True:
     arrow = FancyArrowPatch(
     (0.45*np.cos(np.deg2rad(rot_angle-1)), 0.45*np.sin(np.deg2rad(rot_angle-1))), (0.45, 0.01),
     connectionstyle="arc3,rad=0.1",
-    arrowstyle="<->",
+    arrowstyle="<-",
     mutation_scale=10,
     linewidth=2, color='blue'
     )

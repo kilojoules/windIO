@@ -123,7 +123,7 @@ arc = Arc(
 arrow = FancyArrowPatch(
     (0.25, 0), (0.25*np.cos(np.deg2rad(20)), 0.25*np.sin(np.deg2rad(20))),
     connectionstyle="arc3,rad=0.1",
-    arrowstyle="<->",
+    arrowstyle="->",
     mutation_scale=10,
     linewidth=2, color='blue'
 )
