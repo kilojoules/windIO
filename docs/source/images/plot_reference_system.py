@@ -129,7 +129,7 @@ arrow = FancyArrowPatch(
 )
 ax.add_patch(arrow)
 # Label the twist angle
-ax.text(0.28, 0.05, 'twist, positive towards feather', color='black', fontsize=12)
+ax.text(0.28, 0.05, r'twist, positive towards feather', color='black', fontsize=12)
 
 offset_x = np.array([np.linspace(-0.3, 0., 10),
                      -0.05*np.ones(10), np.zeros(10)]).T

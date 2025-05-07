@@ -132,7 +132,9 @@ Below list summarises the characteristics and rules for anchors:
 * Anchors replace the previous positioning of layers using :code:`start_nd_arc` and :code:`end_nd_arc` in a layer field,
   and add the possibility of defining additional convenient planes and arc positions for placing layers.
 * Anchors do not need to coincide with layer edges, but can define layer centers or other convenient positions,
-* Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the `start_nd_arc` and `end_nd_arc` fields,
+* Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the `start_nd_arc` and optionally `end_nd_arc` fields,
+* While arc positions can be anchored to other anchors, it must be possible to explicitly read the defined anchor arc positions from the windIO file,
+  without geometric computatations.
 * Convenient schemas are available to define arc positions resulting from plane and ruled surface intersections.
 * Anchors do not need to be defined along the entire spanwise grid of the blade.
 * Anchors can cross and coincide, but this may pose challenges in mesh generation.
@@ -167,44 +169,56 @@ that only defines a single arc position along the span, :code:`start_nd_arc`:
                 values: [0.47, 0.49]
 
 
-An anchor can itself be anchored to another anchor using the :code:`anchor` keyword referencing the string name of
-the anchor.
-To offset the anchor relative another anchor, this can be done using
-the non-dimensional arc position or a dimensioned offset along the mold surface, which can be both positive and negative.
-
-.. code-block:: yaml
-
-        -   name: te_ud_ss_midpoint
-            start_nd_arc:
-                grid: [0.0, 1.0]
-                values: [0.13, 0.13]
-            offset_nd_arc:
-                defines: start_nd_arc
-                anchor:
-                    name: TE_SS
-                    handle: start_nd_arc
-                grid: [0.0, 1.0]
-                values: [0.13, 0.13]
-
-Or as an offset dimensioned in meters:
+An anchor can itself be positioned relative to another anchor using the :code:`offset_arc` field referencing the string name of
+the anchor, combined with gird/value pair for the dimensioned offset. The offset can also be non-dimensional,
+for which the :code:`offset_nd_arc` field is used.
 
 .. code-block:: yaml
 
         -   name: te_reinforcement_ss
             start_nd_arc:
-                anchor:
-                    name: TE
-                    handle: start_nd_arc
-            end_nd_arc:
                 grid: [0.0, 1.0]
                 values: [0.13, 0.13]
             offset_arc:
-                defines: end_nd_arc
+                defines: start_nd_arc
                 anchor:
                     name: TE_SS
-                    side: start_nd_arc
+                    handle: start_nd_arc
                 grid: [0.0, 1.0]
-                values: [0.3, 0.3]
+                values: [0.5, 0.5]
+
+The offset can be both positive or negative.
+
+
+.. image:: images/airfoil_anchor+offset.svg
+   :width: 600 px
+   :align: center
+   :alt: Example of anchor placement using `start_nd_arc` and `offset`.
+
+Arc positions can be defined using the combined :code:`midpoint_nd_arc` and :code:`width` fields:
+
+.. code-block:: yaml
+
+        -   name: le_reinforcement
+            start_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.47, 0.47]
+            end_nd_arc:
+                grid: [0.0, 1.0]
+                values: [0.53, 0.53]
+            midpoint_nd_arc:
+                anchor:
+                    name: LE
+                    handle: start_nd_arc
+            width:
+                grid: [0.0, 1.0]
+                values: [0.4, 0.4]
+
+
+.. image:: images/airfoil_midpoint_nd_arc.svg
+   :width: 600 px
+   :align: center
+   :alt: Example of anchor placement using `midpoint_nd_arc` and `width`.
 
 
 Anchors can also be defined from plane intersections, which is convenient for defining spar caps
@@ -213,7 +227,7 @@ Below we define the suction side spar cap, where the plane intersection defines 
 which combined with the `width` field results in `start_nd_arc` and `end_nd_arc` forming a constant width patch along the span
 (note that the numbers in the fields are arbitrary).
 
-.. code-block::yaml
+.. code-block:: yaml
 
         -   name: spar_cap_ss
             start_nd_arc:
@@ -238,11 +252,11 @@ which combined with the `width` field results in `start_nd_arc` and `end_nd_arc`
 
 
 
-
-.. image:: images/airfoil_midpoint_nd_arc.svg
+.. image:: images/airfoil_cap_intersection.svg
    :width: 600 px
    :align: center
    :alt: Example of anchor placement using `midpoint_nd_arc` and `width`.
+
 
 
 The above definition can also be split into two anchors, one that defines the midpoint of the spar cap, and a second one that uses this curve as an anchor, and defining a width,
@@ -282,9 +296,9 @@ computes the two edges of the cap.
 
 Below we show how to define anchors for a shear web:
 
-.. code-block::yaml
+.. code-block:: yaml
 
-        -   name: front_web
+        -   name: aft_web
             start_nd_arc:
                 grid: [0., 1.0]
                 values: [0.31, 0.33]
@@ -297,10 +311,16 @@ Below we show how to define anchors for a shear web:
                 intersection_type1:
                     anchor_curve: reference_axis
                     anchors_nd_grid: [0.0, 1.0]
-                    rotation: 0.0
+                    rotation: 8.0
                 offset:
                     grid: [0.05, 0.95]
                     values: [0.4, 0.0]
+
+
+.. image:: images/airfoil_web_intersection.svg
+   :width: 600 px
+   :align: center
+   :alt: Example of plane_intersection used to define web placement.
 
 The `intersection_type1` intersection is performed as follows:
 
@@ -322,7 +342,7 @@ An example of this type of intersection is given below to compute the location o
 trailing edge shear web with a constant offset from the (curved) trailing edge.
 The intersection type is referred to as `intersection_type2`:
 
-.. code-block::yaml
+.. code-block:: yaml
 
         -   name: te_web
             start_nd_arc:
@@ -352,22 +372,135 @@ If the resulting intersection is not defined along the entire span of the blade,
 That would in the case of an intersection surface extending beyond the trailing edge, result in the curve coinciding with
 the maximum `y`-coordinate of the blade cross-sections, or conversely if it extends beyond the leading edge, the minimum `y`-coordinates of the sections.
 
+
 The `structure` field often grows quite extensively. For the IEA-15MW turbine, it is defined as follows:
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
     :lines: 89-382
 
+
+**Web flanges**
+
+To define web flanges the following section can be added to a web definition:
+
+.. code-block:: yaml
+
+    webs:
+      - name: fore_web
+        ...
+        flanges:
+          - type: L
+            side: suction
+            bondline:
+                material: glue
+                thickness:
+                    grid: [0., 0.5, 1.0]
+                    values: [0.03, 0.02, 0.01]
+            start_nd_arc:
+                anchor:
+                    name: fore_web_anchor_ss
+                    handle: start_nd_arc
+            end_nd_arc:
+                anchor:
+                    name: fore_web_flange_anchor_ss
+                    handle: start_nd_arc
+          - type: L
+            side: pressure
+            bondline:
+                material: glue
+                thickness:
+                    grid: [0., 0.5, 1.0]
+                    values: [0.03, 0.02, 0.01]
+            start_nd_arc:
+                anchor:
+                    name: fore_web_flange_anchor_ps
+                    handle: start_nd_arc
+            end_nd_arc:
+                anchor:
+                    name: fore_web_anchor_ps
+                    handle: start_nd_arc
+
+This feature is currently experimental, and details of the schema could be updated in future releases.
+
+**Tapered thickness along the airfoil arc direction**
+
+While it is often a good approximation that thickness of a composite layer is constant along the airfoil arc direction,
+this is not the case for core material which is often tapered towards e.g. the trailing edge in a wind turbine blade.
+windIO supports specifying thickness as a 2D array, where the first line defines the spanwise grid equivalent to the 1D grid normally used,
+and following lines define the chordwise grid that represent the normalized arc distance between the layers' `start_nd_arc` and its `end_nd_arc`.
+
+.. code-block:: yaml
+
+    thickness:
+        grid:
+            - [0, 0.25, 0.75, 1]
+            - [0.25, 0.25, 0.25, 0.25]
+            - [0.5, 0.5, 0.5, 0.5]
+            - [0.75, 0.75, 0.75, 0.75]
+            - [1.0, 1.0, 1.0, 1.0]
+        values:
+            - [0.0, 0.0, 0.0, 0.0]
+            - [0.05, 0.05, 0.05, 0.05]
+            - [0.05, 0.05, 0.05, 0.05]
+            - [0.05, 0.05, 0.05, 0.05]
+            - [0.0, 0.0, 0.0,0.0]
+
+To taper core material linearly, the easiest approach would be to split the core into two separate patches, one with constant thickness,
+and another with tapered thickness.
+
+
+.. code-block:: yaml
+
+    layers:
+      - name: TE_SS_filler_taper
+        material: foam
+        start_nd_arc:
+            anchor:
+                name: te_reinforcement_ss
+                handles: end_nd_arc
+        end_nd_arc:
+            anchor:
+                name: TE_SS_filler_taper
+                handles: start_nd_arc
+        thickness:
+            grid:
+                - [0, 0.25, 0.75, 1]
+                - [1.0, 1.0, 1.0, 1.0]
+            values:
+                - [0.0, 0.0, 0.0,0.0]
+                - [0.05, 0.05, 0.05, 0.05]
+      - name: TE_SS_filler
+        material: foam
+        start_nd_arc:
+            anchor:
+                name: TE_SS_filler_taper
+                handles: start_nd_arc
+        end_nd_arc:
+            anchor:
+                name: spar_cap_ss
+                handles: start_nd_arc
+        thickness:
+            grid:
+                - [0, 0.25, 0.75, 1]
+            values:
+                - [0.05, 0.05, 0.05, 0.05]
+
+This feature is currently experimental, and details of the schema could be updated in future releases.
+
 The fourth and last field of the `blade` component is the `elastic_properties`, whose subfields are:
 - `inertia_matrix`: Defines the inertia properties of the blade, including mass and moment of inertia.
 - `stiffness_matrix`: Defines the stiffness properties of the blade, including bending and torsional stiffness.
 - `structural_damping`: Defines the structural damping properties of the blade, currently in Rayleigh format `mu`.
+- `added_mass`: Defines non-structural mass in the blade, such as lightning protection, root bolts etc, which is not
+  defined or modelled as part of the composite structure.
 
 The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
     :lines: 383-417
+
 
 Hub
 ~~~

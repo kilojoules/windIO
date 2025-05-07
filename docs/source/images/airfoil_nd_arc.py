@@ -2,12 +2,16 @@
 import numpy as np
 from scipy.integrate import quad
 from scipy.interpolate import PchipInterpolator
+from scipy.spatial.transform import Rotation as R
+
 import matplotlib.pylab as plt
 import matplotlib.patches as patches 
 from matplotlib.patches import PathPatch, FancyArrowPatch
 from matplotlib.path import Path
 
-af = np.array([[ 1.00000e+00, -8.91000e-03],
+af = np.array([
+       [ 1.0, 0.0],
+       [ 1.00000e+00, -8.91000e-03],
        [ 9.83380e-01, -5.58000e-03],
        [ 9.64570e-01, -2.61000e-03],
        [ 9.43639e-01, -5.10000e-04],
@@ -85,7 +89,8 @@ af = np.array([[ 1.00000e+00, -8.91000e-03],
        [ 9.43639e-01,  2.26600e-02],
        [ 9.64570e-01,  1.77500e-02],
        [ 9.83380e-01,  1.33300e-02],
-       [ 1.00000e+00,  9.37000e-03]])[::-1]
+       [ 1.00000e+00,  9.37000e-03],
+       [1.0, 0.0]])[::-1]
 
 def compute_curve_length(x, y):
     st = np.zeros_like(x)
@@ -109,9 +114,31 @@ class InterpArc:
     def __call__(self, s):
         return np.array([self._xi(s), self._yi(s)]).T
 
+class InterpX:
+    def __init__(self, x, y, side=None):
+        self._side = side
+        iLE = np.argmin(x)
+        self._yi_u = PchipInterpolator(x[:iLE][::-1], y[:iLE][::-1])
+        self._yi_l = PchipInterpolator(x[iLE:], y[iLE:])
+
+    def __call__(self, x):
+        if self._side == "suction":
+            return np.array([x, self._yi_u(x)]).T
+        elif self._side == "pressure":
+            return np.array([x, self._yi_l(x)]).T
+        else:
+            return np.array([[x, self._yi_u(x)],
+                            [x, self._yi_l(x)]])
+
 
 
 def plot_af(ax):
+
+    ax.plot(af[:, 0], af[:,1], "k-", linewidth=2)
+    return ax
+
+def plot_start_end_nd_arcTE(ax):
+
     # Define custom Bezier path vertices and codes
     verts = [
         [1.02, 0.005],      # Move to start
@@ -189,7 +216,7 @@ def plot_af(ax):
     )
     ax.add_patch(arrow)
 
-    ax.plot(af[:, 0], af[:,1], "k-", linewidth=2)
+
 
     ax.annotate(
         "nd_arc_position = 0.0", 
@@ -207,55 +234,388 @@ def plot_af(ax):
         fontfamily='monospace',
         color='black'
     )
+
     return ax
 
-fig, ax = plt.subplots(figsize=(10, 4))
-ax = plot_af(ax)
-plt.axis('off')
-plt.axis("equal")
-plt.tight_layout()
-plt.savefig("airfoil_nd_arc.svg")
+if False:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax = plot_af(ax)
+    ax = plot_start_end_nd_arcTE(ax)
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_nd_arc.svg")
+
+# fixed+offset
+
+if False:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax = plot_af(ax)
+
+    s = compute_curve_length(af[1:-1, 0], af[1:-1, 1])
+    s /= s[-1]
+    interp = InterpArc(s, af[1:-1, 0], af[1:-1, 1])
+    cap = interp(np.linspace(0., 0.1, 30))
+    cap_pts = interp(np.linspace(0., 0.1, 2))
+    plt.plot(cap[:, 0], cap[:, 1], "r-", linewidth=5)
+    plt.plot(cap_pts[:, 0], cap_pts[:, 1], 'go', markersize=10)
+
+    ix = 1
+    for label, pt in zip(["start_nd_arc", "end_nd_arc"], cap_pts):
+        ax.annotate(
+            label, 
+            xy=pt,                     # point to annotate
+            xytext=(pt[0], pt[1]+0.02 * ix),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+        ix += 1
+
+    # plot the width
+    arrow = FancyArrowPatch(
+        (cap_pts[0][0]+0.0, cap_pts[0][1]-0.03), (cap_pts[1][0]-0.015, cap_pts[1][1]-0.03),
+        connectionstyle="arc3,rad=0.02",
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+    ax.text(cap_pts[1][0]+0.02, cap_pts[1][1]-0.12, 'offset', color='black', fontfamily='monospace', fontsize=12)
+
+
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_fixed_offset.svg")
+
 
 # midpoint+width
 
-fig, ax = plt.subplots(figsize=(10, 4))
-ax = plot_af(ax)
+if False:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax = plot_af(ax)
 
-s = compute_curve_length(af[:, 0], af[:, 1])
-s /= s[-1]
-interp = InterpArc(s, af[:, 0], af[:, 1])
-cap = interp(np.linspace(0.25, 0.4, 30))
-cap_pts = interp(np.linspace(0.25, 0.4, 3))
-plt.plot(cap[:, 0], cap[:, 1], "r-", linewidth=5)
-plt.plot(cap_pts[:, 0], cap_pts[:, 1], 'go', markersize=10)
+    s = compute_curve_length(af[:, 0], af[:, 1])
+    s /= s[-1]
+    interp = InterpArc(s, af[:, 0], af[:, 1])
+    cap = interp(np.linspace(0.47, 0.53, 30))
+    cap_pts = interp(np.linspace(0.47, 0.53, 3))
+    plt.plot(cap[:, 0], cap[:, 1], "r-", linewidth=5)
+    plt.plot(cap_pts[:, 0], cap_pts[:, 1], 'go', markersize=10)
 
-ix = 1
-for label, pt in zip(["start_nd_arc", "midpoint_nd_arc", "end_nd_arc"], cap_pts):
-    ax.annotate(
-        label, 
-        xy=pt,                     # point to annotate
-        xytext=(pt[0], pt[1]+0.05 * ix),  # text position offset
-        arrowprops=dict(arrowstyle='->', color='black'),
-        fontsize=15,
-        fontfamily='monospace',
-        color='black'
+    ix = 1
+    for label, pt in zip(["start_nd_arc", "midpoint_nd_arc", "end_nd_arc"], cap_pts):
+        ax.annotate(
+            label, 
+            xy=pt,                     # point to annotate
+            xytext=(pt[0]+0.03, pt[1]),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+        ix += 1
+
+    # plot the width
+    arrow = FancyArrowPatch(
+        (cap_pts[0][0]-0.02, cap_pts[0][1]+0.01), (cap_pts[2][0]-0.02, cap_pts[2][1]-0.01),
+        connectionstyle="arc3,rad=0.4",
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
     )
-    ix += 1
+    ax.add_patch(arrow)
+    ax.text(cap_pts[1][0]-0.1, cap_pts[1][1], 'width', color='black', fontfamily='monospace', fontsize=12)
 
-# plot the width
-arrow = FancyArrowPatch(
-    (cap_pts[0][0], cap_pts[0][1]-0.03), (cap_pts[2][0], cap_pts[2][1]-0.03),
+
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_midpoint_nd_arc.svg")
+
+
+# start_nd_arc + offset
+if False:
+    fig, ax = plt.subplots(figsize=(10, 4))
+    ax = plot_af(ax)
+
+    s = compute_curve_length(af[1:-1, 0], af[1:-1, 1])
+    s /= s[-1]
+    interp = InterpArc(s, af[1:-1, 0], af[1:-1, 1])
+    te_reinf = interp(np.linspace(0., 0.1, 30))
+    te_reinf_pts = interp(np.linspace(0., 0.1, 2))
+    plt.plot(te_reinf[:, 0], te_reinf[:, 1], "r-", linewidth=5)
+    plt.plot(te_reinf_pts[:, 0], te_reinf_pts[:, 1], 'go', markersize=10)
+
+    ix = 1
+    for label, pt in zip(["TE_SS", "start_nd_arc"], te_reinf_pts):
+        ax.annotate(
+            label, 
+            xy=pt,                     # point to annotate
+            xytext=(pt[0], pt[1]+0.05 * ix),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+        ix += 1
+
+    # plot the width
+    arrow = FancyArrowPatch(
+        (te_reinf_pts[0][0], te_reinf_pts[0][1]-0.015), (te_reinf_pts[1][0], te_reinf_pts[1][1]-0.015),
+        connectionstyle="arc3,rad=0.01",
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+    ax.text(0.75, -0.0, 'offset', color='black', fontsize=12)
+
+
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_anchor+offset.svg")
+
+
+# plane_intersection
+if True:
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    ax.plot(-0.5, -0.3, 'ko')  # origin
+    
+    ax.arrow(-0.5, -0.3, 0.3, 0., head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.arrow(-0.5, -0.3, -0., 0.3, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.arrow(-0.5, -0.3, 0.1, 0.05, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.text(-0.5, 0.02, 'x', fontsize=12)
+    ax.text(-0.18, -0.3, 'y', fontsize=12)
+    ax.text(-0.39, -0.24, 'z', fontsize=12)
+    
+    sys = ax.annotate('Reference system',
+                xy=(-0.5, -0.25),
+                xytext=(-0.85, -0.2),
+                arrowprops=dict(arrowstyle='->',
+                                color="black",
+                                linewidth=1))
+    ref_axis = [0., 0.]
+    ax.plot(*ref_axis, 'ko')  # origin
+    ax.annotate('Reference axis (x, y, z)', xy=ref_axis, xytext=(0.3, -0.2), arrowprops=dict(arrowstyle='->', color="black", linewidth=1))
+    #ax.arrow(0.3, 0.2, 0.3, 0, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.arrow(0, 0, 0, 0.3, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.arrow(0, 0, 0.1, 0.1, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.text(0, 0.32, 'x', fontsize=12)
+    #ax.text(0.32, 0, 'y', fontsize=12)
+    rot_angle = -8.
+    af_rot = af.copy()
+    af_rot[:, 0] -= 0.3
+    af_rot = np.hstack((af_rot, np.zeros((af_rot.shape[0], 1))))
+    chord_rot = np.array([np.linspace(-0.3, 0.7, 10),
+                    np.zeros(10), np.zeros(10)]).T
+    rot = R.from_euler('z', rot_angle, degrees=True)
+    af_rot = rot.apply(af_rot)
+    chord_rot = rot.apply(chord_rot)
+
+    s = compute_curve_length(af_rot[1:-1, 0], af_rot[1:-1, 1])
+    s /= s[-1]
+    interpx = InterpX(af_rot[1:-1, 0], af_rot[1:-1, 1], side="suction")
+    cap = interpx(np.linspace(-0.25, 0.05, 30))
+    cap_pts = interpx(np.linspace(-0.25, 0.05, 3))
+
+    ax.plot(af_rot[:, 0], af_rot[:, 1])
+    ax.plot(chord_rot[:, 0], chord_rot[:, 1], "k--", linewidth=1)
+    ax.plot(cap[:, 0], cap[:, 1], "r", linewidth=4)
+    ax.plot(cap_pts[:, 0], cap_pts[:, 1], "go", markersize=5)
+
+    # plot the width
+    arrow = FancyArrowPatch(
+        (cap_pts[0][0], cap_pts[0][1]-0.02), (cap_pts[2][0], cap_pts[2][1]-0.02),
+        connectionstyle="arc3,rad=-0.175",
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+    ax.text(cap_pts[0][0], cap_pts[0][1]-0.05, 'width', color='black', fontfamily='monospace', fontsize=12)
+
+
+
+    ix = 1
+    for label, pt in zip(["end_nd_arc", "midpoint_nd_arc", "start_nd_arc"], cap_pts):
+        ax.annotate(
+            label, 
+            xy=pt[:2],                     # point to annotate
+            xytext=(pt[0]+0.3*(ix-3), pt[1] + 0.05*ix),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+        ix += 1
+
+    arrow = FancyArrowPatch(
+        (-0.1, 0.1), (0., 0.1),
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+    ax.annotate(
+            "offset", 
+            xy=(-0.05, 0.1),                     # point to annotate
+            xytext=(0.07, 0.4),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    ax.plot(-0.0*np.ones(5), np.linspace(-0.2, 0.5, 5), 'k--', linewidth=1)
+    ax.plot(-0.1*np.ones(5), np.linspace(-0.2, 0.5, 5), 'k--', linewidth=1)
+    ax.annotate(
+            "intersection plane", 
+            xy=(-0.1, 0.3),                     # point to annotate
+            xytext=(-0.6, 0.4),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    
+    arrow = FancyArrowPatch(
+    (0.45*np.cos(np.deg2rad(rot_angle-1)), 0.45*np.sin(np.deg2rad(rot_angle-1))), (0.45, 0.01),
     connectionstyle="arc3,rad=0.1",
     arrowstyle="<->",
     mutation_scale=10,
     linewidth=2, color='blue'
-)
-ax.add_patch(arrow)
-ax.text(0.28, 0.075, 'width', color='black', fontsize=12)
+    )
+    ax.add_patch(arrow)
+
+    ax.annotate(
+            "rotation", 
+            xy=(0.45, -0.025),                     # point to annotate
+            xytext=(0.6, -0.02),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    
+    ax.plot(np.linspace(-.4, 0.5, 5), np.zeros(5), 'k--', linewidth=1)
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_cap_intersection.svg")
+
+# plane_intersection
+if True:
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    ax.plot(-0.5, -0.3, 'ko')  # origin
+    
+    ax.arrow(-0.5, -0.3, 0.3, 0., head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.arrow(-0.5, -0.3, -0., 0.3, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.arrow(-0.5, -0.3, 0.1, 0.05, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    ax.text(-0.5, 0.02, 'x', fontsize=12)
+    ax.text(-0.18, -0.3, 'y', fontsize=12)
+    ax.text(-0.39, -0.24, 'z', fontsize=12)
+    
+    sys = ax.annotate('Reference system',
+                xy=(-0.5, -0.25),
+                xytext=(-0.85, -0.2),
+                arrowprops=dict(arrowstyle='->',
+                                color="black",
+                                linewidth=1))
+    ref_axis = [0., 0.]
+    ax.plot(*ref_axis, 'ko')  # origin
+    ax.annotate('Reference axis (x, y, z)', xy=ref_axis, xytext=(0.3, 0.5), arrowprops=dict(arrowstyle='->', color="black", linewidth=1))
+    #ax.arrow(0.3, 0.2, 0.3, 0, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.arrow(0, 0, 0, 0.3, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.arrow(0, 0, 0.1, 0.1, head_width=0.01, head_length=0.02, fc='k', ec='k')
+    #ax.text(0, 0.32, 'x', fontsize=12)
+    #ax.text(0.32, 0, 'y', fontsize=12)
+    rot_angle = -8.
+    af_rot = af.copy()
+    af_rot[:, 0] -= 0.3
+    af_rot = np.hstack((af_rot, np.zeros((af_rot.shape[0], 1))))
+    chord_rot = np.array([np.linspace(-0.3, 0.7, 10),
+                    np.zeros(10), np.zeros(10)]).T
+    rot = R.from_euler('z', rot_angle, degrees=True)
+    af_rot = rot.apply(af_rot)
+    chord_rot = rot.apply(chord_rot)
 
 
-plt.axis('off')
-plt.axis("equal")
-plt.tight_layout()
-plt.savefig("airfoil_midpoint_nd_arc.svg")
+    interpx = InterpX(af_rot[1:-1, 0], af_rot[1:-1, 1])
+    web_pts = interpx(0.1)
+    web = np.array([np.linspace(web_pts[0, 0], web_pts[1, 0]),
+                    np.linspace(web_pts[0, 1], web_pts[1, 1])]).T
+    ax.plot(af_rot[:, 0], af_rot[:, 1])
+    ax.plot(chord_rot[:, 0], chord_rot[:, 1], "k--", linewidth=1)
+    ax.plot(web[:, 0], web[:, 1], linewidth=4)
+    ax.plot(web_pts[:, 0], web_pts[:, 1], "go", markersize=5)
 
+    ix = 1
+    for label, pt in zip(["start_nd_arc", "end_nd_arc"], web_pts):
+        ax.annotate(
+            label, 
+            xy=pt,                     # point to annotate
+            xytext=(pt[0]+0.1, pt[1] * ix),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+        ix += 1
+
+    arrow = FancyArrowPatch(
+        (-0.01, 0.1), (0.11, 0.1),
+        arrowstyle="<->",
+        mutation_scale=10,
+        linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+    ax.annotate(
+            "offset", 
+            xy=(0.05, 0.1),                     # point to annotate
+            xytext=(0.07, 0.4),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    ax.plot(np.ones(5)*0., np.linspace(-0.2, 0.5, 5), 'k--', linewidth=1)
+    ax.plot(np.ones(5)*0.1, np.linspace(-0.2, 0.5, 5), 'k--', linewidth=1)
+    ax.annotate(
+            "intersection plane", 
+            xy=(0.1, 0.3),                     # point to annotate
+            xytext=(-0.6, 0.35),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    
+    arrow = FancyArrowPatch(
+    (0.45*np.cos(np.deg2rad(rot_angle-1)), 0.45*np.sin(np.deg2rad(rot_angle-1))), (0.45, 0.01),
+    connectionstyle="arc3,rad=0.1",
+    arrowstyle="<->",
+    mutation_scale=10,
+    linewidth=2, color='blue'
+    )
+    ax.add_patch(arrow)
+
+    ax.annotate(
+            "rotation", 
+            xy=(0.45, -0.025),                     # point to annotate
+            xytext=(0.6, -0.02),  # text position offset
+            arrowprops=dict(arrowstyle='->', color='black'),
+            fontsize=15,
+            fontfamily='monospace',
+            color='black'
+        )
+    
+    ax.plot(np.linspace(-.4, 0.5, 5), np.zeros(5), 'k--', linewidth=1)
+    plt.axis('off')
+    plt.axis("equal")
+    plt.tight_layout()
+    plt.savefig("airfoil_web_intersection.svg")
