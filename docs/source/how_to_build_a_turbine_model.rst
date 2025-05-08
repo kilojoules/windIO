@@ -373,11 +373,87 @@ That would in the case of an intersection surface extending beyond the trailing 
 the maximum `y`-coordinate of the blade cross-sections, or conversely if it extends beyond the leading edge, the minimum `y`-coordinates of the sections.
 
 
-The `structure` field often grows quite extensively. For the IEA-15MW turbine, it is defined as follows:
+**Shear web layups with layer drop-offs**
 
-.. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
-    :language: yaml
-    :lines: 89-382
+Shear webs are sandwich panels often composed of outer biax layers and a core material in-between.
+windIO 2.x supports defining start and end arc extents of web layers referring to
+their extent across the distance between the two shells. This is done by defining an `anchors` field
+for each web, with `grid` / `value` pairs where `grid` is the spanwise non-dimensional curved length,
+and `values` is the non-dimensional arc length of the web.
+
+.. code:: yaml
+
+            webs:
+               -  name: web1
+                  start_nd_grid: 0.05
+                  end_nd_grid: 0.98
+                  start_nd_arc:
+                      anchor:
+                          name: web0
+                          handle: start_nd_arc
+                  end_nd_arc:
+                      anchor:
+                          name: web0
+                          handle: end_nd_arc
+                  anchors:
+                     -  name: web1_shell_attachment
+                        start_nd_arc:
+                            grid: [0.05, 0.98]
+                            values: [0.0, 0.0]
+                        end_nd_arc:
+                            grid: [0.05, 0.98]
+                            values: [1.0, 1.0]
+                     -  name: web1_core
+                        start_nd_arc:
+                            grid: [0.05, 0.98]
+                            values: [0.05, 0.05]
+                        end_nd_arc:
+                            grid: [0.05, 0.98]
+                            values: [0.95, 0.95]
+
+In the `layers` section, these anchors are referenced similar to the shell anchors:
+
+.. code:: yaml
+
+                 -  name: web1_skin00
+                    web: web1
+                    material: glass_biax
+                    thickness:
+                        grid: [0.05, 0.95]
+                        values: [0.002, 0.002]
+                    fiber_orientation:
+                        grid: [0.05,  0.95]
+                        values: [0.0,  0.0]
+                    start_nd_grid: 0.05
+                    end_nd_grid: 0.95
+                    start_nd_arc:
+                        anchor:
+                            name: web1_shell_attachment
+                            handle: start_nd_arc
+                    end_nd_arc:
+                        anchor:
+                            name: web1_shell_attachment
+                            handle: end_nd_arc
+
+                 -  name: web1_filler
+                    web: web1
+                    material: medium_density_foam
+                    thickness:
+                        grid: [0.05, 0.95]
+                        values: [0.002, 0.002]
+                    fiber_orientation:
+                        grid: [0.05,  0.95]
+                        values: [0.0,  0.0]
+                    start_nd_grid: 0.05
+                    end_nd_grid: 0.95
+                    start_nd_arc:
+                        anchor:
+                            name: web1_core
+                            handle: start_nd_arc
+                    end_nd_arc:
+                        anchor:
+                            name: web1_core
+                            handle: end_nd_arc
 
 
 **Web flanges**
@@ -487,6 +563,16 @@ and another with tapered thickness.
                 - [0.05, 0.05, 0.05, 0.05]
 
 This feature is currently experimental, and details of the schema could be updated in future releases.
+
+
+**Complete example: IEA 15 MW RWT**
+
+The `structure` field often grows quite extensively. For the IEA-15MW turbine, it is defined as follows:
+
+.. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
+    :language: yaml
+    :lines: 89-382
+
 
 The fourth and last field of the `blade` component is the `elastic_properties`, whose subfields are:
 - `inertia_matrix`: Defines the inertia properties of the blade, including mass and moment of inertia.
