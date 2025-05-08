@@ -138,7 +138,7 @@ Below list summarises the characteristics and rules for anchors:
 * Convenient schemas are available to define arc positions resulting from plane and ruled surface intersections.
 * Anchors do not need to be defined along the entire spanwise grid of the blade.
 * Anchors can cross and coincide, but this may pose challenges in mesh generation.
-* The previously defined `offset_y_pa` has been deprecated, and hasa been replaced with `plane_intersection`.
+* The previously defined `offset_y_pa` has been deprecated, and has been replaced with `plane_intersection`.
 
 The below list defines anchor names that are pre-defined but can be overwitten explicitly by the user:
 
@@ -170,7 +170,7 @@ that only defines a single arc position along the span, :code:`start_nd_arc`:
 
 
 An anchor can itself be positioned relative to another anchor using the :code:`offset_arc` field referencing the string name of
-the anchor, combined with gird/value pair for the dimensioned offset. The offset can also be non-dimensional,
+the anchor, combined with grid/value pair for the dimensioned offset. The offset can also be non-dimensional,
 for which the :code:`offset_nd_arc` field is used.
 
 .. code-block:: yaml
