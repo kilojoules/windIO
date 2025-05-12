@@ -9,7 +9,7 @@ import jsonschema
 import jsonschema.validators
 
 from .yaml import load_yaml
-from .schemas import schemaPath
+from .schemas import schemaPath, schema_validation_error_formatter
 
 
 def retrieve_yaml(uri: str):
@@ -100,13 +100,4 @@ def _jsonschema_validate_modified(instance, schema, cls=None, *args, **kwargs):
 
     cls.check_schema(schema)
     validator = cls(schema, *args, **kwargs)
-    err_message = ""
-    n_errs = 0
-    for err in validator.iter_errors(instance):
-        n_errs += 1
-        _message = f"Error {n_errs}: Failed at instance path `{err.json_path}` with error message: \"{err.message}\"\n"
-        err_message += _message
-
-    if n_errs > 0:
-        err_message = f"Validation of schema instance failed for schema `{schema['$id']}`\nThe validation found {n_errs} error(s) which are further detailed below.\n\n"+err_message
-        raise jsonschema.exceptions.ValidationError(err_message)
+    schema_validation_error_formatter(validator.iter_errors(instance), schema['$id'])
