@@ -155,7 +155,7 @@ def load_yaml(filename: str | Path | os.PathLike, loader=None) -> dict:
     if loader is None:
         loader = _get_YAML()
 
-    if not isinstance(filename, Path):
+    if isinstance(filename, str):
         filename = Path(filename)
 
     return loader.load(filename)

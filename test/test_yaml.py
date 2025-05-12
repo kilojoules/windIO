@@ -5,6 +5,7 @@ from pathlib import Path
 import pytest
 import numpy as np
 import xarray as xr
+import ruamel.yaml.error
 
 import windIO
 import windIO.yaml
@@ -244,5 +245,5 @@ def test_load_yaml():
         not_a_filename = "this is not a valid filename"
         windIO.load_yaml(not_a_filename)
 
-    with pytest.raises(TypeError):
+    with pytest.raises(ruamel.yaml.error.YAMLStreamError):
         windIO.load_yaml(dict())
