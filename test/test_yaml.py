@@ -216,29 +216,30 @@ def test_numpy_read():
 
 
 def test_load_yaml():
-    yaml_pathlib_Path = Path(__file__).parent / "turbine" / "IEA-15-240-RWT.yaml"
+    yaml_pathlib_Path = Path(windIO.plant_ex.__file__).parent / "plant_energy_turbine" / "IEA37_10MW_turbine.yaml"
     # Load from Path instance
     assert isinstance(
         yaml_pathlib_Path, Path
     ), "`yaml_Path` should be a `pathlib.Path` instance"
-    IEA_15_wio = windIO.load_yaml(yaml_pathlib_Path)
+    IEA_10_turb = windIO.load_yaml(yaml_pathlib_Path)
     windIO.validate(
-        IEA_15_wio, "turbine/turbine_schema"
+        IEA_10_turb, "plant/turbine"
     )  # Testing that the loaded schema is valid
 
     # Load from string instance
     yaml_str = str(yaml_pathlib_Path)
     assert isinstance(yaml_str, str), "`yaml_str` should be a `str` instance"
-    _IEA_15_wio = windIO.load_yaml(yaml_str)
-    assert_equal_dicts(IEA_15_wio,_IEA_15_wio)
+    IEA_10_turb = windIO.load_yaml(yaml_str)
+    windIO.validate(
+        IEA_10_turb, "plant/turbine"
+    )  # Testing that the loaded schema is valid
 
-    # Load from os.path
-    yaml_os_path = os.path.join(
-        os.path.dirname(__file__), "turbine", "IEA-15-240-RWT.yaml"
-    )
-    assert isinstance(yaml_os_path, str), "`yaml_str` should be a `str` instance"
-    _IEA_15_wio = windIO.load_yaml(yaml_os_path)
-    assert_equal_dicts(IEA_15_wio,_IEA_15_wio)
+    # As a file-handle
+    with open(yaml_pathlib_Path, "r") as file:
+        IEA_10_turb = windIO.load_yaml(file)
+        windIO.validate(
+            IEA_10_turb, "plant/turbine"
+        )  # Testing that the loaded schema is valid
 
     # Fail if not a path-like argument
     with pytest.raises(FileNotFoundError):
