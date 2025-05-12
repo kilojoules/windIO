@@ -60,7 +60,7 @@ def validate(
         schema_type (str): Type of schema to be used for validation. This must map to one
             of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` folders.
             Examples of valid schema types are 'plant/wind_energy_system' or
-            '`turbine/IEAontology_schema`'.
+            '`turbine/turbine_schema`'.
         restrictive (bool, optional): If True, the schema will be modified to enforce
             that no additional properties are allowed. Defaults to True.
 
