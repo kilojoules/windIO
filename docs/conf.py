@@ -22,11 +22,11 @@ sys.path.insert(0, os.path.abspath("../windIO"))
 # -- Project information -----------------------------------------------------
 
 project = 'windIO'
-copyright = '2020, IEA Wind Task 37'
-author = 'IEA Wind Task 37'
+copyright = '2025, IEA Wind Task 55 REFWIND'
+author = 'IEA Wind Task 55 REFWIND'
 
 # The full version, including alpha/beta/rc tags
-release = 'v1.0'
+release = 'v1.1'
 
 
 # -- General configuration ---------------------------------------------------

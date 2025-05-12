@@ -6,6 +6,7 @@ from jsonschema.exceptions import ValidationError
 
 import windIO
 from windIO.validator import registry
+import windIO.schemas
 
 from .conftest import SampleInputs
 
@@ -107,6 +108,9 @@ def test_wind_farm_invalid_inputs_electrical_collection_array(subtests):
 
 
 def test_plant_valid_schema():
+
+    assert windIO.schemas.has_pint is True, "`pint` should be installed to validate `windIO.plant` schemas"
+
     schema_base = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "plant"
     for fschema in schema_base.rglob("*.yaml"):
 
