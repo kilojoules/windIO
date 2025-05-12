@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from pathlib import Path, PosixPath, WindowsPath
+import jsonschema.exceptions
 from referencing import Registry, Resource
 from referencing.exceptions import NoSuchResource
 import copy
 import jsonschema
+import jsonschema.validators
 
 from .yaml import load_yaml
 from .schemas import schemaPath
@@ -89,4 +91,22 @@ def validate(
     if restrictive:
         schema = _enforce_no_additional_properties(schema)
 
-    jsonschema.validate(data, schema, registry=registry)
+    _jsonschema_validate_modified(data, schema, registry=registry)
+
+def _jsonschema_validate_modified(instance, schema, cls=None, *args, **kwargs):
+    """Modification of the `jsonschema.validate` which is though to provide a better error message when validation fails"""
+    if cls is None:
+        cls = jsonschema.validators.validator_for(schema)
+
+    cls.check_schema(schema)
+    validator = cls(schema, *args, **kwargs)
+    err_message = ""
+    n_errs = 0
+    for err in validator.iter_errors(instance):
+        n_errs += 1
+        _message = f"Error {n_errs}: Failed at instance path `{err.json_path}` with error message: \"{err.message}\"\n"
+        err_message += _message
+
+    if n_errs > 0:
+        err_message = f"Validation of schema instance failed for schema `{schema['$id']}`\nThe validation found {n_errs} error(s) which are further detailed below.\n\n"+err_message
+        raise jsonschema.exceptions.ValidationError(err_message)
