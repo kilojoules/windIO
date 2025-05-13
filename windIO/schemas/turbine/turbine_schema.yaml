@@ -397,10 +397,12 @@ properties:
                                                             description: The field :code:`rotation` is a number that defines the rotation of the plane in degrees.
                                                             units: deg
                                                 offset:
-                                                    grid:
-                                                        $ref: "#/definitions/distributed_data/grid_nd"
-                                                    values:
-                                                        $ref: "#/definitions/distributed_data/length"
+                                                    type: object
+                                                    properties:
+                                                        grid:
+                                                            $ref: "#/definitions/distributed_data/grid_nd"
+                                                        values:
+                                                            $ref: "#/definitions/distributed_data/length"
                                         width:
                                             type: object
                                             properties:
@@ -476,10 +478,12 @@ properties:
                                                         properties:
                                                             material: { type: string }
                                                             thickness:
-                                                                grid:
-                                                                    $ref: "#/definitions/distributed_data/grid_nd"
-                                                                values:
-                                                                    $ref: "#/definitions/distributed_data/length"
+                                                                type: object
+                                                                properties:
+                                                                    grid:
+                                                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                                                    values:
+                                                                        $ref: "#/definitions/distributed_data/length"
                                                         required: [material, thickness]
                                                     start_nd_arc:
                                                         $ref: "#/definitions/anchor_ref"
