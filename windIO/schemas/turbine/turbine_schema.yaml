@@ -469,9 +469,13 @@ properties:
                                                 - values
                                             properties:
                                                 grid:
-                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                    oneOf:
+                                                        - $ref: "#/definitions/distributed_data/grid_nd"
+                                                        - $ref: "#/definitions/distributed_data/grid_2d"
                                                 values:
-                                                    $ref: "#/definitions/distributed_data/length"
+                                                    oneOf:
+                                                        - $ref: "#/definitions/distributed_data/length"
+                                                        - $ref: "#/definitions/distributed_data/length2d"
                                         n_plies:
                                             type: object
                                             description: In addition or in alternative to the dimensional thickness, the discrete number of plies of a composite laminate can be defined by the user. Notably, the ply thickness is a material property (not a layer property) and it is defined in the top-level field :code:`materials`.
@@ -3739,6 +3743,17 @@ definitions:
                 minimum: 0.0
                 maximum: 1.0
                 uniqueItems: true
+        grid_2d:
+            type: array
+            description: A 2D array specifying the grid points where the first row is the spanwise grid and following rows the grid along the arc of the airfoil.
+            items:
+                type: array
+                units: dimensionless
+                items:
+                    type: number
+                    minItems: 2
+                    units: dimensionless
+                minItems: 2
         grid_aoa:
             type: array
             description: Grid of angles of attack to describe polars
@@ -3775,6 +3790,17 @@ definitions:
                 units: m
                 minItems: 2
                 uniqueItems: false
+        length2d:
+            type: array
+            description: A 2D array specifying the thickness values on the nd2d grid.
+            items:
+                type: array
+                units: m
+                items:
+                    type: number
+                    units: m
+                    minItems: 2
+            minItems: 2
         force:
             type: array
             description: Loading described along a beam, expressed in N per meter
