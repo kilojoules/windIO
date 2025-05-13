@@ -1,3 +1,5 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "windIO/plant/wind_energy_system"
 title: "windIO: plant"
 description: A file used as input or output of a wind farm model
 required:
@@ -14,10 +16,10 @@ properties:
     type: string
   #~
   site:
-    $ref: "site.yaml"
+    $ref: "./site.yaml"
   # #~
   wind_farm:
-    $ref: "wind_farm.yaml"
+    $ref: "./wind_farm.yaml"
   #~
   attributes:
     title: Attributes
@@ -475,10 +477,10 @@ properties:
         properties:
           layout:
             title: Array of design variables
-            $ref: "wind_farm/properties/layouts"
+            $ref: "./wind_farm/properties/layouts"
           turbine_types:
             title: Wind turbine types installed
-            $ref: "wind_farm/properties/turbines"
+            $ref: "./wind_farm/properties/turbines"
           number_turbines:
             title: Number of turbines installed
           turbine_hub_heights:
@@ -521,16 +523,16 @@ properties:
             properties:
               parcels:
                 title: List of parcel polygons
-                $ref: "site.yaml#/properties/boundaries" # Or refer to subset of user defined polygons in /site/
+                $ref: "./site.yaml#/properties/boundaries" # Or refer to subset of user defined polygons in /site/
               exclusion_zones:
                 title: List of exclusion zone polygons
-                $ref: "site.yaml#/properties/exclusions" # Or refer to subset of user defined polygons in /site/
+                $ref: "./site.yaml#/properties/exclusions" # Or refer to subset of user defined polygons in /site/
 
       initial_design:
         properties:
           layout:
             title: Initial layout
-            $ref: "wind_farm.yaml#/definition/layout"
+            $ref: "./wind_farm.yaml#/definition/layout"
           turbine_types: # Examples for future development
             title: Initial turbine types
           number_turbines:
@@ -541,7 +543,7 @@ properties:
         properties:
           layout:
             title: Final layout
-            $ref: "wind_farm.yaml#/definition/layout"
+            $ref: "./wind_farm.yaml#/definition/layout"
           turbine_types: # Examples for future development
             title: Final turbine types
           number_turbines:
