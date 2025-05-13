@@ -612,7 +612,7 @@ class v1p0_to_v2p0:
         # Pop out older ref_axis
         monopile["outer_shape"].pop("reference_axis")
         monopile["structure"].pop("reference_axis")
-        # Rename drag_coeffcient to cd
+        # Rename drag_coefficient to cd
         cd_monopile = monopile["outer_shape"]["drag_coefficient"]
         monopile["outer_shape"]["cd"] = cd_monopile
         monopile["outer_shape"].pop("drag_coefficient")
@@ -628,6 +628,9 @@ class v1p0_to_v2p0:
             members[i_memb].pop("Ca")
             members[i_memb]["cd"] = members[i_memb]["Cd"]
             members[i_memb].pop("Cd")
+            if "Cp" in members[i_memb]:
+                members[i_memb]["cp"] = members[i_memb]["Cp"]
+                members[i_memb].pop("Cp")
             members[i_memb]["structure"] = members[i_memb]["internal_structure"]
             members[i_memb].pop("internal_structure")
             if "ballasts" in members[i_memb]["structure"]:
@@ -640,10 +643,10 @@ class v1p0_to_v2p0:
             if "rotation" in members[i_memb]["outer_shape"]:
                 rotation_rad = members[i_memb]["outer_shape"]["rotation"]
                 members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
-            if "ring_stiffeners" in members[i_memb]["structure"]:
-                if "spacing" in members[i_memb]["structure"]["ring_stiffeners"]:
-                    spacing_rad = members[i_memb]["structure"]["ring_stiffeners"]["spacing"]
-                    members[i_memb]["structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
+            # if "ring_stiffeners" in members[i_memb]["structure"]:
+            #     if "spacing" in members[i_memb]["structure"]["ring_stiffeners"]:
+            #         spacing_rad = members[i_memb]["structure"]["ring_stiffeners"]["spacing"]
+            #         members[i_memb]["structure"]["ring_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
         return dict_v2p0
 
     def convert_airfoils(self, dict_v2p0):
