@@ -488,11 +488,11 @@ class v1p0_to_v2p0:
         if "gear_ratio" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["gearbox"]["gear_ratio"] =  v1p0_dt["gear_ratio"]
         if "length_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["gearbox"]["length_user"] = v1p0_dt["length_user"]
+            dict_v2p0["components"]["drivetrain"]["gearbox"]["length"] = v1p0_dt["length_user"]
         if "radius_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["gearbox"]["radius_user"] = v1p0_dt["radius_user"]
+            dict_v2p0["components"]["drivetrain"]["gearbox"]["radius"] = v1p0_dt["radius_user"]
         if "mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["gearbox"]["mass_user"] = v1p0_dt["mass_user"]
+            dict_v2p0["components"]["drivetrain"]["gearbox"]["mass"] = v1p0_dt["mass_user"]
         if "gearbox_efficiency" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["gearbox"]["efficiency"] = v1p0_dt["gearbox_efficiency"]
         if "damping_ratio" in v1p0_dt:
@@ -542,13 +542,13 @@ class v1p0_to_v2p0:
         
         dict_v2p0["components"]["drivetrain"]["other_components"] = {}
         if "brake_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["brake_mass_user"] = v1p0_dt["brake_mass_user"]
+            dict_v2p0["components"]["drivetrain"]["other_components"]["brake_mass"] = v1p0_dt["brake_mass_user"]
         if "hvac_mass_coefficient" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["hvac_mass_coefficient"] = v1p0_dt["hvac_mass_coefficient"]
         if "converter_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["converter_mass_user"] = v1p0_dt["converter_mass_user"]
+            dict_v2p0["components"]["drivetrain"]["other_components"]["converter_mass"] = v1p0_dt["converter_mass_user"]
         if "transformer_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["transformer_mass_user"] = v1p0_dt["transformer_mass_user"]
+            dict_v2p0["components"]["drivetrain"]["other_components"]["transformer_mass"] = v1p0_dt["transformer_mass_user"]
         if "mb1Type" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["mb1Type"] = v1p0_dt["mb1Type"]
         if "mb2Type" in v1p0_dt:
