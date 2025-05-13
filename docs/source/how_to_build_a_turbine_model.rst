@@ -372,6 +372,32 @@ If the resulting intersection is not defined along the entire span of the blade,
 That would in the case of an intersection surface extending beyond the trailing edge, result in the curve coinciding with
 the maximum `y`-coordinate of the blade cross-sections, or conversely if it extends beyond the leading edge, the minimum `y`-coordinates of the sections.
 
+**Layers**
+
+The :code:`layers` section defines the actual layup of typically composite materials in the blade.
+The position of the layers is defined in terms of the anchors defined above, while the thickness and fiber orientation
+are defined as spanwise and optionally chordwise distributions. An example of a layer definition is shown below:
+
+.. code-block:: yaml
+
+        -   name: TE_SS_filler
+            material: foam
+            thickness:
+                grid: [0.05, 0.95]
+                values: [0.05, 0.05]
+            fiber_orientation:
+                grid: [0.05, 0.95]
+                values: [0.0, 0.0]
+            start_nd_grid: 0.05
+            end_nd_grid: 0.95
+            start_nd_arc:
+                anchor:
+                    name: TE_SS
+                    handle: start_nd_arc
+            end_nd_arc:
+                anchor:
+                    name: spar_cap_ss
+                    handle: start_nd_arc
 
 **Shear web layups with layer drop-offs**
 
@@ -511,6 +537,7 @@ and following lines define the chordwise grid that represent the normalized arc 
     thickness:
         grid:
             - [0, 0.25, 0.75, 1]
+            - [0.0, 0.0, 0.0, 0.0]
             - [0.25, 0.25, 0.25, 0.25]
             - [0.5, 0.5, 0.5, 0.5]
             - [0.75, 0.75, 0.75, 0.75]
@@ -518,7 +545,7 @@ and following lines define the chordwise grid that represent the normalized arc 
         values:
             - [0.0, 0.0, 0.0, 0.0]
             - [0.05, 0.05, 0.05, 0.05]
-            - [0.05, 0.05, 0.05, 0.05]
+            - [0.10, 0.10, 0.10, 0.10]
             - [0.05, 0.05, 0.05, 0.05]
             - [0.0, 0.0, 0.0,0.0]
 
@@ -578,8 +605,7 @@ The fourth and last field of the `blade` component is the `elastic_properties`, 
 - `inertia_matrix`: Defines the inertia properties of the blade, including mass and moment of inertia.
 - `stiffness_matrix`: Defines the stiffness properties of the blade, including bending and torsional stiffness.
 - `structural_damping`: Defines the structural damping properties of the blade, currently in Rayleigh format `mu`.
-- `added_mass`: Defines non-structural mass in the blade, such as lightning protection, root bolts etc, which is not
-  defined or modelled as part of the composite structure.
+- `added_mass`: Defines non-structural mass in the blade, such as lightning protection, root bolts etc, which is not defined or modelled as part of the composite structure.
 
 The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
 

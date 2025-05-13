@@ -2976,6 +2976,1285 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors" onclick="setAnchor('#components_blade_structure_anchors')"><span class="property-name">anchors</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors"
+             data-parent="#accordioncomponents_blade_structure_anchors">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of object</span><br/>
+<span class="description"><p>The field :code:<code>anchors</code> defines non-dimensional arc positions along the surface of the blade that are used to position shear webs and layers. The anchors are defined in terms of :code:<code>name</code>, :code:<code>start_nd_arc</code>, and optionally :code:<code>end_nd_arc</code>. In addition to the required arc positions, anchors can also be defined parametrically using the :code:<code>offset_arc</code>, :code:<code>offset_nd_arc</code> or :code:<code>plane_intersection</code>.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_anchors_items">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_name">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_name">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_name"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_name" onclick="setAnchor('#components_blade_structure_anchors_items_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_name">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_name"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_name"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_name">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+<span class="description"><p>String that identifies the anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc')"><span class="property-name">start_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc">
+            <div class="card-body pl-5">
+
+    <br/>
+<span class="description"><p>Non-dimensional arc position of the anchor which can be defined using grid/values or as a reference to another anchor.</p>
+</span><div class="one-of-value" id="components_blade_structure_anchors_items_start_nd_arc_oneOf"><h2 class="handle">
+  <label>One of</label>
+</h2><ul class="nav nav-tabs" id="tabscomponents_blade_structure_anchors_items_start_nd_arc_oneOf_oneOf" role="tablist"><li class="nav-item">
+            <a class="nav-link active oneOf-option"
+               id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')"
+            >anchor_ref</a>
+        </li><li class="nav-item">
+            <a class="nav-link oneOf-option"
+               id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')"
+            >nd_arc_position</a>
+        </li></ul>
+<div class="tab-content card"><div class="tab-pane fade card-body active show"
+             id="tab-pane_components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+
+    
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor')"><span class="property-name">anchor</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_name">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle')"><span class="property-name">handle</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i0_anchor_handle">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div><div class="tab-pane fade card-body "
+             id="tab-pane_components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span>
+
+    
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values" onclick="setAnchor('#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+<span class="description"><p>Grid along an arc length, expressed non dimensionally where 0 is the trailing edge on the suction side and 1 is the trailing edge on the pressure side. The arc starts and ends at the mid-point of the trailing edge in the case of open trailing edges.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<p><i>Units:</i> <code>dimensionless</code></p>
+        
+
+        
+        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_anchors_items_start_nd_arc_oneOf_i1_values_items_number">Value must be greater or equal to <code>-1.0</code> and lesser or equal to <code>1.0</code></span></p>
+
+        
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div></div></div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_end_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_end_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_end_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_anchors_items_end_nd_arc')"><span class="property-name">end_nd_arc</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_end_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_end_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_end_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_end_nd_arc">
+            <div class="card-body pl-5">
+
+    <br/>
+<span class="description"><p>Optional additional non-dimensional arc position of the anchor which can be defined using grid/values or as a reference to another anchor.</p>
+</span><div class="one-of-value" id="components_blade_structure_anchors_items_end_nd_arc_oneOf"><h2 class="handle">
+  <label>One of</label>
+</h2><ul class="nav nav-tabs" id="tabscomponents_blade_structure_anchors_items_end_nd_arc_oneOf_oneOf" role="tablist"><li class="nav-item">
+            <a class="nav-link active oneOf-option"
+               id="components_blade_structure_anchors_items_end_nd_arc_oneOf_i0" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_end_nd_arc_oneOf_i0" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_end_nd_arc_oneOf_i0')"
+            >anchor_ref</a>
+        </li><li class="nav-item">
+            <a class="nav-link oneOf-option"
+               id="components_blade_structure_anchors_items_end_nd_arc_oneOf_i1" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_end_nd_arc_oneOf_i1" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_end_nd_arc_oneOf_i1')"
+            >nd_arc_position</a>
+        </li></ul>
+<div class="tab-content card"><div class="tab-pane fade card-body active show"
+             id="tab-pane_components_blade_structure_anchors_items_end_nd_arc_oneOf_i0" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+        </div><div class="tab-pane fade card-body "
+             id="tab-pane_components_blade_structure_anchors_items_end_nd_arc_oneOf_i1" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i1</a>
+        </div></div></div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_midpoint_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_midpoint_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_midpoint_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_midpoint_nd_arc" onclick="setAnchor('#components_blade_structure_anchors_items_midpoint_nd_arc')"><span class="property-name">midpoint_nd_arc</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_midpoint_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_midpoint_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_midpoint_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_midpoint_nd_arc">
+            <div class="card-body pl-5">
+
+    <br/>
+<span class="description"><p>Optional midpoint non-dimensional arc position of the anchor which can be defined using grid/values or as a reference to another anchor.</p>
+</span><div class="one-of-value" id="components_blade_structure_anchors_items_midpoint_nd_arc_oneOf"><h2 class="handle">
+  <label>One of</label>
+</h2><ul class="nav nav-tabs" id="tabscomponents_blade_structure_anchors_items_midpoint_nd_arc_oneOf_oneOf" role="tablist"><li class="nav-item">
+            <a class="nav-link active oneOf-option"
+               id="components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i0" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i0" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i0')"
+            >anchor_ref</a>
+        </li><li class="nav-item">
+            <a class="nav-link oneOf-option"
+               id="components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i1" data-toggle="tab" href="#tab-pane_components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i1" role="tab"
+               onclick="setAnchor('#components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i1')"
+            >nd_arc_position</a>
+        </li></ul>
+<div class="tab-content card"><div class="tab-pane fade card-body active show"
+             id="tab-pane_components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i0" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+        </div><div class="tab-pane fade card-body "
+             id="tab-pane_components_blade_structure_anchors_items_midpoint_nd_arc_oneOf_i1" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i1</a>
+        </div></div></div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc')"><span class="property-name">offset_arc</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Defines an offset arc relative to another anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_defines">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_defines">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_defines"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_defines" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_defines')"><span class="property-name">defines</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_defines">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_defines"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_defines"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_defines">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>Specifies the arc type being defined (e.g., <code>start_nd_arc</code> or <code>end_nd_arc</code>).</p>
+</span><div class="enum-value" id="components_blade_structure_anchors_items_offset_arc_defines_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_anchor">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_anchor">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_anchor"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_anchor" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_anchor')"><span class="property-name">anchor</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_anchor">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_anchor"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_anchor"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_anchor">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Reference to another anchor for the offset.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_anchor_name">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_anchor_name">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_anchor_name"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_anchor_name" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_anchor_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_anchor_name">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_anchor_name"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_anchor_name"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_anchor_name">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+<span class="description"><p>The name of the referenced anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_anchor_handle">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_anchor_handle">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_anchor_handle"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_anchor_handle" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_anchor_handle')"><span class="property-name">handle</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_anchor_handle">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_anchor_handle"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_anchor_handle"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_anchor_handle">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>The handle of the referenced anchor (e.g., <code>start_nd_arc</code> or <code>end_nd_arc</code>).</p>
+</span><div class="enum-value" id="components_blade_structure_anchors_items_offset_arc_anchor_handle_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li><li class="list-group-item enum-item">"midpoint_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_grid" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_arc_values">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_arc_values">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_arc_values"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_arc_values" onclick="setAnchor('#components_blade_structure_anchors_items_offset_arc_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_arc_values">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_arc_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_arc_values"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_arc_values">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
+<a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc')"><span class="property-name">offset_nd_arc</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Defines a normalized offset arc relative to another anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_defines">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_defines">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_defines"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_defines" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_defines')"><span class="property-name">defines</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_defines">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_defines"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_defines"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_defines">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>Specifies the arc type being defined (e.g., <code>start_nd_arc</code> or <code>end_nd_arc</code>).</p>
+</span><div class="enum-value" id="components_blade_structure_anchors_items_offset_nd_arc_defines_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_anchor"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_anchor" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_anchor')"><span class="property-name">anchor</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_anchor">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_anchor"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Reference to another anchor for the offset.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor_name">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor_name">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_anchor_name"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_anchor_name" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_anchor_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_anchor_name">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_anchor_name"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor_name"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor_name">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+<span class="description"><p>The name of the referenced anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor_handle">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor_handle">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_anchor_handle"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_anchor_handle" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_anchor_handle')"><span class="property-name">handle</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_anchor_handle">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_anchor_handle"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_anchor_handle"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_anchor_handle">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>The handle of the referenced anchor (e.g., <code>start_nd_arc</code> or <code>end_nd_arc</code>).</p>
+</span><div class="enum-value" id="components_blade_structure_anchors_items_offset_nd_arc_anchor_handle_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li><li class="list-group-item enum-item">"midpoint_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_grid" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_offset_nd_arc_values">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_offset_nd_arc_values">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_offset_nd_arc_values"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_offset_nd_arc_values" onclick="setAnchor('#components_blade_structure_anchors_items_offset_nd_arc_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_offset_nd_arc_values">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_offset_nd_arc_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_offset_nd_arc_values"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_offset_nd_arc_values">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i1</a>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_width">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_width">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_width"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_width" onclick="setAnchor('#components_blade_structure_anchors_items_width')"><span class="property-name">width</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_width">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_width"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_width"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_width">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>width of the anchor in meters used when both start<em>nd</em>arc and end<em>nd</em>arc are defined.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_width_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_width_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_width_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_width_grid" onclick="setAnchor('#components_blade_structure_anchors_items_width_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_width_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_width_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_width_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_width_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_width_values">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_width_values">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_width_values"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_width_values" onclick="setAnchor('#components_blade_structure_anchors_items_width_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_width_values">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_width_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_width_values"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_width_values">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
+<a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_width_defines">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_width_defines">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_width_defines"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_width_defines" onclick="setAnchor('#components_blade_structure_anchors_items_width_defines')"><span class="property-name">defines</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_width_defines">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_width_defines"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_width_defines"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_width_defines">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of enum (of string)</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_anchors_items_width_defines_items">
+            
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<div class="enum-value" id="components_blade_structure_anchors_items_width_defines_items_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection')"><span class="property-name">plane_intersection</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Defines a plane intersection for computing the arc position(s) of the anchor.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_side">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_side">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_side"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_side" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_side')"><span class="property-name">side</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_side">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_side"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_side"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_side">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>The field :code:<code>side</code> is a string that defines the side where the intesection should be performed. It can be either :code:<code>suction</code>, :code:<code>pressure</code>, or :code:<code>both</code>.</p>
+</span><div class="enum-value" id="components_blade_structure_anchors_items_plane_intersection_side_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"suction"</li><li class="list-group-item enum-item">"pressure"</li><li class="list-group-item enum-item">"both"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_defines">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_defines">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_defines"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_defines" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_defines')"><span class="property-name">defines</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_defines">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_defines"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_defines"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_defines">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of enum (of string)</span><br/>
+<span class="description"><p>The field :code:<code>defines</code> is a list of strings that defines the anchors the intersection computes.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_anchors_items_plane_intersection_defines_items">
+            
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<div class="enum-value" id="components_blade_structure_anchors_items_plane_intersection_defines_items_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"start_nd_arc"</li><li class="list-group-item enum-item">"end_nd_arc"</li><li class="list-group-item enum-item">"midpoint_nd_arc"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type1"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type1" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type1')"><span class="property-name">plane_type1</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type1">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type1"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<div class="description collapse" id="collapseDescription_components_blade_structure_anchors_items_plane_intersection_plane_type1">
+            <p>The field :code:<code>plane_type1</code> is a dictionary that defines a plane intersection for computing the arc position(s) of the anchor. It is constructed as follows, 1. Starting from the blade root coordinate system, rotate the lofted blade by the amount defined in :code:<code>rotation</code> around the blade :code:<code>z</code>-axis using a right-handed rule. 2. Interpolate the :code:<code>x</code>, :code:<code>y</code>, :code:<code>z</code> coordinates of the :code:<code>anchor_curve</code> curve at the :code:<code>anchors_nd_grid</code> non-dimensional arc positions, resulting in two points in space. 3. Construct a plane spanning the two points, and with a normal vector in the y-z plane perpendicular to the line connecting the two points. 4. Offset the plane along the plane normal vector by the amount defined in :code:<code>offset</code>. If the offset is not linear, the plane effectively becomes a ruled surface. 5. Intersect the plane with the blade surface and compute the :code:<code>position_nd_arc</code> of the intersection curve along the span.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_components_blade_structure_anchors_items_plane_intersection_plane_type1"
+               aria-expanded="false" aria-controls="collapseDescriptioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1"
+            ></a>
+        </div>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve')"><span class="property-name">anchor_curve</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchor_curve">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+<span class="description"><p>The field :code:<code>anchor_curve</code> is a string that identifies the reference anchor curve from which the plane is generated.</p>
+</span>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid')"><span class="property-name">anchors_nd_grid</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+<span class="description"><p>Grid positions for computing the two plane points between which the intersection plane is generated.</p>
+</span>
+        
+
+        
+        
+
+        <p><span class="badge badge-light restriction min-items-restriction" id="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid_minItems">Must contain a minimum of <code>2</code> items</span></p><p><span class="badge badge-light restriction max-items-restriction" id="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid_maxItems">Must contain a maximum of <code>2</code> items</span></p> <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_anchors_items_plane_intersection_plane_type1_anchors_nd_grid_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_rotation">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_rotation">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type1_rotation"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type1_rotation" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type1_rotation')"><span class="property-name">rotation</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type1_rotation">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type1_rotation"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type1_rotation"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type1_rotation">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>The field :code:<code>rotation</code> defines the rotation of the plane in degrees.</p>
+</span><p><i>Units:</i> <code>deg</code></p>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type2"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type2" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type2')"><span class="property-name">plane_type2</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type2">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type2"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve')"><span class="property-name">anchor_curve</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+<div class="description collapse" id="collapseDescription_components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve">
+            <p>The field :code:<code>plane_type2</code> is a dictionary that defines a ruled surface intersection for computing the arc position(s) of the anchor. 1. Starting from the blade root coordinate system, rotate the lofted blade by the amount defined in :code:<code>rotation</code> around the blade root <code>z</code>-axis using a right-handed rule. 2. In the y-z plane construct an offset curve normal to the anchor curve. 3. Construct the ruled surface by extrapolating the offset curve along the <code>x</code>-axis. 4. Intersect the ruled surface with the blade surface and compute the <code>position_nd_arc</code> of the intersection curve.</p>
+
+        </div>
+        <div>
+            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_components_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve"
+               aria-expanded="false" aria-controls="collapseDescriptioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2_anchor_curve"
+            ></a>
+        </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2_rotation">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2_rotation">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_plane_type2_rotation"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_plane_type2_rotation" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_plane_type2_rotation')"><span class="property-name">rotation</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_plane_type2_rotation">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_plane_type2_rotation"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_plane_type2_rotation"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_plane_type2_rotation">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>The field :code:<code>rotation</code> is a number that defines the rotation of the plane in degrees.</p>
+</span><p><i>Units:</i> <code>deg</code></p>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_offset">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_offset">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_offset"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_offset" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_offset')"><span class="property-name">offset</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_offset">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_offset"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_offset"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_offset">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_offset_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_offset_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_offset_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_offset_grid" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_offset_grid')"><span class="property-name">grid</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_offset_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_offset_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_offset_grid"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_offset_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_anchors_items_plane_intersection_offset_values">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_anchors_items_plane_intersection_offset_values">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_anchors_items_plane_intersection_offset_values"
+                        aria-expanded="" aria-controls="components_blade_structure_anchors_items_plane_intersection_offset_values" onclick="setAnchor('#components_blade_structure_anchors_items_plane_intersection_offset_values')"><span class="property-name">values</span></button>
+                <a class="headerlink" href="#components_blade_structure_anchors_items_plane_intersection_offset_values">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_anchors_items_plane_intersection_offset_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_anchors_items_plane_intersection_offset_values"
+             data-parent="#accordioncomponents_blade_structure_anchors_items_plane_intersection_offset_values">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
+<a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="accordion" id="accordioncomponents_blade_structure_webs">
     <div class="card">
         <div class="card-header" id="headingcomponents_blade_structure_webs">
@@ -2992,7 +4271,7 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>The field :code:<code>webs</code> consists of a list of entries, each representing a shear web defined in terms of :code:<code>name</code> and position.</p>
+<span class="description"><p>The field :code:<code>webs</code> consists of a list of entries, each representing a shear web defined in terms of :code:<code>name</code> and position. Shear webs are assumed to be planar surfaces connecting the suction and pressure sides of the blade.</p>
 </span>
         
 
@@ -3040,12 +4319,68 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_start_nd_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_start_nd_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_start_nd_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_start_nd_grid" onclick="setAnchor('#components_blade_structure_webs_items_start_nd_grid')"><span class="property-name">start_nd_grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_start_nd_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_start_nd_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_start_nd_grid"
+             data-parent="#accordioncomponents_blade_structure_webs_items_start_nd_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>Start arc position of the web in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).</p>
+</span>
+        
+
+        
+        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_webs_items_start_nd_grid_number">Value must be greater or equal to <code>0.0</code> and lesser or equal to <code>1.0</code></span></p>
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_end_nd_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_end_nd_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_end_nd_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_end_nd_grid" onclick="setAnchor('#components_blade_structure_webs_items_end_nd_grid')"><span class="property-name">end_nd_grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_end_nd_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_end_nd_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_end_nd_grid"
+             data-parent="#accordioncomponents_blade_structure_webs_items_end_nd_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>End arc position of the web in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).</p>
+</span>
+        
+
+        
+        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_webs_items_end_nd_grid_number">Value must be greater or equal to <code>0.0</code> and lesser or equal to <code>1.0</code></span></p>
+
+        
+            </div>
+        </div>
+    </div>
+</div>
 <div class="accordion" id="accordioncomponents_blade_structure_webs_items_start_nd_arc">
     <div class="card">
         <div class="card-header" id="headingcomponents_blade_structure_webs_items_start_nd_arc">
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_start_nd_arc"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_start_nd_arc')"><span class="property-name">start_nd_arc</span></button>
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_start_nd_arc')"><span class="property-name">start_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
                 <a class="headerlink" href="#components_blade_structure_webs_items_start_nd_arc">#</a>
             </h2>
         </div>
@@ -3056,79 +4391,7 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
-</span>
-
-    
-        
-
-        
-        
-
-        
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_start_nd_arc_grid">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_start_nd_arc_grid">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_start_nd_arc_grid"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_start_nd_arc_grid" onclick="setAnchor('#components_blade_structure_webs_items_start_nd_arc_grid')"><span class="property-name">grid</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_start_nd_arc_grid">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_webs_items_start_nd_arc_grid"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_start_nd_arc_grid"
-             data-parent="#accordioncomponents_blade_structure_webs_items_start_nd_arc_grid">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
-<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_start_nd_arc_values">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_start_nd_arc_values">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_start_nd_arc_values"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_start_nd_arc_values" onclick="setAnchor('#components_blade_structure_webs_items_start_nd_arc_values')"><span class="property-name">values</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_start_nd_arc_values">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_webs_items_start_nd_arc_values"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_start_nd_arc_values"
-             data-parent="#accordioncomponents_blade_structure_webs_items_start_nd_arc_values">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span><br/>
-<span class="description"><p>Grid along an arc length, expressed non dimensionally where 0 is the trailing edge on the suction side and 1 is the trailing edge on the pressure side. The arc starts and ends at the mid-point of the trailing edge in the case of open trailing edges.</p>
-</span>
-        
-
-        
-        
-
-         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
-    <div class="card">
-        <div class="card-body items-definition" id="components_blade_structure_webs_items_start_nd_arc_values_items">
-            
-
-    <span class="badge badge-dark value-type">Type: number</span><br/>
-<p><i>Units:</i> <code>dimensionless</code></p>
-        
-
-        
-        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_webs_items_start_nd_arc_values_items_number">Value must be greater or equal to <code>-1.0</code> and lesser or equal to <code>1.0</code></span></p>
-
-        
-        </div>
-    </div>
-            </div>
-        </div>
-    </div>
-</div>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
@@ -3138,7 +4401,7 @@ function anchorLink(linkTarget) {
         <div class="card-header" id="headingcomponents_blade_structure_webs_items_end_nd_arc">
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_end_nd_arc"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_end_nd_arc')"><span class="property-name">end_nd_arc</span></button>
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_end_nd_arc')"><span class="property-name">end_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
                 <a class="headerlink" href="#components_blade_structure_webs_items_end_nd_arc">#</a>
             </h2>
         </div>
@@ -3149,97 +4412,64 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
-</span><a href="#components_blade_structure_webs_items_start_nd_arc" onclick="anchorLink('components_blade_structure_webs_items_start_nd_arc')" class="ref-link">Same definition as start_nd_arc</a>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
 </div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_rotation">
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_anchors">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_rotation">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_anchors">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_rotation"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_rotation" onclick="setAnchor('#components_blade_structure_webs_items_rotation')"><span class="property-name">rotation</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_rotation">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_anchors"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_anchors" onclick="setAnchor('#components_blade_structure_webs_items_anchors')"><span class="property-name">anchors</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_anchors">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_webs_items_rotation"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_rotation"
-             data-parent="#accordioncomponents_blade_structure_webs_items_rotation">
+        <div id="components_blade_structure_webs_items_anchors"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_anchors"
+             data-parent="#accordioncomponents_blade_structure_webs_items_anchors">
             <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of object</span><br/>
+<span class="description"><p>The field :code:<code>anchors</code> in a web defines positions along the web surface for placing web layers.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_webs_items_anchors_items">
+            
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>The rotation defines the angle between the chord line and the y axis and it has the opposite sign of the twist. For shear webs perpendicular to the chord line in the section(s) where twist is zero, it is easiest to simply use the keyword fixed :code:<code>twist</code>. Blades with straight shear webs will always have the field rotation equal to the twist plus/minus a constant angle and, assuming a non-swept blade (zero values in the blade y reference axis), a linear field offset.</p>
-</span>
 
-    
         
 
         
         
 
         
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_rotation_grid">
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_anchors_items_name">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_rotation_grid">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_anchors_items_name">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_rotation_grid"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_rotation_grid" onclick="setAnchor('#components_blade_structure_webs_items_rotation_grid')"><span class="property-name">grid</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_rotation_grid">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_anchors_items_name"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_anchors_items_name" onclick="setAnchor('#components_blade_structure_webs_items_anchors_items_name')"><span class="property-name">name</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_anchors_items_name">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_webs_items_rotation_grid"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_rotation_grid"
-             data-parent="#accordioncomponents_blade_structure_webs_items_rotation_grid">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
-<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_rotation_values">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_rotation_values">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_rotation_values"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_rotation_values" onclick="setAnchor('#components_blade_structure_webs_items_rotation_values')"><span class="property-name">values</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_rotation_values">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_webs_items_rotation_values"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_rotation_values"
-             data-parent="#accordioncomponents_blade_structure_webs_items_rotation_values">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
-<a href="#components_blade_outer_shape_twist_values" onclick="anchorLink('components_blade_outer_shape_twist_values')" class="ref-link">Same definition as values</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_rotation_fixed">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_rotation_fixed">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_rotation_fixed"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_rotation_fixed" onclick="setAnchor('#components_blade_structure_webs_items_rotation_fixed')"><span class="property-name">fixed</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_rotation_fixed">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_webs_items_rotation_fixed"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_rotation_fixed"
-             data-parent="#accordioncomponents_blade_structure_webs_items_rotation_fixed">
+        <div id="components_blade_structure_webs_items_anchors_items_name"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_anchors_items_name"
+             data-parent="#accordioncomponents_blade_structure_webs_items_anchors_items_name">
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: string</span><br/>
-<span class="description"><p>Name of the layer to lock the edge</p>
+<span class="description"><p>String that identifies the anchor.</p>
 </span>
         
 
@@ -3251,23 +4481,217 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_anchors_items_start_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_anchors_items_start_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_anchors_items_start_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_anchors_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_anchors_items_start_nd_arc')"><span class="property-name">start_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_anchors_items_start_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_anchors_items_start_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_anchors_items_start_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_webs_items_anchors_items_start_nd_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i1</a>
             </div>
         </div>
     </div>
 </div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_offset_y_reference_axis">
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_anchors_items_end_nd_arc">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_offset_y_reference_axis">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_anchors_items_end_nd_arc">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_offset_y_reference_axis"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_offset_y_reference_axis" onclick="setAnchor('#components_blade_structure_webs_items_offset_y_reference_axis')"><span class="property-name">offset_y_reference_axis</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_offset_y_reference_axis">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_anchors_items_end_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_anchors_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_anchors_items_end_nd_arc')"><span class="property-name">end_nd_arc</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_anchors_items_end_nd_arc">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_webs_items_offset_y_reference_axis"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_offset_y_reference_axis"
-             data-parent="#accordioncomponents_blade_structure_webs_items_offset_y_reference_axis">
+        <div id="components_blade_structure_webs_items_anchors_items_end_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_anchors_items_end_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_webs_items_anchors_items_end_nd_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i1" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i1')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i1</a>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges" onclick="setAnchor('#components_blade_structure_webs_items_flanges')"><span class="property-name">flanges</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of object</span><br/>
+<span class="description"><p>The field :code:<code>flanges</code> defines the geometry and bondline thickness of the flanges of a shear web. The flanges are defined in terms of :code:<code>type</code>, :code:<code>side</code>, :code:<code>bondline</code>, :code:<code>start_nd_arc</code>, and :code:<code>end_nd_arc</code>.</p>
+</span>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_webs_items_flanges_items">
+            
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_type">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_type">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_type"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_type" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_type')"><span class="property-name">type</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_type">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_type"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_type"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_type">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<span class="description"><p>The field :code:<code>type</code> is a string that defines the shape of the flange, either L-shaped or T-shaped.</p>
+</span><div class="enum-value" id="components_blade_structure_webs_items_flanges_items_type_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"L"</li><li class="list-group-item enum-item">"T"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_side">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_side">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_side"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_side" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_side')"><span class="property-name">side</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_side">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_side"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_side"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_side">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
+<div class="enum-value" id="components_blade_structure_webs_items_flanges_items_side_enum">
+            <h4>Must be one of:</h4>
+            <ul class="list-group"><li class="list-group-item enum-item">"suction"</li><li class="list-group-item enum-item">"pressure"</li><li class="list-group-item enum-item">"both"</li></ul>
+            </div>
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_bondline">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_bondline">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_bondline"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_bondline" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_bondline')"><span class="property-name">bondline</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_bondline">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_bondline"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_bondline"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_bondline">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<span class="description"><p>The field :code:<code>bondline</code> is a dictionary that defines the bondline material and thickness.</p>
+</span>
+        
+
+        
+        
+
+        
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_bondline_material">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_bondline_material">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_bondline_material"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_bondline_material" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_bondline_material')"><span class="property-name">material</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_bondline_material">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_bondline_material"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_bondline_material"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_bondline_material">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: string</span><br/>
+
+        
+
+        
+        
+
+        
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_bondline_thickness"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_bondline_thickness" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_bondline_thickness')"><span class="property-name">thickness</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_bondline_thickness">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_bondline_thickness"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness">
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
@@ -3278,19 +4702,19 @@ function anchorLink(linkTarget) {
         
 
         
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_offset_y_reference_axis_grid">
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness_grid">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_offset_y_reference_axis_grid">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness_grid">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_offset_y_reference_axis_grid"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_offset_y_reference_axis_grid" onclick="setAnchor('#components_blade_structure_webs_items_offset_y_reference_axis_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_offset_y_reference_axis_grid">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_bondline_thickness_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_bondline_thickness_grid" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_bondline_thickness_grid')"><span class="property-name">grid</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_bondline_thickness_grid">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_webs_items_offset_y_reference_axis_grid"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_offset_y_reference_axis_grid"
-             data-parent="#accordioncomponents_blade_structure_webs_items_offset_y_reference_axis_grid">
+        <div id="components_blade_structure_webs_items_flanges_items_bondline_thickness_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness_grid"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness_grid">
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
@@ -3299,19 +4723,19 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
-<div class="accordion" id="accordioncomponents_blade_structure_webs_items_offset_y_reference_axis_values">
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness_values">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_webs_items_offset_y_reference_axis_values">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness_values">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_offset_y_reference_axis_values"
-                        aria-expanded="" aria-controls="components_blade_structure_webs_items_offset_y_reference_axis_values" onclick="setAnchor('#components_blade_structure_webs_items_offset_y_reference_axis_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_webs_items_offset_y_reference_axis_values">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_bondline_thickness_values"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_bondline_thickness_values" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_bondline_thickness_values')"><span class="property-name">values</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_bondline_thickness_values">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_webs_items_offset_y_reference_axis_values"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_offset_y_reference_axis_values"
-             data-parent="#accordioncomponents_blade_structure_webs_items_offset_y_reference_axis_values">
+        <div id="components_blade_structure_webs_items_flanges_items_bondline_thickness_values"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_bondline_thickness_values"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_bondline_thickness_values">
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
@@ -3320,6 +4744,58 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
+            </div>
+        </div>
+    </div>
+</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_start_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_start_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_start_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_start_nd_arc')"><span class="property-name">start_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_start_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_start_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_start_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_start_nd_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_structure_webs_items_flanges_items_end_nd_arc">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_structure_webs_items_flanges_items_end_nd_arc">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_webs_items_flanges_items_end_nd_arc"
+                        aria-expanded="" aria-controls="components_blade_structure_webs_items_flanges_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_webs_items_flanges_items_end_nd_arc')"><span class="property-name">end_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_webs_items_flanges_items_end_nd_arc">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_structure_webs_items_flanges_items_end_nd_arc"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_webs_items_flanges_items_end_nd_arc"
+             data-parent="#accordioncomponents_blade_structure_webs_items_flanges_items_end_nd_arc">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: object</span><br/>
+<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
             </div>
         </div>
     </div>
@@ -3346,15 +4822,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: array of object</span><br/>
-<div class="description collapse" id="collapseDescription_components_blade_structure_layers">
-            <p>The sub-field :code:<code>layers</code> defines the material layers of the wind turbine blade. In most cases, these are layers of composite materials. The most convenient approach to define the position of spar caps mimics the definition of the shear webs, adding the width and side that define the width of the layer in meters and the side where the layer is located, either “pressure” or “suction”. Layers that wrap the entire cross section, such as paint or outer shell skin, can be defined with :code:<code>start_nd_arc</code> set to 0 and :code:<code>end_nd_arc</code> set to 1. To define reinforcements, the best way is usually to define the width, in meters, and the midpoint, named :code:<code>midpoint_nd_arc</code> and defined nondimensional between 0 and 1. Converters should be able to look for the leading edge, marked as LE. Similar combinations can be constructed with the combination of :code:<code>width</code> and :code:<code>start_nd_arc</code> or :code:<code>end_nd_arc</code>. Finally, for composite layers belonging to the shear webs, a tag :code:<code>web</code> should contain the name of the web. The layers are then modeled from leading edge to trailing edge in the order they were specified.</p>
-
-        </div>
-        <div>
-            <a class="collapse-description-link collapsed" data-toggle="collapse" href="#collapseDescription_components_blade_structure_layers"
-               aria-expanded="false" aria-controls="collapseDescriptioncomponents_blade_structure_layers"
-            ></a>
-        </div>
+<span class="description"><p>The sub-field :code:<code>layers</code> defines the material layers of the wind turbine blade. In most cases, these are layers of composite materials. The thickness is defined in meters and optionally with the number of plines using the field :code:<code>n_plines</code>.</p>
+</span>
         
 
         
@@ -3473,7 +4942,7 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Dimensional thickness of the laminate, expressed in meters. This value is modeled constant along the section. To define ply drops along the 2D surface, the user is therefore required to define multiple layers, possibly ply by ply when many ply drops exist.</p>
+<span class="description"><p>Dimensional thickness of the laminate, expressed in meters. This value is most commonly modeled constant along the section but can also be defined as a 2D grid in the spanwise and chordwise direction allowing to define tapering of a layer, relevant for core material in the trailing edge.</p>
 </span>
         
 
@@ -3496,8 +4965,76 @@ function anchorLink(linkTarget) {
              data-parent="#accordioncomponents_blade_structure_layers_items_thickness_grid">
             <div class="card-body pl-5">
 
+    <br/>
+<div class="one-of-value" id="components_blade_structure_layers_items_thickness_grid_oneOf"><h2 class="handle">
+  <label>One of</label>
+</h2><ul class="nav nav-tabs" id="tabscomponents_blade_structure_layers_items_thickness_grid_oneOf_oneOf" role="tablist"><li class="nav-item">
+            <a class="nav-link active oneOf-option"
+               id="components_blade_structure_layers_items_thickness_grid_oneOf_i0" data-toggle="tab" href="#tab-pane_components_blade_structure_layers_items_thickness_grid_oneOf_i0" role="tab"
+               onclick="setAnchor('#components_blade_structure_layers_items_thickness_grid_oneOf_i0')"
+            >grid_nd</a>
+        </li><li class="nav-item">
+            <a class="nav-link oneOf-option"
+               id="components_blade_structure_layers_items_thickness_grid_oneOf_i1" data-toggle="tab" href="#tab-pane_components_blade_structure_layers_items_thickness_grid_oneOf_i1" role="tab"
+               onclick="setAnchor('#components_blade_structure_layers_items_thickness_grid_oneOf_i1')"
+            >grid_2d</a>
+        </li></ul>
+<div class="tab-content card"><div class="tab-pane fade card-body active show"
+             id="tab-pane_components_blade_structure_layers_items_thickness_grid_oneOf_i0" role="tabpanel">
+            
+
     <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
 <a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+        </div><div class="tab-pane fade card-body "
+             id="tab-pane_components_blade_structure_layers_items_thickness_grid_oneOf_i1" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: array of array</span><br/>
+<span class="description"><p>A 2D array specifying the grid points where the first row is the spanwise grid and following rows the grid along the arc of the airfoil.</p>
+</span>
+
+    
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_layers_items_thickness_grid_oneOf_i1_items">
+            
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+<p><i>Units:</i> <code>dimensionless</code></p>
+        
+
+        
+        
+
+        <p><span class="badge badge-light restriction min-items-restriction" id="components_blade_structure_layers_items_thickness_grid_oneOf_i1_items_minItems">Must contain a minimum of <code>2</code> items</span></p> <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_layers_items_thickness_grid_oneOf_i1_items_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<p><i>Units:</i> <code>dimensionless</code></p>
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+        </div>
+    </div>
+        </div></div></div>
+        
+
+        
+        
+
+        
             </div>
         </div>
     </div>
@@ -3517,8 +5054,76 @@ function anchorLink(linkTarget) {
              data-parent="#accordioncomponents_blade_structure_layers_items_thickness_values">
             <div class="card-body pl-5">
 
+    <br/>
+<div class="one-of-value" id="components_blade_structure_layers_items_thickness_values_oneOf"><h2 class="handle">
+  <label>One of</label>
+</h2><ul class="nav nav-tabs" id="tabscomponents_blade_structure_layers_items_thickness_values_oneOf_oneOf" role="tablist"><li class="nav-item">
+            <a class="nav-link active oneOf-option"
+               id="components_blade_structure_layers_items_thickness_values_oneOf_i0" data-toggle="tab" href="#tab-pane_components_blade_structure_layers_items_thickness_values_oneOf_i0" role="tab"
+               onclick="setAnchor('#components_blade_structure_layers_items_thickness_values_oneOf_i0')"
+            >length</a>
+        </li><li class="nav-item">
+            <a class="nav-link oneOf-option"
+               id="components_blade_structure_layers_items_thickness_values_oneOf_i1" data-toggle="tab" href="#tab-pane_components_blade_structure_layers_items_thickness_values_oneOf_i1" role="tab"
+               onclick="setAnchor('#components_blade_structure_layers_items_thickness_values_oneOf_i1')"
+            >length2d</a>
+        </li></ul>
+<div class="tab-content card"><div class="tab-pane fade card-body active show"
+             id="tab-pane_components_blade_structure_layers_items_thickness_values_oneOf_i0" role="tabpanel">
+            
+
     <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
 <a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
+        </div><div class="tab-pane fade card-body "
+             id="tab-pane_components_blade_structure_layers_items_thickness_values_oneOf_i1" role="tabpanel">
+            
+
+    <span class="badge badge-dark value-type">Type: array of array</span><br/>
+<span class="description"><p>An array specifying the thickness values on the 2D grid defined by the grid<em>2d field. Note that the thickness array has to contain one less row than the grid</em>2d field.</p>
+</span>
+
+    
+        
+
+        
+        
+
+        <p><span class="badge badge-light restriction min-items-restriction" id="components_blade_structure_layers_items_thickness_values_oneOf_i1_minItems">Must contain a minimum of <code>2</code> items</span></p> <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_layers_items_thickness_values_oneOf_i1_items">
+            
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+<p><i>Units:</i> <code>m</code></p>
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_structure_layers_items_thickness_values_oneOf_i1_items_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<p><i>Units:</i> <code>m</code></p>
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+        </div>
+    </div>
+        </div></div></div>
+        
+
+        
+        
+
+        
             </div>
         </div>
     </div>
@@ -3690,123 +5295,56 @@ function anchorLink(linkTarget) {
         </div>
     </div>
 </div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_width">
+<div class="accordion" id="accordioncomponents_blade_structure_layers_items_start_nd_grid">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_width">
+        <div class="card-header" id="headingcomponents_blade_structure_layers_items_start_nd_grid">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_width"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_width" onclick="setAnchor('#components_blade_structure_layers_items_width')"><span class="property-name">width</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_width">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_start_nd_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_layers_items_start_nd_grid" onclick="setAnchor('#components_blade_structure_layers_items_start_nd_grid')"><span class="property-name">start_nd_grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_layers_items_start_nd_grid">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_layers_items_width"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_width"
-             data-parent="#accordioncomponents_blade_structure_layers_items_width">
+        <div id="components_blade_structure_layers_items_start_nd_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_start_nd_grid"
+             data-parent="#accordioncomponents_blade_structure_layers_items_start_nd_grid">
             <div class="card-body pl-5">
 
-    <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>The field width defines the width in meters along the arc of the layer.</p>
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>Start position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).</p>
 </span>
         
 
         
-        
+        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_layers_items_start_nd_grid_number">Value must be greater or equal to <code>0.0</code> and lesser or equal to <code>1.0</code></span></p>
 
         
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_width_grid">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_width_grid">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_width_grid"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_width_grid" onclick="setAnchor('#components_blade_structure_layers_items_width_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_width_grid">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_width_grid"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_width_grid"
-             data-parent="#accordioncomponents_blade_structure_layers_items_width_grid">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
-<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
             </div>
         </div>
     </div>
 </div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_width_values">
+<div class="accordion" id="accordioncomponents_blade_structure_layers_items_end_nd_grid">
     <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_width_values">
+        <div class="card-header" id="headingcomponents_blade_structure_layers_items_end_nd_grid">
             <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_width_values"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_width_values" onclick="setAnchor('#components_blade_structure_layers_items_width_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_width_values">#</a>
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_end_nd_grid"
+                        aria-expanded="" aria-controls="components_blade_structure_layers_items_end_nd_grid" onclick="setAnchor('#components_blade_structure_layers_items_end_nd_grid')"><span class="property-name">end_nd_grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_structure_layers_items_end_nd_grid">#</a>
             </h2>
         </div>
 
-        <div id="components_blade_structure_layers_items_width_values"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_width_values"
-             data-parent="#accordioncomponents_blade_structure_layers_items_width_values">
+        <div id="components_blade_structure_layers_items_end_nd_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_end_nd_grid"
+             data-parent="#accordioncomponents_blade_structure_layers_items_end_nd_grid">
             <div class="card-body pl-5">
 
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
-<a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
-            </div>
-        </div>
-    </div>
-</div>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_midpoint_nd_arc">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_midpoint_nd_arc">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_midpoint_nd_arc"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_midpoint_nd_arc" onclick="setAnchor('#components_blade_structure_layers_items_midpoint_nd_arc')"><span class="property-name">midpoint_nd_arc</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_midpoint_nd_arc">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_midpoint_nd_arc"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_midpoint_nd_arc"
-             data-parent="#accordioncomponents_blade_structure_layers_items_midpoint_nd_arc">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
-</span><a href="#components_blade_structure_webs_items_start_nd_arc" onclick="anchorLink('components_blade_structure_webs_items_start_nd_arc')" class="ref-link">Same definition as start_nd_arc</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_side">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_side">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_side"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_side" onclick="setAnchor('#components_blade_structure_layers_items_side')"><span class="property-name">side</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_side">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_side"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_side"
-             data-parent="#accordioncomponents_blade_structure_layers_items_side">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: enum (of string)</span><br/>
-<span class="description"><p>The field side is string that can be either :code:<code>suction</code> or :code:<code>pressure</code>, defining the side where a layer is defined.</p>
-</span><div class="enum-value" id="components_blade_structure_layers_items_side_enum">
-            <h4>Must be one of:</h4>
-            <ul class="list-group"><li class="list-group-item enum-item">"suction"</li><li class="list-group-item enum-item">"pressure"</li><li class="list-group-item enum-item">"Suction"</li><li class="list-group-item enum-item">"Pressure"</li><li class="list-group-item enum-item">"SUCTION"</li><li class="list-group-item enum-item">"PRESSURE"</li></ul>
-            </div>
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+<span class="description"><p>End position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).</p>
+</span>
         
 
         
-        
+        <p><span class="badge badge-light restriction numeric-restriction" id="components_blade_structure_layers_items_end_nd_grid_number">Value must be greater or equal to <code>0.0</code> and lesser or equal to <code>1.0</code></span></p>
 
         
             </div>
@@ -3818,7 +5356,7 @@ function anchorLink(linkTarget) {
         <div class="card-header" id="headingcomponents_blade_structure_layers_items_start_nd_arc">
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_start_nd_arc"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_layers_items_start_nd_arc')"><span class="property-name">start_nd_arc</span></button>
+                        aria-expanded="" aria-controls="components_blade_structure_layers_items_start_nd_arc" onclick="setAnchor('#components_blade_structure_layers_items_start_nd_arc')"><span class="property-name">start_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
                 <a class="headerlink" href="#components_blade_structure_layers_items_start_nd_arc">#</a>
             </h2>
         </div>
@@ -3829,8 +5367,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
-</span><a href="#components_blade_structure_webs_items_start_nd_arc" onclick="anchorLink('components_blade_structure_webs_items_start_nd_arc')" class="ref-link">Same definition as start_nd_arc</a>
+<span class="description"><p>The field :code:<code>start_nd_arc</code> is a reference to the anchor that defines the start of the layer. The anchor is defined in terms of :code:<code>name</code>, :code:<code>start_nd_arc</code>, and :code:<code>end_nd_arc</code>.</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
@@ -3840,7 +5378,7 @@ function anchorLink(linkTarget) {
         <div class="card-header" id="headingcomponents_blade_structure_layers_items_end_nd_arc">
             <h2 class="mb-0">
                 <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_end_nd_arc"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_layers_items_end_nd_arc')"><span class="property-name">end_nd_arc</span></button>
+                        aria-expanded="" aria-controls="components_blade_structure_layers_items_end_nd_arc" onclick="setAnchor('#components_blade_structure_layers_items_end_nd_arc')"><span class="property-name">end_nd_arc</span> <span class="badge badge-warning required-property">Required</span></button>
                 <a class="headerlink" href="#components_blade_structure_layers_items_end_nd_arc">#</a>
             </h2>
         </div>
@@ -3851,99 +5389,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>Non-dimensional location of the point along the non-dimensional arc length</p>
-</span><a href="#components_blade_structure_webs_items_start_nd_arc" onclick="anchorLink('components_blade_structure_webs_items_start_nd_arc')" class="ref-link">Same definition as start_nd_arc</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_rotation">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_rotation">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_rotation"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_rotation" onclick="setAnchor('#components_blade_structure_layers_items_rotation')"><span class="property-name">rotation</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_rotation">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_rotation"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_rotation"
-             data-parent="#accordioncomponents_blade_structure_layers_items_rotation">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: object</span><br/>
-<span class="description"><p>The rotation defines the angle between the chord line and the y axis and it has the opposite sign of the twist. For shear webs perpendicular to the chord line in the section(s) where twist is zero, it is easiest to simply use the keyword fixed :code:<code>twist</code>. Blades with straight shear webs will always have the field rotation equal to the twist plus/minus a constant angle and, assuming a non-swept blade (zero values in the blade y reference axis), a linear field offset.</p>
-</span><a href="#components_blade_structure_webs_items_rotation" onclick="anchorLink('components_blade_structure_webs_items_rotation')" class="ref-link">Same definition as rotation</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_offset_y_reference_axis">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_offset_y_reference_axis">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_offset_y_reference_axis"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_offset_y_reference_axis" onclick="setAnchor('#components_blade_structure_layers_items_offset_y_reference_axis')"><span class="property-name">offset_y_reference_axis</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_offset_y_reference_axis">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_offset_y_reference_axis"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_offset_y_reference_axis"
-             data-parent="#accordioncomponents_blade_structure_layers_items_offset_y_reference_axis">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: object</span><br/>
-
-        
-
-        
-        
-
-        
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_offset_y_reference_axis_grid">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_offset_y_reference_axis_grid">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_offset_y_reference_axis_grid"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_offset_y_reference_axis_grid" onclick="setAnchor('#components_blade_structure_layers_items_offset_y_reference_axis_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_offset_y_reference_axis_grid">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_offset_y_reference_axis_grid"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_offset_y_reference_axis_grid"
-             data-parent="#accordioncomponents_blade_structure_layers_items_offset_y_reference_axis_grid">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
-<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="accordion" id="accordioncomponents_blade_structure_layers_items_offset_y_reference_axis_values">
-    <div class="card">
-        <div class="card-header" id="headingcomponents_blade_structure_layers_items_offset_y_reference_axis_values">
-            <h2 class="mb-0">
-                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_structure_layers_items_offset_y_reference_axis_values"
-                        aria-expanded="" aria-controls="components_blade_structure_layers_items_offset_y_reference_axis_values" onclick="setAnchor('#components_blade_structure_layers_items_offset_y_reference_axis_values')"><span class="property-name">values</span> <span class="badge badge-warning required-property">Required</span></button>
-                <a class="headerlink" href="#components_blade_structure_layers_items_offset_y_reference_axis_values">#</a>
-            </h2>
-        </div>
-
-        <div id="components_blade_structure_layers_items_offset_y_reference_axis_values"
-             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_structure_layers_items_offset_y_reference_axis_values"
-             data-parent="#accordioncomponents_blade_structure_layers_items_offset_y_reference_axis_values">
-            <div class="card-body pl-5">
-
-    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 0.0]</span><br/>
-<a href="#components_blade_reference_axis_x_values" onclick="anchorLink('components_blade_reference_axis_x_values')" class="ref-link">Same definition as values</a>
-            </div>
-        </div>
-    </div>
-</div>
+<span class="description"><p>The field :code:<code>end_nd_arc</code> is a reference to the anchor that defines the end of the layer. The anchor is defined in terms of :code:<code>name</code>, :code:<code>start_nd_arc</code>, and :code:<code>end_nd_arc</code>.</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
@@ -18289,13 +19736,13 @@ function anchorLink(linkTarget) {
              data-parent="#accordioncontrol_pitch_min_pitch">
             <div class="card-body pl-5">
 
-    <span class="badge badge-dark value-type">Type: number</span> <span class="badge badge-success default-value">Default: 0</span><br/>
+    <span class="badge badge-dark value-type">Type: number</span> <span class="badge badge-success default-value">Default: 0.0</span><br/>
 <span class="description"><p>Minimum pitch angle, where the default is 0 deg</p>
 </span><p><i>Units:</i> <code>deg</code></p>
         
 
         
-        <p><span class="badge badge-light restriction numeric-restriction" id="control_pitch_min_pitch_number">Value must be greater or equal to <code>-0.5</code> and lesser or equal to <code>90.0</code></span></p>
+        <p><span class="badge badge-light restriction numeric-restriction" id="control_pitch_min_pitch_number">Value must be greater or equal to <code>-10.0</code> and lesser or equal to <code>90.0</code></span></p>
 
         
             </div>
