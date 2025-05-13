@@ -1,6 +1,7 @@
 import unittest
 from pathlib import Path
 import windIO
+import windIO.schemas
 from windIO.converters.windIO2windIO import v1p0_to_v2p0
 
 from jsonschema import Draft7Validator
@@ -8,8 +9,9 @@ from jsonschema import Draft7Validator
 turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 test_dir = Path(__file__).parent
 
+
 class TestRegression(unittest.TestCase):
-    
+
     def test_load_IEA_15_240_RWT(self):
 
         path2yaml = turbine_reference_path / "IEA-15-240-RWT.yaml"
@@ -69,9 +71,19 @@ class TestRegression(unittest.TestCase):
         windIO.validate(filename_v2p0, schema_type="turbine/turbine_schema")
 
     def test_valid_schema(self):
-        
-        path2schema = Path(__file__).parent.parent.parent / "windIO" / "schemas" / "turbine" / "turbine_schema.yaml"
-        
+
+        assert (
+            windIO.schemas.has_pint is True
+        ), "`pint` should be installed to validate `turbine_schema`"
+
+        path2schema = (
+            Path(__file__).parent.parent.parent
+            / "windIO"
+            / "schemas"
+            / "turbine"
+            / "turbine_schema.yaml"
+        )
+
         schema = windIO.load_yaml(path2schema)
 
         windIO.schemas.windIOMetaSchema.check_schema(schema)
