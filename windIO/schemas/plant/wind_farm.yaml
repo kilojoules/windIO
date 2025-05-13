@@ -1,3 +1,5 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: "windIO/plant/wind_farm"
 title: Definition of the wind energy conversion system
 description: A file used to define either a single wind farm or multiple wind farms with turbine type mappings and additional built environment components
 required:
@@ -24,7 +26,7 @@ properties:
         properties:
           coordinates:
             description: List of turbine coordinates for this layout
-            $ref: "common.yaml#/definitions/coordinates"
+            $ref: "./common.yaml#/definitions/coordinates"
       - type: array
         items:
           type: object
@@ -33,7 +35,7 @@ properties:
           properties:
             coordinates:
               description: List of turbine coordinates for this layout
-              $ref: "common.yaml#/definitions/coordinates"
+              $ref: "./common.yaml#/definitions/coordinates"
             turbine_types:
               description: (Optional) List of turbine types corresponding to turbine positions.
               type: array
@@ -42,13 +44,13 @@ properties:
 
   turbines:
     description: (Optional) The full turbine definition for the entire wind farm
-    $ref: "turbine.yaml#"
+    $ref: "./turbine.yaml#"
 
   turbine_types:
     description: (Optional) List of turbine types used for layouts. Required if turbine_types is used in layouts.
     type: object
     additionalProperties:
-      $ref: "turbine.yaml#"
+      $ref: "./turbine.yaml#"
 
   electrical_substations:
     description: Information about electrical substations
@@ -129,7 +131,7 @@ definitions:
     properties:
       coordinates:
         title: Substation coordinates
-        $ref: "common.yaml#/definitions/coordinates"
+        $ref: "./common.yaml#/definitions/coordinates"
       capacity:
         title: Substation capacity
         description: Capacity of the electrical substation in megawatts

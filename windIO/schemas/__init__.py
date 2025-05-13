@@ -25,6 +25,7 @@ Besides the extension of the Draft 7 Meta-Schema the Python `jsonschema.validato
       `pint` is not a required dependency as an average user as they are not expected to validate the windIO schemas them self (but only instances of the schema).
 """
 import jsonschema
+from pathlib import Path
 import jsonschema.validators
 try:
     # Checks if `pint` is installed - if not the `units` format is not validated for windIO meta schemas (not relevant for the average user)
@@ -32,6 +33,8 @@ try:
     has_pint = True
 except ImportError:
     has_pint = False
+
+schemaPath = Path(__file__).parent
 
 # Initializing a Draft 7 validator copy
 windIOMetaSchema = jsonschema.validators.extend(jsonschema.Draft7Validator)
