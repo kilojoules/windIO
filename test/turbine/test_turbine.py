@@ -40,6 +40,20 @@ class TestRegression(unittest.TestCase):
         # Validate the file
         windIO.validate(path2yaml, schema_type="turbine/turbine_schema")
 
+    def test_load_IEA_22_280_RWT(self):
+
+        path2yaml = turbine_reference_path / "IEA-22-280-RWT.yaml"
+
+        # Verify the file loads
+        windIO.load_yaml(path2yaml)
+
+    def test_validate_IEA_22_280_RWT(self):
+
+        path2yaml = turbine_reference_path / "IEA-22-280-RWT.yaml"
+
+        # Validate the file
+        windIO.validate(path2yaml, schema_type="turbine/turbine_schema")
+
     def test_v1p0_2p0_converter_IEA_15_240_RWT(self):
 
         filename_v1p0 = test_dir / "v1p0" / "IEA-15-240-RWT.yaml"
