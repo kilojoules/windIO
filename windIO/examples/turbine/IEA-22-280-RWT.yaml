@@ -853,10 +853,7 @@ components:
                 values: [0.1, 0.1, 0.1, 0.1]
             material: steel
         other_components:
-            brake_mass_user: 0.0
             hvac_mass_coefficient: 0.025
-            converter_mass_user: 0.0
-            transformer_mass_user: 0.0
             mb1Type: CARB
             mb2Type: SRB
             uptower: true

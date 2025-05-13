@@ -541,14 +541,14 @@ class v1p0_to_v2p0:
             dict_v2p0["components"]["drivetrain"]["bedplate"]["material"] = v1p0_dt["bedplate_material"]
         
         dict_v2p0["components"]["drivetrain"]["other_components"] = {}
-        if "brake_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["brake_mass_user"] = v1p0_dt["brake_mass_user"]
+        # if "brake_mass_user" in v1p0_dt:
+        #     dict_v2p0["components"]["drivetrain"]["other_components"]["brake_mass_user"] = v1p0_dt["brake_mass_user"]
         if "hvac_mass_coefficient" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["hvac_mass_coefficient"] = v1p0_dt["hvac_mass_coefficient"]
-        if "converter_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["converter_mass_user"] = v1p0_dt["converter_mass_user"]
-        if "transformer_mass_user" in v1p0_dt:
-            dict_v2p0["components"]["drivetrain"]["other_components"]["transformer_mass_user"] = v1p0_dt["transformer_mass_user"]
+        # if "converter_mass_user" in v1p0_dt:
+        #     dict_v2p0["components"]["drivetrain"]["other_components"]["converter_mass_user"] = v1p0_dt["converter_mass_user"]
+        # if "transformer_mass_user" in v1p0_dt:
+        #     dict_v2p0["components"]["drivetrain"]["other_components"]["transformer_mass_user"] = v1p0_dt["transformer_mass_user"]
         if "mb1Type" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["mb1Type"] = v1p0_dt["mb1Type"]
         if "mb2Type" in v1p0_dt:
