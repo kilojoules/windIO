@@ -306,6 +306,56 @@ properties:
                                             oneOf:
                                                 - $ref: "#/definitions/anchor_ref"
                                                 - $ref: "#/definitions/distributed_data/nd_arc_position"
+                                        offset_arc:
+                                            type: object
+                                            description: Defines an offset arc relative to another anchor.
+                                            properties:
+                                                defines:
+                                                    type: string
+                                                    description: Specifies the arc type being defined (e.g., `start_nd_arc` or `end_nd_arc`).
+                                                    enum: ["start_nd_arc", "end_nd_arc"]
+                                                anchor:
+                                                    type: object
+                                                    description: Reference to another anchor for the offset.
+                                                    properties:
+                                                        name:
+                                                            type: string
+                                                            description: The name of the referenced anchor.
+                                                        handle:
+                                                            type: string
+                                                            description: The handle of the referenced anchor (e.g., `start_nd_arc` or `end_nd_arc`).
+                                                            enum: ["start_nd_arc", "end_nd_arc", "midpoint_nd_arc"]
+                                                    required: [name, handle]
+                                                grid:
+                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                values:
+                                                    $ref: "#/definitions/distributed_data/length"
+                                            required: [defines, anchor, grid, values]
+                                        offset_nd_arc:
+                                            type: object
+                                            description: Defines a normalized offset arc relative to another anchor.
+                                            properties:
+                                                defines:
+                                                    type: string
+                                                    description: Specifies the arc type being defined (e.g., `start_nd_arc` or `end_nd_arc`).
+                                                    enum: ["start_nd_arc", "end_nd_arc"]
+                                                anchor:
+                                                    type: object
+                                                    description: Reference to another anchor for the offset.
+                                                    properties:
+                                                        name:
+                                                            type: string
+                                                            description: The name of the referenced anchor.
+                                                        handle:
+                                                            type: string
+                                                            description: The handle of the referenced anchor (e.g., `start_nd_arc` or `end_nd_arc`).
+                                                            enum: ["start_nd_arc", "end_nd_arc", "midpoint_nd_arc"]
+                                                    required: [name, handle]
+                                                grid:
+                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                values:
+                                                    $ref: "#/definitions/distributed_data/nd_arc_position"
+                                            required: [defines, anchor, grid, values]
                                         plane_intersection:
                                             properties: 
                                                 side:
