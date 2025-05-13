@@ -19,7 +19,7 @@ class v1p0_to_v2p0:
         dict_v1p0 = windIO.load_yaml(self.filename_v1p0)
         
         # Set windIO version
-        dict_v2p0 = {"windIO_version": "2.0"}
+        self.dict_v2p0 = dict_v2p0 = {"windIO_version": "2.0"}
 
         # Copy the input windio dict
         dict_v2p0.update(deepcopy(dict_v1p0))
@@ -270,7 +270,7 @@ class v1p0_to_v2p0:
                                                            "handle": "start_nd_arc"}
                 if "width" in layer_v1p0:
                     anchor["width"] = {}
-                    anchor["width"]["defines"] = "both"
+                    anchor["width"]["defines"] = ["start_nd_arc", "end_nd_arc"]
                     anchor["width"].update(layer_v1p0["width"])
                 else:
                     raise ValueError("width is not defined for %s, required when midpoint_nd_arc is defined" % layer_v1p0["name"])
@@ -280,11 +280,12 @@ class v1p0_to_v2p0:
                 anchor["name"] = name
                 anchor["width"] = {}
                 anchor["width"].update(layer_v1p0["width"])
+                anchor["width"]["defines"] = ["start_nd_arc", "end_nd_arc"]
                 if start_fixed and end_fixed:
                     raise ValueError("entity %s cannot define fixtures and both start and end"
                                     " and also define a width" % layer_v1p0["name"])
                 if start_fixed:
-                    anchor["width"]["defines"] = "end_nd_arc"
+                    anchor["width"]["defines"] = ["end_nd_arc"]
                     anchor["start_nd_arc"] = {"anchor": {
                         "name": start_anchor_name,
                         "handle": start_anchor_handle
@@ -293,7 +294,7 @@ class v1p0_to_v2p0:
                 #     anchor["start_nd_arc"] = dummy_dict
                 #     print("start_nd_arc not found for %s, adding dummy values!" % name)
                 if end_fixed:
-                    anchor["width"]["defines"] = "start_nd_arc"
+                    anchor["width"]["defines"] = ["start_nd_arc"]
                     anchor["end_nd_arc"] = {"anchor": {
                         "name": end_anchor_name,
                         "handle": end_anchor_handle
@@ -311,10 +312,10 @@ class v1p0_to_v2p0:
                 isect = anchor["plane_intersection"] = {}
                 if is_web:
                     isect["side"] = "both"
-                    isect["defines"] = "start_end_nd_arc"
+                    isect["defines"] = ["start_nd_arc", "end_nd_arc"]
                 else:
                     isect["side"] = layer_v1p0["side"]
-                    isect["defines"] = "midpoint_nd_arc"
+                    isect["defines"] = ["midpoint_nd_arc"]
                 isect["plane_type1"] = {"anchor_curve": "reference_axis",
                                         "anchors_nd_grid": [0.0, 1.0],
                                         "rotation": 0.0}
@@ -329,27 +330,33 @@ class v1p0_to_v2p0:
             layer["end_nd_arc"]["anchor"]["handle"] = end_anchor_handle
 
             if is_web:
-                web_anchor_start = {}
-                web_anchor_start["name"] = "%s_upper" % name
-                web_anchor_start["start_nd_arc"] = zeros_dict
-                web_anchor_end = {}
-                web_anchor_end["name"] = "%s_lower" % name
-                web_anchor_end["start_nd_arc"] = ones_dict
-                layer["anchors"] = [web_anchor_start, web_anchor_end]
+                web_anchor = {}
+                web_anchor["name"] = "%s_shell_attachment" % name
+                web_anchor["start_nd_arc"] = zeros_dict
+                web_anchor["end_nd_arc"] = ones_dict
+                
+                layer["anchors"] = [web_anchor]
 
             if "web" in layer_v1p0:
                 anchor_name = layer_v1p0["web"]
                 layer["web"] = layer_v1p0["web"]
-                layer["start_nd_arc"]["anchor"]["name"] = anchor_name + "_upper"
+                layer["start_nd_arc"]["anchor"]["name"] = anchor_name + "_shell_attachment"
                 layer["start_nd_arc"]["anchor"]["handle"] = "start_nd_arc"
-                layer["end_nd_arc"]["anchor"]["name"] = anchor_name + "_lower"
-                layer["end_nd_arc"]["anchor"]["handle"] = "start_nd_arc"
+                layer["end_nd_arc"]["anchor"]["name"] = anchor_name + "_shell_attachment"
+                layer["end_nd_arc"]["anchor"]["handle"] = "end_nd_arc"
             if not is_web:
                 layer["material"] = layer_v1p0["material"]
                 layer["thickness"] = layer_v1p0["thickness"]
                 layer["fiber_orientation"] = layer_v1p0.get("fiber_orientation", zeros_dict)
                 if "n_plies" in layer_v1p0:
                     layer["n_plies"] = layer_v1p0["n_plies"]
+            if anchor is not None:
+                if "start_nd_arc" not in anchor:
+                    anchor["start_nd_arc"] = zeros_dict
+                    print("⚠️ Required field start_nd_arc not found for %s. Adding a dummy field." % layer_v1p0["name"])
+                if "end_nd_arc" not in anchor:
+                    anchor["end_nd_arc"] = ones_dict
+                    print("⚠️ Required field end_nd_arc not found for %s. Adding a dummy field." % layer_v1p0["name"])
 
             return layer, anchor
         

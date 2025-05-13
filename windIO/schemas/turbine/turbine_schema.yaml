@@ -261,6 +261,7 @@ properties:
                         default: {}
                         description: The field :code:`structure` contains the data to describe the internal structure of standard wind turbine blades. This is a fairly sophisticated process and the ontology proposed in this work supports different definitions. On the top level, the field :code:`structure` has two sub-components, namely the :code:`webs`, where the positions of the shear webs are defined, and the :code:`layers`, which describe all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position in the two-dimensional sections. Recently, the fields :code:`joint` and :code:`root` were added to support blades that are segmented spanwise and details about the blade root bolting.
                         required:
+                            - anchors
                             - layers
                         properties:
                             root:
@@ -281,6 +282,88 @@ properties:
                                         maximum: 1.e+10
                                         units: Pa
                                         description: Max stress on bolt
+                            anchors:
+                                type: array
+                                description: The field :code:`anchors` defines the position of the shear webs and the layers. The anchors are defined in terms of :code:`name`, :code:`start_nd_arc`, and :code:`end_nd_arc`. The anchors are used to define the position of the shear webs and the layers. The anchors are defined in terms of :code:`name`, :code:`start_nd_arc`, and :code:`end_nd_arc`.
+                                items:
+                                    type: object
+                                    required:
+                                        - name
+                                        - start_nd_arc
+                                    properties:
+                                        name:
+                                            type: string
+                                            description: String that identifies the anchor.
+                                        start_nd_arc:
+                                            oneOf:
+                                                - $ref: "#/definitions/anchor_ref"
+                                                - $ref: "#/definitions/distributed_data/nd_arc_position"
+                                        end_nd_arc:
+                                            oneOf:
+                                                - $ref: "#/definitions/anchor_ref"
+                                                - $ref: "#/definitions/distributed_data/nd_arc_position"
+                                        midpoint_nd_arc:
+                                            oneOf:
+                                                - $ref: "#/definitions/anchor_ref"
+                                                - $ref: "#/definitions/distributed_data/nd_arc_position"
+                                        plane_intersection:
+                                            properties: 
+                                                side:
+                                                    type: string
+                                                    description: The field :code:`side` is a string that defines the side where the intesection should be performed. It can be either :code:`suction`, :code:`pressure`, or :code:`both`.
+                                                    enum: ['suction', 'pressure', 'both']
+                                                defines:
+                                                    type: array
+                                                    description: The field :code:`defines` is a list of strings that defines the anchors the intersection computes.
+                                                    items:
+                                                        type: string
+                                                        enum: ['start_nd_arc', 'end_nd_arc', 'midpoint_nd_arc']
+                                                plane_type1:
+                                                    type: object
+                                                    properties:
+                                                        anchor_curve:
+                                                            type: string
+                                                            description: The field :code:`anchor_curve` is a string that identifies the reference anchor curve from which the plane is generated.
+                                                        anchors_nd_grid:
+                                                            type: array
+                                                            description: Grid positions for computing the two plane points between which to span the intersection plane.
+                                                            items:
+                                                                type: number
+                                                            minItems: 2
+                                                            maxItems: 2
+                                                            uniqueItems: false
+                                                        rotation:
+                                                            type: number
+                                                            description: The field :code:`rotation` is a number that defines the rotation of the plane in degrees.
+                                                            units: deg
+                                                plane_type2:
+                                                    type: object
+                                                    properties:
+                                                        anchor_curve:
+                                                            type: string
+                                                            description: The field :code:`anchor_curve` is a string that identifies the reference anchor curve from which the plane is generated.
+                                                        rotation:
+                                                            type: number
+                                                            description: The field :code:`rotation` is a number that defines the rotation of the plane in degrees.
+                                                            units: deg
+                                                offset:
+                                                    grid:
+                                                        $ref: "#/definitions/distributed_data/grid_nd"
+                                                    values:
+                                                        $ref: "#/definitions/distributed_data/length"
+                                        width:
+                                            type: object
+                                            properties:
+                                                grid:
+                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                values:
+                                                    $ref: "#/definitions/distributed_data/length"
+                                                defines:
+                                                    type: array
+                                                    items:
+                                                        type: string
+                                                        enum: ["start_nd_arc", "end_nd_arc"]
+                                            required: [grid, values, defines]
                             webs:
                                 type: array
                                 description: The field :code:`webs` consists of a list of entries, each representing a shear web defined in terms of :code:`name` and position.
@@ -288,26 +371,72 @@ properties:
                                     type: object
                                     required:
                                         - name
+                                        - start_nd_grid
+                                        - end_nd_grid
+                                        - start_nd_arc
+                                        - end_nd_arc
                                     properties:
                                         name:
                                             type: string
                                             description: String that identifies the web.
+                                        start_nd_grid:
+                                            type: number
+                                            description: Start position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
+                                            minimum: 0.0
+                                            maximum: 1.0
+                                        end_nd_grid:
+                                            type: number
+                                            description: End position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
+                                            minimum: 0.0
+                                            maximum: 1.0
                                         start_nd_arc:
-                                            $ref: "#/definitions/distributed_data/nd_arc_position"
+                                            $ref: "#/definitions/anchor_ref"
                                         end_nd_arc:
-                                            $ref: "#/definitions/distributed_data/nd_arc_position"
-                                        rotation:
-                                            $ref: "#/definitions/distributed_data/rotation"
-                                        offset_y_reference_axis:
-                                            type: object
-                                            required:
-                                                - grid
-                                                - values
-                                            properties:
-                                                grid:
-                                                    $ref: "#/definitions/distributed_data/grid_nd"
-                                                values:
-                                                    $ref: "#/definitions/distributed_data/length"
+                                            $ref: "#/definitions/anchor_ref"
+                                        anchors:
+                                            type: array
+                                            description: The field :code:`anchors` defines the position of the shear webs and the layers. The anchors are defined in terms of :code:`name`, :code:`start_nd_arc`, and :code:`end_nd_arc`.
+                                            items:
+                                                type: object
+                                                required:
+                                                    - name
+                                                    - start_nd_arc
+                                                properties:
+                                                    name:
+                                                        type: string
+                                                        description: String that identifies the anchor.
+                                                    start_nd_arc:
+                                                        $ref: "#/definitions/distributed_data/nd_arc_position"
+                                                    end_nd_arc:
+                                                        $ref: "#/definitions/distributed_data/nd_arc_position"
+                                        flanges:
+                                            type: array
+                                            items:
+                                                type: object
+                                                properties:
+                                                    type:
+                                                        type: string
+                                                        enum: [L, T]
+                                                        description: The field :code:`type` is a string that defines the shape of the flange, either L-shaped or T-shaped.
+                                                    side:
+                                                        type: string
+                                                        enum: [suction, pressure, both]
+                                                    bondline:
+                                                        type: object
+                                                        properties:
+                                                            material: { type: string }
+                                                            thickness:
+                                                                grid:
+                                                                    $ref: "#/definitions/distributed_data/grid_nd"
+                                                                values:
+                                                                    $ref: "#/definitions/distributed_data/length"
+                                                        required: [material, thickness]
+                                                    start_nd_arc:
+                                                        $ref: "#/definitions/anchor_ref"
+                                                    end_nd_arc:
+                                                        $ref: "#/definitions/anchor_ref"
+                                                required: [type, side, bondline, start_nd_arc, end_nd_arc]
+
                             layers:
                                 type: array
                                 description: The sub-field :code:`layers` defines the material layers of the wind turbine blade. In most cases, these are layers of composite materials. The most convenient approach to define the position of spar caps mimics the definition of the shear webs, adding the width and side that define the width of the layer in meters and the side where the layer is located, either “pressure” or “suction”. Layers that wrap the entire cross section, such as paint or outer shell skin, can be defined with :code:`start_nd_arc` set to 0 and :code:`end_nd_arc` set to 1. To define reinforcements, the best way is usually to define the width, in meters, and the midpoint, named :code:`midpoint_nd_arc` and defined nondimensional between 0 and 1. Converters should be able to look for the leading edge, marked as LE. Similar combinations can be constructed with the combination of :code:`width` and :code:`start_nd_arc` or :code:`end_nd_arc`. Finally, for composite layers belonging to the shear webs, a tag :code:`web` should contain the name of the web. The layers are then modeled from leading edge to trailing edge in the order they were specified.
@@ -318,6 +447,10 @@ properties:
                                         - name
                                         - material
                                         - thickness
+                                        - start_nd_grid
+                                        - end_nd_grid
+                                        - start_nd_arc
+                                        - end_nd_arc
                                     properties:
                                         name:
                                             type: string
@@ -362,39 +495,22 @@ properties:
                                                     $ref: "#/definitions/distributed_data/grid_nd"
                                                 values:
                                                     $ref: "#/definitions/distributed_data/angle"
-                                        width:
-                                            type: object
-                                            description: The field width defines the width in meters along the arc of the layer. 
-                                            required:
-                                                - grid
-                                                - values
-                                            properties:
-                                                grid:
-                                                    $ref: "#/definitions/distributed_data/grid_nd"
-                                                values:
-                                                    $ref: "#/definitions/distributed_data/length"
-                                        midpoint_nd_arc:
-                                            $ref: "#/definitions/distributed_data/nd_arc_position"
-                                        side:
-                                            type: string
-                                            description: The field side is string that can be either :code:`suction` or :code:`pressure`, defining the side where a layer is defined.
-                                            enum: ['suction', 'pressure', 'Suction', 'Pressure', 'SUCTION', 'PRESSURE']
+                                        start_nd_grid:
+                                            type: number
+                                            description: Start position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
+                                            minimum: 0.0
+                                            maximum: 1.0
+                                        end_nd_grid:
+                                            type: number
+                                            description: End position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
+                                            minimum: 0.0
+                                            maximum: 1.0
                                         start_nd_arc:
-                                            $ref: "#/definitions/distributed_data/nd_arc_position"
+                                            $ref: "#/definitions/anchor_ref"
+                                            description: The field :code:`start_nd_arc` is a reference to the anchor that defines the start of the layer. The anchor is defined in terms of :code:`name`, :code:`start_nd_arc`, and :code:`end_nd_arc`.
                                         end_nd_arc:
-                                            $ref: "#/definitions/distributed_data/nd_arc_position"
-                                        rotation:
-                                            $ref: "#/definitions/distributed_data/rotation"
-                                        offset_y_reference_axis:
-                                            type: object
-                                            required:
-                                                - grid
-                                                - values
-                                            properties:
-                                                grid:
-                                                    $ref: "#/definitions/distributed_data/grid_nd"
-                                                values:
-                                                    $ref: "#/definitions/distributed_data/length"
+                                            $ref: "#/definitions/anchor_ref"
+                                            description: The field :code:`end_nd_arc` is a reference to the anchor that defines the end of the layer. The anchor is defined in terms of :code:`name`, :code:`start_nd_arc`, and :code:`end_nd_arc`.
                             joint:
                                 type: object
                                 default: {}
@@ -2898,9 +3014,9 @@ properties:
                         type: number
                         description: Minimum pitch angle, where the default is 0 deg
                         units: deg
-                        minimum: -0.5
+                        minimum: -10.0
                         maximum: 90.
-                        default: 0
+                        default: 0.0
                     max_pitch:
                         type: number
                         description: Maximum pitch angle, where the default is 90 deg
@@ -3701,20 +3817,17 @@ definitions:
                         minimum: -1.0
                         maximum: 1.0
                         uniqueItems: true
-                        fixed:
-                            type: string
-                            description: Name of the layer to lock the edge
-        rotation:
-            type: object
-            description: The rotation defines the angle between the chord line and the y axis and it has the opposite sign of the twist. For shear webs perpendicular to the chord line in the section(s) where twist is zero, it is easiest to simply use the keyword fixed :code:`twist`. Blades with straight shear webs will always have the field rotation equal to the twist plus/minus a constant angle and, assuming a non-swept blade (zero values in the blade y reference axis), a linear field offset.
-            properties:
-                grid:
-                    $ref: "#/definitions/distributed_data/grid_nd"
-                values:
-                    $ref: "#/definitions/distributed_data/angle"
-                fixed:
-                    type: string
-                    description: Name of the layer to lock the edge
+            required: [grid, values]
+    anchor_ref:
+        type: object
+        properties:
+            anchor:
+                type: object
+                properties:
+                    name: { type: string }
+                    handle: { type: string }
+                required: [name, handle]
+        required: [anchor]
     beam:
         type: object
         description: The equivalent elastic properties of a beam are defined in :code:`elastic_properties`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia.
