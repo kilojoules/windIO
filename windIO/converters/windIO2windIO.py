@@ -271,6 +271,7 @@ class v1p0_to_v2p0:
                     anchor["midpoint_nd_arc"]["anchor"] = {"name": layer_v1p0["midpoint_nd_arc"]["fixed"],
                                                            "handle": "start_nd_arc"}
                     if layer_v1p0["midpoint_nd_arc"]["fixed"] == "LE":
+                        print("⚠️ Computing LE anchor from layer %s, please check!" % layer_v1p0["name"])
                         LE = (np.array(layer_v1p0["end_nd_arc"]["values"]) + np.array(layer_v1p0["start_nd_arc"]["values"])) / 2.0
                         LE_anchor = {"name": "LE",
                                      "start_nd_arc": {"grid": layer_v1p0["start_nd_arc"]["grid"],
