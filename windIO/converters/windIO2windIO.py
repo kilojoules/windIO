@@ -201,6 +201,8 @@ class v1p0_to_v2p0:
 
         def convert_arcs(layer_v1p0, anchors, is_web=False):
 
+            anchor_names = [a["name"] for a in anchors]
+
             name = layer_v1p0["name"]
             layer = {}
             anchor = None
@@ -268,6 +270,17 @@ class v1p0_to_v2p0:
                     anchor["midpoint_nd_arc"] = {}
                     anchor["midpoint_nd_arc"]["anchor"] = {"name": layer_v1p0["midpoint_nd_arc"]["fixed"],
                                                            "handle": "start_nd_arc"}
+                    if layer_v1p0["midpoint_nd_arc"]["fixed"] == "LE":
+                        LE = (np.array(layer_v1p0["end_nd_arc"]["values"]) + np.array(layer_v1p0["start_nd_arc"]["values"])) / 2.0
+                        LE_anchor = {"name": "LE",
+                                     "start_nd_arc": {"grid": layer_v1p0["start_nd_arc"]["grid"],
+                                                      "values": LE}
+                                                      }
+                        if "LE" in anchor_names:
+                            anchors[anchor_names.index("LE")] = LE_anchor
+                        else:
+                            anchors.append(LE_anchor)
+
                 if "width" in layer_v1p0:
                     anchor["width"] = {}
                     anchor["width"]["defines"] = ["start_nd_arc", "end_nd_arc"]
@@ -374,14 +387,6 @@ class v1p0_to_v2p0:
             if anchor is not None:
                 blade_struct["anchors"].append(anchor)
             blade_struct["layers"].append(layer)
-
-        for ilayer in range(len(blade_struct["layers"])):
-            if "rotation" in blade_struct["layers"][ilayer]:
-                rotation_rad = blade_struct["layers"][ilayer]["rotation"]["values"]
-                blade_struct["layers"][ilayer]["rotation"]["values"] = np.rad2deg(rotation_rad)
-            if "offset_y_pa" in blade_struct["layers"][ilayer]:
-                blade_struct["layers"][ilayer]["offset_y_reference_axis"] = blade_struct["layers"][ilayer]["offset_y_pa"]
-                blade_struct["layers"][ilayer].pop("offset_y_pa")
         
         # Pop older ref axis
         blade_struct.pop("reference_axis")

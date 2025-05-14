@@ -12,6 +12,7 @@ Here we will walk through the YAML file of the IEA-15MW turbine, which is locate
 
 The YAML file is divided into several sections, each describing a different part of the turbine model.
 The top level sections are as follows:
+
 - `windIO_version`: Version of windIO used.
 - `assembly`: The field assembly includes nine entries that aim at describing the overall configuration of the wind turbine and its components.
 - `components`: Specifications for individual components like blades, tower, and nacelle.
@@ -67,8 +68,8 @@ This is how it looks for the IEA-15:
 outer_shape
 +++++++++++
 
-Next, the `outer_shape` is defined. Here, follow the  :doc:`detailed_turbine_documentation` for the details. 
-It is important to note that each quantity that is distributed along the span is defined in terms of pairs of `grid` and `values`.
+Next, the :code:`outer_shape` is defined. Here, follow the  :doc:`detailed_turbine_documentation` for the details. 
+It is important to note that each quantity that is distributed along the span is defined in terms of pairs of :code:`grid` and `values`.
 The field `grid` maps the distribution of the quantity along the curved length of the reference axis,
 while `values` defines the value of the quantity at each grid point.
 The grid is defined in terms of a list of values, which are normalized to the 3D curvilinear blade length.
@@ -77,9 +78,35 @@ The grid is defined in terms of a list of values, which are normalized to the 3D
     :language: yaml
     :lines: 25-88
 
-The outer surface used to generate computational meshes for the internal blade structure or high-fidelity aerodynamic modelling 
-is defined in `components.blade.outer_shape.surface`. 
-This object is defined discretely as a block-structured surface grid with the following structure:
+The outer aerodynamic 3D surface or structural outer mold line (OML) can also be defined
+in :code:`components.blade.outer_shape.surface`. It can be used to generate computational meshes for the internal blade structure or high-fidelity aerodynamic modelling.
+
+To construct this surface, the following steps must be followed in the right order. 
+
+1. From the outer_shape field, use rthick or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
+   Note that using spanwise_position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined.
+   Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord. Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils. Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils. 
+2. Scale airfoils by chord.
+3. In the blade root coordinate system, apply section_offset_x from the leading edge.
+4. In the blade root coordinate system, apply section_offset_y from the chord line.
+5. Compute and apply rotation matrix M to place airfoils orthonormal to local reference axis tangent, see below for details on this.
+6. Apply x, y and z translations from the curved reference axis.
+
+The transformation matrix for a cross-section is constructed as:
+
+1. compute reference axis curve tangent unit vectors :math:`(t_x, t_y, t_z)` (preferably analytically using pchip derivatives)
+2. compute rotation matrices for x- and y-rotations :math:`M_x` and :math:`M_y` from axis and angle, see https://en.wikipedia.org/wiki/Rotation_matrix "Rotation matrix from axis and angle"
+3. :math:`M_{xy} = matmul(M_y, M_x)`
+4. Compute twist correction :math:`r_z =  atan2(M_{xy}(0, 1), Mxy(0, 0))`. The twist correction is consistent with how the local chord reference system is defined in HAWC2, but this may be different in other aeroelastic tools.
+5. :math:`r_z = twist + r_z`
+6. Compute z-rotation matrix `M_z` as for step 2 from :math:`t_z` and :math:`r_z`
+7. :math:`M = matmul(M_{xy}, M_z)`
+
+The above definition of the transformation from local to blade reference frame is described in detail by `Li et al, 2024 <https://iopscience.iop.org/article/10.1088/1742-6596/2767/2/022033/pdf>`_.
+Also see `Li et al, 2022 <https://wes.copernicus.org/articles/7/1341/2022/wes-7-1341-2022.pdf>`_.
+
+
+This surface object is defined discretely as a block-structured surface grid with the following fields:
 
 
 .. code-block:: yaml
@@ -97,7 +124,7 @@ This object is defined discretely as a block-structured surface grid with the fo
                 - [...]
                 - [...]
 
-which will map to a (n_pts, nsec) 2D array where `n_pts` is the number of nodes in the cross-sections along the blade.
+which will map each coordinate direction to a :math:`(n_pts, nsec)` 2D array where :math:`n_pts` is the number of nodes in the cross-sections along the blade.
 We define a local curvilinear mapping that in the spanwise direction follows the :code:`grid` used for the
 :code:`reference_axis`.
 In the direction along the local cross-section surface arc the field :code:`nd_arc_position` is defined as 0.0 at the trailing edge midpoint,
@@ -122,7 +149,7 @@ On the top level, the field :code:`blade.structure` has the sub-sections:
 * :code:`webs`: (Optional) Defines the placement and geometry of the shear webs, 
 * :code:`layers`: Defines all internal layers in terms of :code:`name`, :code:`material`, :code:`thickness`, number of plies :code:`n_plies`, :code:`fiber_orientation` (for composites), and position. 
 * :code:`joints`: (Optional) Defines spanwise segmentation of blades.
-* :code:`elastic_properties``: Defines the elastic properties of a beam-representation of the blade.
+* :code:`elastic_properties`: Defines the elastic properties of a beam-representation of the blade.
 
 Anchors are used to define references for placement of layers, shear webs and other main features of the blade structure.
 
@@ -132,13 +159,13 @@ Below list summarises the characteristics and rules for anchors:
 * Anchors replace the previous positioning of layers using :code:`start_nd_arc` and :code:`end_nd_arc` in a layer field,
   and add the possibility of defining additional convenient planes and arc positions for placing layers.
 * Anchors do not need to coincide with layer edges, but can define layer centers or other convenient positions,
-* Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the `start_nd_arc` and optionally `end_nd_arc` fields,
+* Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the :code:`start_nd_arc` and optionally :code:`end_nd_arc` fields,
 * While arc positions can be anchored to other anchors, it must be possible to explicitly read the defined anchor arc positions from the windIO file,
   without geometric computatations.
 * Convenient schemas are available to define arc positions resulting from plane and ruled surface intersections.
 * Anchors do not need to be defined along the entire spanwise grid of the blade.
 * Anchors can cross and coincide, but this may pose challenges in mesh generation.
-* The previously defined `offset_y_pa` has been deprecated, and has been replaced with `plane_intersection`.
+* The previously defined :code:`offset_y_pa` has been deprecated, and has been replaced with :code:`plane_intersection`.
 
 The below list defines anchor names that are pre-defined but can be overwitten explicitly by the user:
 
@@ -153,8 +180,19 @@ The below list defines anchor names that are pre-defined but can be overwitten e
     Pressure side trailing edge of the blade cross-sections, defined by the
     last point of the local cross-section.
 
-In windIO v1.0, the leading-edge `LE` was pre-defined, however, in windIO 2.0,
+In windIO v1.0, the leading-edge :code:`LE` was pre-defined, however, in windIO 2.0,
 the user has to explicitly define this field as an anchor to avoid any ambiguities.
+
+.. list-table::
+   :widths: 400 400
+   :header-rows: 0
+
+   * - .. image:: images/airfoil_nd_arc.svg
+          :width: 400 px
+          :align: center
+     - .. image:: images/airfoil_TE.svg
+          :width: 400 px
+          :align: center
 
 Anchors are defined as a list and the :code:`name` and :code:`start_nd_arc` fields are required.
 Depending on the anchor type :code:`end_nd_arc` can also be defined for the anchor.
@@ -598,20 +636,21 @@ The `structure` field often grows quite extensively. For the IEA-15MW turbine, i
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 89-382
+    :lines: 89-628
 
 
 The fourth and last field of the `blade` component is the `elastic_properties`, whose subfields are:
+
 - `inertia_matrix`: Defines the inertia properties of the blade, including mass and moment of inertia.
 - `stiffness_matrix`: Defines the stiffness properties of the blade, including bending and torsional stiffness.
 - `structural_damping`: Defines the structural damping properties of the blade, currently in Rayleigh format `mu`.
-- `added_mass`: Defines non-structural mass in the blade, such as lightning protection, root bolts etc, which is not defined or modelled as part of the composite structure.
+- `point_mass`: Defines non-structural mass in the blade, such as lightning protection, root bolts etc, which is not defined or modelled as part of the composite structure.
 
 The `elastic_properties` field of the IEA-15MW turbine is defined as follows:
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 383-417
+    :lines: 629-663
 
 
 Hub
@@ -621,7 +660,7 @@ The `hub` section of the turbine YAML file provides detailed specifications for 
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 418-438
+    :lines: 664-680
 
 Drivetrain
 ~~~~~~~~~~
@@ -640,19 +679,23 @@ Users should refer to the :doc:`detailed_turbine_documentation` for the details 
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 439-542
+    :lines: 736-835
 
 Yaw
 ~~~
-The `yaw` section of the turbine YAML file provides detailed specifications for the wind turbine yaw system. Currently it only includes the equivalent `elastic_properties` of the yaw system. The yaw system of the IEA-15MW turbine is defined as shown below.
+The `yaw` section of the turbine YAML file provides detailed specifications for the wind turbine yaw system. Currently it only includes the equivalent `elastic_properties` of the yaw system.
+The schema for the yaw mass can be found `here <https://ieawindsystems.github.io/windIO/source/detailed_turbine_documentation.html#components_yaw>`_.
 
-.. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
-    :language: yaml
-    :lines: 543-547
+.. The yaw system of the IEA-15MW turbine is defined as shown below.
+
+.. .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
+..     :language: yaml
+..     :lines: 543-547
 
 Tower
 ~~~~~
 The `tower` section of the turbine YAML file provides detailed specifications for the wind turbine tower. It includes the following subfields:
+
 - `reference_axis`: Defines the reference axis of the tower in the tower base coordinate system. This axis is used as the basis for defining both the tower geometry and structural properties.
 - `outer_shape`: Defines the outer shape of the tower
 - `structure`: Defines the inner structure of the tower
@@ -660,11 +703,12 @@ The `tower` section of the turbine YAML file provides detailed specifications fo
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 548-573
+    :lines: 681-706
 
 Monopile
 ~~~~~~~~
 The `monopile` section of the turbine YAML file provides detailed specifications for the wind turbine monopile, when present. It includes the following subfields:
+
 - `reference_axis`: Defines the reference axis of the monopile in the tower base coordinate system. This axis is used as the basis for defining both the monopile geometry and structural properties.
 - `outer_shape`: Defines the outer shape of the monopile
 - `structure`: Defines the inner structure of the monopile
@@ -672,11 +716,12 @@ The `monopile` section of the turbine YAML file provides detailed specifications
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 574-602
+    :lines: 707-735
 
 Floating platform
 ~~~~~~~~~~~~~~~~~
 The `floating_platform` section of the turbine YAML file provides detailed specifications for the wind turbine floating platform, when present. It includes the following subfields:
+
 - `transition_piece_mass`
 - `transition_piece_cost`
 - `joints`
@@ -686,13 +731,14 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 574-766
+    :lines: 820-1012
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
 Mooring
 ~~~~~~~
 The `mooring` section of the turbine YAML file provides detailed specifications for the floating wind turbine mooring system, when present. It includes the following subfields:
+
 - `nodes`: Defines the nodes of the mooring system
 - `lines`: Defines the lines of the mooring system
 - `line_types`: Defines the characteristics of the lines
@@ -702,13 +748,14 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 767-819
+    :lines: 1013-1065
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
 Airfoils
 ---------------
 The `airfoils` section of the turbine YAML file provides a database of airfoil coordinates, polars, and unsteady aero parameters. Each aifoil includes the following subfields:
+
 - `coordinates`: Defines the coordinates of the airfoils
 - `aerodynamic_center`: Defines the chordwise position of aerodynamic center of the airfoils
 - `rthick`: Defines the relative thickness of the airfoils
@@ -720,7 +767,7 @@ An example of the `FFA-W3-211` airfoil used in the IEA-15MW turbine is shown bel
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 642-661
+    :lines: 836-994
 
 Note that in this example only one configuration of polars at a single Re number is defined. The user can define multiple configurations by adding more entries to the `polars` field. The `polars` field is a list of dictionaries, where each dictionary represents a different configuration of polars. Multiple sets of polars for the same configuration under different Re numbers can be defined by adding more entries to the `re_sets` field. The `re_sets` field is a second list of dictionaries, where each dictionary represents polars at varying Reynolds.
 
@@ -731,11 +778,12 @@ The `materials` section of the turbine YAML file provides detailed specification
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 878-901
+    :lines: 995-1202
 
 Control
 -------
 The `control` section of the turbine YAML file provides detailed specifications for the wind turbine control system. It includes the following subfields:
+
 - `supervisory`: Defines the parameters of the supervisory control system
 - `pitch`: Defines the parameters of the pitch control system
 - `torque`: Defines the parameters of the torque control system
@@ -745,7 +793,7 @@ The details of each field are discussed in the page :doc:`detailed_turbine_docum
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 970-984
+    :lines: 1203-1217
 
 Environment
 -----------
@@ -753,7 +801,7 @@ The `environment` section of the turbine YAML file provides detailed specificati
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 985-997
+    :lines: 1218-1230
 
 Balance of System (BoS)
 -----------------------
@@ -761,7 +809,7 @@ The `bos` section of the turbine YAML file provides detailed specifications for 
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 998-1014
+    :lines: 1231-1247
 
 Costs
 -----
@@ -769,4 +817,4 @@ The `costs` section of the turbine YAML file provides detailed specifications fo
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT.yaml
     :language: yaml
-    :lines: 1015-1042
+    :lines: 1248-1275
