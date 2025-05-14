@@ -1451,9 +1451,9 @@ function anchorLink(linkTarget) {
              data-parent="#accordioncomponents_blade_outer_shape_surface">
             <div class="card-body pl-5">
 
-    <span class="badge badge-dark value-type">Type: object</span> <span class="badge badge-success default-value">Default: {}</span><br/>
+    <span class="badge badge-dark value-type">Type: object</span><br/>
 <div class="description collapse" id="collapseDescription_components_blade_outer_shape_surface">
-            <p>windIO aims to standardize the input of the CFD geometry for the rotor. The following steps must be followed in the right order. 1) From the outer<em>shape field, use rthick or use PCHIP based on the master airfoils and the airfoil</em>position grid to interpolate airfoil cross-sections in between defined airfoils. Note that using airfoil<em>position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined. Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord. Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils. Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils. 2) Scale airfoils by chord. 3) In the blade root coordinate system, apply section</em>offset<em>x from the leading edge. 4) In the blade root coordinate system, apply section</em>offset<em>y from the chord line. 5) Compute and apply rotation matrix M to place airfoils orthonormal to local reference axis tangent. 6) Apply x, y and z translations from the curved reference axis. The transformation matrix M for a cross-section is constructed as 1) compute reference axis curve tangent unit vectors (tx, ty, tz) (preferably analytically using pchip derivatives) 1) compute rotation matrices for x- and y-rotations Mx and My from axis and angle, see https://en.wikipedia.org/wiki/Rotation</em>matrix "Rotation matrix from axis and angle" 3) Mxy = matmul (My, Mx) 4) Compute twist correction rz = atan2(Mxy(0,1), Mxy(0,0)) 5) rz = twist + rz 6) Compute z-rotation matrix Mz as for step 2 from tz and rz 7) M = matmul (Mx, My). The above definition of the transformation from local to blade reference frame is described better here https://iopscience.iop.org/article/10.1088/1742-6596/2767/2/022033/pdf. Also see https://wes.copernicus.org/articles/7/1341/2022/wes-7-1341-2022.pdf.</p>
+            <p>Outer aerodynamic surface of the blade formatted as block structured arrays with x, y, z coordinates mapped onto the curvilinear grid used for the reference axis. The following steps must be followed in the right order. 1) From the outer<em>shape field, use rthick or use PCHIP based on the master airfoils and the outer</em>shape.airfoils.spanwise<em>position grid to interpolate airfoil cross-sections in between defined airfoils. Note that using airfoil</em>position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined. Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord. Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils. Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils. 2) Scale airfoils by chord. 3) In the blade root coordinate system, apply section<em>offset</em>x from the leading edge. 4) In the blade root coordinate system, apply section<em>offset</em>y from the chord line. 5) Compute and apply rotation matrix M to place airfoils orthonormal to local reference axis tangent. 6) Apply x, y and z translations from the curved reference axis. The transformation matrix M for a cross-section is constructed as 1) compute reference axis curve tangent unit vectors (tx, ty, tz) (preferably analytically using pchip derivatives) 1) compute rotation matrices for x- and y-rotations Mx and My from axis and angle, see https://en.wikipedia.org/wiki/Rotation_matrix "Rotation matrix from axis and angle" 3) Mxy = matmul (My, Mx) 4) Compute twist correction rz = atan2(Mxy(0,1), Mxy(0,0)) 5) rz = twist + rz 6) Compute z-rotation matrix Mz as for step 2 from tz and rz 7) M = matmul (Mx, My). The above definition of the transformation from local to blade reference frame is described better here https://iopscience.iop.org/article/10.1088/1742-6596/2767/2/022033/pdf. Also see https://wes.copernicus.org/articles/7/1341/2022/wes-7-1341-2022.pdf.</p>
 
         </div>
         <div>
@@ -1467,6 +1467,192 @@ function anchorLink(linkTarget) {
         
 
         
+<div class="accordion" id="accordioncomponents_blade_outer_shape_surface_grid">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_outer_shape_surface_grid">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_outer_shape_surface_grid"
+                        aria-expanded="" aria-controls="components_blade_outer_shape_surface_grid" onclick="setAnchor('#components_blade_outer_shape_surface_grid')"><span class="property-name">grid</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_outer_shape_surface_grid">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_outer_shape_surface_grid"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_outer_shape_surface_grid"
+             data-parent="#accordioncomponents_blade_outer_shape_surface_grid">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of number</span> <span class="badge badge-success default-value">Default: [0.0, 1.0]</span><br/>
+<a href="#components_blade_reference_axis_x_grid" onclick="anchorLink('components_blade_reference_axis_x_grid')" class="ref-link">Same definition as grid</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_outer_shape_surface_x">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_outer_shape_surface_x">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_outer_shape_surface_x"
+                        aria-expanded="" aria-controls="components_blade_outer_shape_surface_x" onclick="setAnchor('#components_blade_outer_shape_surface_x')"><span class="property-name">x</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_outer_shape_surface_x">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_outer_shape_surface_x"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_outer_shape_surface_x"
+             data-parent="#accordioncomponents_blade_outer_shape_surface_x">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of array</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_x_items">
+            
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_x_items_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_outer_shape_surface_y">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_outer_shape_surface_y">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_outer_shape_surface_y"
+                        aria-expanded="" aria-controls="components_blade_outer_shape_surface_y" onclick="setAnchor('#components_blade_outer_shape_surface_y')"><span class="property-name">y</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_outer_shape_surface_y">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_outer_shape_surface_y"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_outer_shape_surface_y"
+             data-parent="#accordioncomponents_blade_outer_shape_surface_y">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of array</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_y_items">
+            
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_y_items_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="accordion" id="accordioncomponents_blade_outer_shape_surface_z">
+    <div class="card">
+        <div class="card-header" id="headingcomponents_blade_outer_shape_surface_z">
+            <h2 class="mb-0">
+                <button class="btn btn-link property-name-button" type="button" data-toggle="collapse" data-target="#components_blade_outer_shape_surface_z"
+                        aria-expanded="" aria-controls="components_blade_outer_shape_surface_z" onclick="setAnchor('#components_blade_outer_shape_surface_z')"><span class="property-name">z</span> <span class="badge badge-warning required-property">Required</span></button>
+                <a class="headerlink" href="#components_blade_outer_shape_surface_z">#</a>
+            </h2>
+        </div>
+
+        <div id="components_blade_outer_shape_surface_z"
+             class="collapse property-definition-div" aria-labelledby="headingcomponents_blade_outer_shape_surface_z"
+             data-parent="#accordioncomponents_blade_outer_shape_surface_z">
+            <div class="card-body pl-5">
+
+    <span class="badge badge-dark value-type">Type: array of array</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_z_items">
+            
+
+    <span class="badge badge-dark value-type">Type: array of number</span><br/>
+
+        
+
+        
+        
+
+         <span class="badge badge-info no-additional">No Additional Items</span><h4>Each item of this array must be:</h4>
+    <div class="card">
+        <div class="card-body items-definition" id="components_blade_outer_shape_surface_z_items_items">
+            
+
+    <span class="badge badge-dark value-type">Type: number</span><br/>
+
+        
+
+        
+        
+
+        
+        </div>
+    </div>
+        </div>
+    </div>
+            </div>
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </div>
@@ -4703,7 +4889,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: string</span><br/>
-
+<span class="description"><p>material name identifier, which needs to be defined in the :code:<code>materials</code> section.</p>
+</span>
         
 
         
@@ -4730,7 +4917,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-
+<span class="description"><p>thickness of the bondline in meters described as function of spanwise grid</p>
+</span>
         
 
         
@@ -4803,7 +4991,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+<span class="description"><p>The field :code:<code>start_nd_arc</code> is a reference to the anchor that defines the start of the flange attachment on the shell. The anchor refers to an anchor on the shell surface and must be defined in the :code:<code>anchors</code> section.</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
@@ -4824,7 +5013,8 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: object</span><br/>
-<a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
+<span class="description"><p>The field :code:<code>end_nd_arc</code> is a reference to the anchor that defines the end of the flange attachment on the shell. The anchor refers to an anchor on the shell surface and must be defined in the :code:<code>anchors</code> section.</p>
+</span><a href="#components_blade_structure_anchors_items_start_nd_arc_oneOf_i0" onclick="anchorLink('components_blade_structure_anchors_items_start_nd_arc_oneOf_i0')" class="ref-link">Same definition as components_blade_structure_anchors_items_start_nd_arc_oneOf_i0</a>
             </div>
         </div>
     </div>
@@ -16543,7 +16733,7 @@ function anchorLink(linkTarget) {
             <div class="card-body pl-5">
 
     <span class="badge badge-dark value-type">Type: array of object</span><br/>
-<span class="description"><p>Database of airfoils. windIO describes the airfoils in terms of coordinates, polars, and unsteady aerodynamic coefficients. The yaml entry airfoils consists of a list of elements. For each set of coordinates, multiple sets of polars and parameters can co-exist. Note that the airfoils listed in this database are not all necessarily used in the blade. Only the ones called in :code:<code>airfoil_position' within :code:</code>outer_shape<code>of the :code:</code>component<code>:code:</code>blade` will actually be loaded to model the blade.</p>
+<span class="description"><p>Database of airfoils. windIO describes the airfoils in terms of coordinates, polars, and unsteady aerodynamic coefficients. The yaml entry airfoils consists of a list of elements. For each set of coordinates, multiple sets of polars and parameters can co-exist. Note that the airfoils listed in this database are not all necessarily used in the blade. Only the ones called in :code:<code>airfoils' within :code:</code>outer_shape<code>of the :code:</code>component<code>:code:</code>blade` will actually be loaded to model the blade.</p>
 </span>
         
 
