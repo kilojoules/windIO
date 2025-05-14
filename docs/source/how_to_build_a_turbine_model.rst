@@ -78,14 +78,17 @@ The grid is defined in terms of a list of values, which are normalized to the 3D
     :language: yaml
     :lines: 25-88
 
-The outer aerodynamic 3D surface or structural outer mold line (OML) can also be defined
+The outer aerodynamic 3D surface or structural outer mold line (OML) can be defined
 in :code:`components.blade.outer_shape.surface`. It can be used to generate computational meshes for the internal blade structure or high-fidelity aerodynamic modelling.
 
 To construct this surface, the following steps must be followed in the right order. 
 
 1. From the outer_shape field, use rthick or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
    Note that using spanwise_position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined.
-   Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord. Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils. Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils. 
+   Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord.
+   Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils.
+   Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils.
+   Define the surface with an open trailing edge, since splining a disconinuous trailing edge will likely result in overshooting.
 2. Scale airfoils by chord.
 3. In the blade root coordinate system, apply section_offset_x from the leading edge.
 4. In the blade root coordinate system, apply section_offset_y from the chord line.
@@ -105,9 +108,7 @@ The transformation matrix for a cross-section is constructed as:
 The above definition of the transformation from local to blade reference frame is described in detail by `Li et al, 2024 <https://iopscience.iop.org/article/10.1088/1742-6596/2767/2/022033/pdf>`_.
 Also see `Li et al, 2022 <https://wes.copernicus.org/articles/7/1341/2022/wes-7-1341-2022.pdf>`_.
 
-
 This surface object is defined discretely as a block-structured surface grid with the following fields:
-
 
 .. code-block:: yaml
 
