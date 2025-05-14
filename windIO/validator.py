@@ -1,13 +1,15 @@
 from __future__ import annotations
 
 from pathlib import Path, PosixPath, WindowsPath
+import jsonschema.exceptions
 from referencing import Registry, Resource
 from referencing.exceptions import NoSuchResource
 import copy
 import jsonschema
+import jsonschema.validators
 
 from .yaml import load_yaml
-from .schemas import schemaPath
+from .schemas import schemaPath, schema_validation_error_formatter
 
 
 def retrieve_yaml(uri: str):
@@ -60,7 +62,7 @@ def validate(
         schema_type (str): Type of schema to be used for validation. This must map to one
             of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` folders.
             Examples of valid schema types are 'plant/wind_energy_system' or
-            '`turbine/IEAontology_schema`'.
+            '`turbine/turbine_schema`'.
         restrictive (bool, optional): If True, the schema will be modified to enforce
             that no additional properties are allowed. Defaults to True.
 
@@ -89,4 +91,13 @@ def validate(
     if restrictive:
         schema = _enforce_no_additional_properties(schema)
 
-    jsonschema.validate(data, schema, registry=registry)
+    _jsonschema_validate_modified(data, schema, registry=registry)
+
+def _jsonschema_validate_modified(instance, schema, cls=None, *args, **kwargs):
+    """Modification of the `jsonschema.validate` which is though to provide a better error message when validation fails"""
+    if cls is None:
+        cls = jsonschema.validators.validator_for(schema)
+
+    cls.check_schema(schema)
+    validator = cls(schema, *args, **kwargs)
+    schema_validation_error_formatter(validator.iter_errors(instance), schema['$id'])
