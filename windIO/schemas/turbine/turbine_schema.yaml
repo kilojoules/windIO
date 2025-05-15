@@ -588,7 +588,9 @@ properties:
                                         fiber_orientation:
                                             type: object
                                             description: For composite laminates, the orientation of the fibers in degrees can be specified. Looking from blade root, positive angles represent a rotation of the fibers towards the leading edge of the blade. Note that the angles are with respect to the cross section local reference system, not the reference system at blade root.
-                                            default: {'grid':[0.0, 1.0], 'values':[0.0, 0.0]}
+                                            default: 
+                                                grid: [0.0, 1.0]
+                                                values: [0.0, 0.0]
                                             required:
                                                 - grid
                                                 - values
@@ -952,7 +954,9 @@ properties:
                             wall_thickness:
                                 type: object
                                 description: Thickness of the hollow elliptical bedplate used in direct drive configurations
-                                default: {'grid':[0.0, 1.0], 'values':[0.05, 0.05]}
+                                default: 
+                                    grid: [0.0, 1.0] 
+                                    values: [0.05, 0.05]
                                 required:
                                     - grid
                                     - values
@@ -1457,7 +1461,9 @@ properties:
                         rpm_efficiency:
                             type: object
                             description: User input override of generator rpm-efficiency values, with rpm as grid input and eff as values input
-                            default: {'grid':[0.0], 'values':[0.0]}
+                            default: 
+                                grid: [0.0]
+                                values: [0.0]
                             required:
                                 - grid
                                 - values
@@ -3944,8 +3950,10 @@ definitions:
             anchor:
                 type: object
                 properties:
-                    name: { type: string }
-                    handle: { type: string }
+                    name: 
+                        type: string
+                    handle: 
+                        type: string
                 required: [name, handle]
         required: [anchor]
     beam:
