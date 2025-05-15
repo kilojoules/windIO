@@ -173,7 +173,7 @@ The below list defines anchor names that are pre-defined but can be overwitten e
 :code:`name: TE`
     Trailing edge of the blade cross-sections, defined as the midpoint
     between the first and last point of the local cross-section, following the below sketch TE defines two values 
-    :code:`start_nd_arc`=0.0 and :code:`end_nd_arc`=1.0.
+    :code:`start_nd_arc=0.0` and :code:`end_nd_arc=1.0`.
 :code:`name: TE_SS`
     Suction side trailing edge of the blade cross-sections, defined by the
     first point of the local cross-section.
