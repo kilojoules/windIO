@@ -93,7 +93,7 @@ def validate(
     _jsonschema_validate_modified(data, schema, registry=registry)
 
     if defaults:
-        validator = DefaultValidatingDraft7Validator if defaults else jsonschema.Draft7Validator
+        validator = DefaultValidatingDraft7Validator
         validator(schema).validate(data)
 
     return data
