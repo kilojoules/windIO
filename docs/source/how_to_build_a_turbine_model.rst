@@ -83,7 +83,7 @@ in :code:`components.blade.outer_shape.surface`. It can be used to generate comp
 
 To construct this surface, the following steps must be followed in the right order. 
 
-1. From the outer_shape field, use `rthick` or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
+1. From the outer_shape field, use :code:`rthick` or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
    Note that using spanwise_position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined.
    Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord.
    Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalized surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils.
