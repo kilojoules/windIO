@@ -83,12 +83,12 @@ in :code:`components.blade.outer_shape.surface`. It can be used to generate comp
 
 To construct this surface, the following steps must be followed in the right order. 
 
-1. From the outer_shape field, use rthick or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
+1. From the outer_shape field, use `rthick` or use PCHIP based on the master airfoils and the :code:`outer_shape.airfoils.spanwise_position` grid to interpolate airfoil cross-sections in between defined airfoils.
    Note that using spanwise_position in the windIO file requires the resolution of this grid to be quite fine, and airfoils with relative thickness above the typical 36% to be defined.
    Otherwise it is quite difficult to control the shape transition from the cylindrical root to the max chord.
-   Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalised surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils.
-   Interpolating based on a common chord-wise discretisation will result in very different airfoil shapes particularly for thick airfoils.
-   Define the surface with an open trailing edge, since splining a disconinuous trailing edge will likely result in overshooting.
+   Also note that airfoils in the airfoils section should be interpolated onto a common grid based on normalized surface curve fraction using PCHIP, allowing point-wise interpolation between airfoils.
+   Interpolating based on a common chord-wise discretization will result in very different airfoil shapes particularly for thick airfoils.
+   Define the surface with an open trailing edge, since splining a discontinuous trailing edge will likely result in overshooting.
 2. Scale airfoils by chord.
 3. In the blade root coordinate system, apply section_offset_x from the leading edge.
 4. In the blade root coordinate system, apply section_offset_y from the chord line.
@@ -129,7 +129,7 @@ which will map each coordinate direction to a :math:`(n_pts, nsec)` 2D array whe
 We define a local curvilinear mapping that in the spanwise direction follows the :code:`grid` used for the
 :code:`reference_axis`.
 In the direction along the local cross-section surface arc the field :code:`nd_arc_position` is defined as 0.0 at the trailing edge midpoint,
-travelling along the suction side, to the leading edge and pressure side, and is 1.0 at the trailing edge midpoint, see below sketch.
+traveling along the suction side, to the leading edge and pressure side, and is 1.0 at the trailing edge midpoint, see below sketch.
 
 .. image:: images/airfoil_nd_arc.svg
    :width: 600 px
@@ -155,20 +155,20 @@ On the top level, the field :code:`blade.structure` has the sub-sections:
 Anchors are used to define references for placement of layers, shear webs and other main features of the blade structure.
 
 
-Below list summarises the characteristics and rules for anchors:
+Below list summarizes the characteristics and rules for anchors:
 
 * Anchors replace the previous positioning of layers using :code:`start_nd_arc` and :code:`end_nd_arc` in a layer field,
   and add the possibility of defining additional convenient planes and arc positions for placing layers.
 * Anchors do not need to coincide with layer edges, but can define layer centers or other convenient positions,
 * Anchors *must* define their non-dimensional arc position(s) along the cross-section surface using the :code:`start_nd_arc` and optionally :code:`end_nd_arc` fields,
 * While arc positions can be anchored to other anchors, it must be possible to explicitly read the defined anchor arc positions from the windIO file,
-  without geometric computatations.
+  without geometric computations.
 * Convenient schemas are available to define arc positions resulting from plane and ruled surface intersections.
 * Anchors do not need to be defined along the entire spanwise grid of the blade.
 * Anchors can cross and coincide, but this may pose challenges in mesh generation.
 * The previously defined :code:`offset_y_pa` has been deprecated, and has been replaced with :code:`plane_intersection`.
 
-The below list defines anchor names that are pre-defined but can be overwitten explicitly by the user:
+The below list defines anchor names that are pre-defined but can be overwritten explicitly by the user:
 
 :code:`name: TE`
     Trailing edge of the blade cross-sections, defined as the midpoint
@@ -445,7 +445,7 @@ are defined as spanwise and optionally chordwise distributions. An example of a 
 
 **Shear web layups with layer drop-offs**
 
-Shear webs are sandwich panels often composed of outer biax layers and a core material in-between.
+Shear webs are sandwich panels often composed of outer biaxial layers and a core material in-between.
 windIO 2.x supports defining start and end arc extents of web layers referring to
 their extent across the distance between the two shells. This is done by defining an :code:`anchors` field
 for each web, with :code:`grid` / :code:`values` pairs where :code:`grid` is the spanwise non-dimensional curved length,
@@ -742,7 +742,7 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 820-1012
+    :lines: 807-999
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
@@ -759,13 +759,13 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 1013-1065
+    :lines: 1000-1052
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
 Airfoils
 ---------------
-The :code:`airfoils` section of the turbine YAML file provides a database of airfoil coordinates, polars, and unsteady aero parameters. Each aifoil includes the following subfields:
+The :code:`airfoils` section of the turbine YAML file provides a database of airfoil coordinates, polars, and unsteady aero parameters. Each airfoil includes the following subfields:
 
 - :code:`coordinates`: Defines the coordinates of the airfoils
 - :code:`aerodynamic_center`: Defines the chordwise position of aerodynamic center of the airfoils

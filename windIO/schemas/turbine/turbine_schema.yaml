@@ -116,7 +116,7 @@ properties:
         properties:
             blade:
                 type: object
-                description: The component :code:`blade` includes three subcomponents, namely :code:`outer_shape`, :code:`elastic_properties`, and :code:`structure`. A fourth and a fifth subfields :code:`cfd_geometry` and :code:`3D_fem` will be added to support higher fidelity modeling of the rotor. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, usually curved, :code:`reference_axis`.
+                description: The component :code:`blade` includes three subcomponents, namely :code:`reference_axis`, :code:`outer_shape`, and :code:`structure`. All distributed quantities, such as blade chord or the thickness of a structural component, are expressed in terms of pair arrays :code:`grid` and :code:`values`, which must have a minimum length of two elements and the same size. :code:`grid` is defined nondimensional between 0 (root) and 1 (tip) along the, usually curved, :code:`reference_axis`.
                 required:
                     - reference_axis
                     - outer_shape
@@ -283,9 +283,6 @@ properties:
                                     - x
                                     - y
                                     - z
-
-                    elastic_properties:
-                        $ref: "#/definitions/beam"
                     structure:
                         type: object
                         default: {}
@@ -294,24 +291,6 @@ properties:
                             - anchors
                             - layers
                         properties:
-                            root:
-                                type: object
-                                default: {}
-                                properties:
-                                    d_f:
-                                        type: number
-                                        default: 0.03
-                                        minimum: 0.01
-                                        maximum: 0.2
-                                        units: m
-                                        description: Diameter of the fastener, default is M30, so 0.03 meters
-                                    sigma_max:
-                                        type: number
-                                        default: 675.e+6
-                                        minimum: 1.e+5
-                                        maximum: 1.e+10
-                                        units: Pa
-                                        description: Max stress on bolt
                             anchors:
                                 type: array
                                 description: The field :code:`anchors` defines non-dimensional arc positions along the surface of the blade that are used to position shear webs and layers. The anchors are defined in terms of :code:`name`, :code:`start_nd_arc`, and optionally :code:`end_nd_arc`. In addition to the required arc positions, anchors can also be defined parametrically using the :code:`offset_arc`, :code:`offset_nd_arc` or :code:`plane_intersection`.
@@ -534,7 +513,6 @@ properties:
                                                         description: The field :code:`end_nd_arc` is a reference to the anchor that defines the end of the flange attachment on the shell. The anchor refers to an anchor on the shell surface and must be defined in the :code:`anchors` section.
                                                         $ref: "#/definitions/anchor_ref"
                                                 required: [type, side, bondline, start_nd_arc, end_nd_arc]
-
                             layers:
                                 type: array
                                 description: The sub-field :code:`layers` defines the material layers of the wind turbine blade. In most cases, these are layers of composite materials. The thickness is defined in meters and optionally with the number of plines using the field :code:`n_plines`.
@@ -641,29 +619,26 @@ properties:
                                         default: 0.0
                                         minimum: 0.0
                                         maximum: 1.e+6
-                                    bolt:
-                                        type: string
-                                        default: M30
-                                        enum: [M18, M24, M30, M36, M42, M48, M52]
-                                        description: Bolt size for the blade bolted joint
-                                    nonmaterial_cost:
+                            root:
+                                type: object
+                                default: {}
+                                properties:
+                                    d_f:
                                         type: number
-                                        description: Cost of the joint not from materials.
-                                        default: 0.0
-                                        minimum: 0.0
-                                        units: USD
-                                        maximum: 1.e+6
-                                    reinforcement_layer_ss:
-                                        type: string
-                                        description: Layer identifier for the joint reinforcement on the suction side
-                                        default: joint_reinf_ss
-                                    reinforcement_layer_ps:
-                                        type: string
-                                        description: Layer identifier for the joint reinforcement on the pressure side
-                                        default: joint_reinf_ps
-                    # 3D_fem:
-                        # type: object
-                        # TODO
+                                        default: 0.03
+                                        minimum: 0.01
+                                        maximum: 0.2
+                                        units: m
+                                        description: Diameter of the fastener, default is M30, so 0.03 meters
+                                    sigma_max:
+                                        type: number
+                                        default: 675.e+6
+                                        minimum: 1.e+5
+                                        maximum: 1.e+10
+                                        units: Pa
+                                        description: Max stress on bolt
+                            elastic_properties:
+                                $ref: "#/definitions/beam"
             hub:
                 type: object
                 additionalProperties: True
@@ -1614,14 +1589,12 @@ properties:
                                         $ref: "#/definitions/distributed_data/grid_nd"
                                     values:
                                         $ref: "#/definitions/distributed_data/grid_nd"
-                    elastic_properties:
-                        $ref: "#/definitions/beam"
                     structure:
                         type: object
-                        required:
-                            - layers
                         optional:
+                            - layers
                             - outfitting_factor
+                            - elastic_properties
                         properties:
                             outfitting_factor:
                                 type: number
@@ -1657,6 +1630,8 @@ properties:
                                                     $ref: "#/definitions/distributed_data/grid_nd"
                                                 values:
                                                     $ref: "#/definitions/distributed_data/length"
+                            elastic_properties:
+                                $ref: "#/definitions/beam"
             monopile:
                 type: object
                 required:
@@ -1769,14 +1744,12 @@ properties:
                                         $ref: "#/definitions/distributed_data/grid_nd"
                                     values:
                                         $ref: "#/definitions/distributed_data/grid_nd"
-                    elastic_properties:
-                        $ref: "#/definitions/beam"
                     structure:
                         type: object
-                        required:
-                            - layers
                         optional:
+                            - layers
                             - outfitting_factor
+                            - elastic_properties
                         properties:
                             outfitting_factor:
                                 type: number
@@ -1812,6 +1785,8 @@ properties:
                                                     $ref: "#/definitions/distributed_data/grid_nd"
                                                 values:
                                                     $ref: "#/definitions/distributed_data/length"
+                            elastic_properties:
+                                $ref: "#/definitions/beam"
             jacket:
                 type: object
                 required:
