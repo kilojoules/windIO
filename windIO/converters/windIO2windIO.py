@@ -399,8 +399,9 @@ class v1p0_to_v2p0:
         dict_v2p0["components"]["blade"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties_mb"]
         dict_v2p0["components"]["blade"].pop("elastic_properties_mb")
         # Redefine stiffness and inertia matrices listing each element individually as opposed to an array
-        dict_v2p0["components"]["blade"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties"]["six_x_six"]
-        blade_beam = dict_v2p0["components"]["blade"]["elastic_properties"]
+        dict_v2p0["components"]["blade"]["structure"]["elastic_properties"] = dict_v2p0["components"]["blade"]["elastic_properties"]["six_x_six"]
+        blade_beam = dict_v2p0["components"]["blade"]["structure"]["elastic_properties"]
+        dict_v2p0["components"]["blade"].pop("elastic_properties")
 
         # # Start by moving structural twist from rad to deg
         # if "values" in blade_beam["twist"]:
@@ -599,7 +600,7 @@ class v1p0_to_v2p0:
         # Pop out older ref_axis
         tower["outer_shape"].pop("reference_axis")
         tower["structure"].pop("reference_axis")
-        # Rename drag_coeffcient to cd
+        # Rename drag_coefficient to cd
         cd_tower = tower["outer_shape"]["drag_coefficient"]
         tower["outer_shape"]["cd"] = cd_tower
         tower["outer_shape"].pop("drag_coefficient")
