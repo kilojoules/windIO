@@ -82,6 +82,13 @@ class v1p0_to_v2p0:
             print(traceback.format_exc())
             print("⚠️ Control block database could not be converted successfully. Please check.")
             print(f"Error details: {e}")
+        try:
+            dict_v2p0 = self.convert_bos(dict_v2p0)
+            print("Balance of station block converted successfully")
+        except Exception as e:
+            print(traceback.format_exc())
+            print("⚠️ Balance of station database could not be converted successfully. Please check.")
+            print(f"Error details: {e}")
 
         # Print out
         print("New yaml file being generated: %s"%self.filename_v2p0)
@@ -745,6 +752,24 @@ class v1p0_to_v2p0:
 
         return dict_v2p0
 
+    def convert_bos(self, dict_v2p0):
+        
+        if "commissioning_pct" in dict_v2p0["bos"]:
+            dict_v2p0["bos"].pop("commissioning_pct")
+        
+        if "decommissioning_pct" in dict_v2p0["bos"]:
+            dict_v2p0["bos"].pop("decommissioning_pct")
+        
+        if "site_assessment_plan_cost" in dict_v2p0["bos"]:
+            dict_v2p0["bos"].pop("site_assessment_plan_cost")
+        
+        if "construction_operations_plan_cost" in dict_v2p0["bos"]:
+            dict_v2p0["bos"].pop("construction_operations_plan_cost")
+        
+        if "design_install_plan_cost" in dict_v2p0["bos"]:
+            dict_v2p0["bos"].pop("design_install_plan_cost")
+
+        return dict_v2p0
 
 if __name__ == "__main__":
     
