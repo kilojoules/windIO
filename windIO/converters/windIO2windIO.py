@@ -82,6 +82,14 @@ class v1p0_to_v2p0:
             print(traceback.format_exc())
             print("⚠️ Control block database could not be converted successfully. Please check.")
             print(f"Error details: {e}")
+        
+        # If present, remove WISDEM specific environment, bos, and costs properties from schema
+        if "environment" in dict_v2p0:
+            dict_v2p0.pop("environment")
+        if "bos" in dict_v2p0:
+            dict_v2p0.pop("bos")
+        if "costs" in dict_v2p0:
+            dict_v2p0.pop("costs")
 
         # Print out
         print("New yaml file being generated: %s"%self.filename_v2p0)
