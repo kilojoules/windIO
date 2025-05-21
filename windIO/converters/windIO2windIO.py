@@ -768,6 +768,10 @@ class v1p0_to_v2p0:
         
         if "design_install_plan_cost" in dict_v2p0["bos"]:
             dict_v2p0["bos"].pop("design_install_plan_cost")
+        
+        if "boem_review_cost" in dict_v2p0["bos"]:
+            dict_v2p0["bos"]["review_cost"] = dict_v2p0["bos"]["boem_review_cost"]
+            dict_v2p0["bos"].pop("boem_review_cost")
 
         return dict_v2p0
 
