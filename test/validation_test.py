@@ -18,7 +18,7 @@ def test_validate_raise():
     IEA_15MW_turb_mod["materials"][0].pop("name")
 
     with pytest.raises(jsonschema.exceptions.ValidationError, match="The validation found 3 error"):
-        windIO.validate(IEA_15MW_turb_mod, "turbine/turbine_schema", defaults = False)
+        windIO.validate(IEA_15MW_turb_mod, "turbine/turbine_schema")
 
 
 def test_validation_IEA_case_studies_1_2():
