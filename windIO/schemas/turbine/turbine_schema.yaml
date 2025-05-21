@@ -20,9 +20,6 @@ optional:
     - airfoils
     - materials
     - control
-    - environment
-    - bos
-    - costs
     - outputs
 additionalProperties: False
 properties:

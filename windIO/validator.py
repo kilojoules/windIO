@@ -51,7 +51,7 @@ def _enforce_no_additional_properties(schema):
 
 
 def validate(
-    input: dict | str | Path, schema_type: str, restrictive: bool = True, defaults: bool = True,
+    input: dict | str | Path, schema_type: str, restrictive: bool = True, defaults: bool = False,
 ) -> None:
     """
     Validates a given windIO input based on the selected schema type.
@@ -90,11 +90,10 @@ def validate(
     if restrictive:
         schema = _enforce_no_additional_properties(schema)
 
-    _jsonschema_validate_modified(data, schema, registry=registry)
-
     if defaults:
-        validator = DefaultValidatingDraft7Validator
-        validator(schema).validate(data)
+        _jsonschema_validate_modified(data, schema, cls = DefaultValidatingDraft7Validator, registry=registry)
+    else:
+        _jsonschema_validate_modified(data, schema, registry=registry)
 
     return data
 

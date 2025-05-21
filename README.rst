@@ -82,3 +82,9 @@ The suggested method of incorporating windIO into your code is:
    data = windIO.validate(input="path/to/input.yaml", schema_type="plant/wind_energy_system <for example>")
 
    # Conversion to your software's data structures here
+
+Note that an optional argument to populate the input file with default values from the schema is available:
+
+.. code-block:: python
+
+   data = windIO.validate(input="path/to/input.yaml", schema_type="plant/wind_energy_system <for example>", defaults=True)
