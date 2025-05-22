@@ -57,23 +57,27 @@ def validate(
     Validates a given windIO input based on the selected schema type.
 
     Args:
-        input (dict | str | Path): Input data or path to file to be validated.
-        schema_type (str): Type of schema to be used for validation. This must map to one
-            of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` folders.
-            Examples of valid schema types are 'plant/wind_energy_system' or
-            '`turbine/turbine_schema`'.
+        input (dict | str | Path): Input data as a dictionary or a path to a YAML file 
+            containing the data to be validated.
+        schema_type (str): Type of schema to be used for validation. This must correspond 
+            to one of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` 
+            folders. Examples of valid schema types include 'plant/wind_energy_system' or 
+            'turbine/turbine_schema'.
         restrictive (bool, optional): If True, the schema will be modified to enforce
             that no additional properties are allowed. Defaults to True.
+        defaults (bool, optional): If True, default values specified in the schema will 
+            be applied to the input data during validation. Defaults to False.
 
     Raises:
-        FileNotFoundError: If the schema type is not found in the schemas folder.
-        TypeError: If the input type is not supported.
+        FileNotFoundError: If the schema file corresponding to the schema type is not found.
+        TypeError: If the input type is not supported (must be dict, str, or Path-like).
         jsonschema.exceptions.ValidationError: If the input data fails validation
             against the schema.
-        jsonschema.exceptions.SchemaError: if the schema itself is invalid.
+        jsonschema.exceptions.SchemaError: If the schema itself is invalid.
 
     Returns:
-        None
+        dict: The validated input data. If `defaults` is True, the returned data will 
+        include default values specified in the schema.
     """
     schema_file = schemaPath / f"{schema_type}.yaml"
     if not schema_file.exists():
