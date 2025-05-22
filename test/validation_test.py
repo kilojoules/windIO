@@ -20,6 +20,26 @@ def test_validate_raise():
     with pytest.raises(jsonschema.exceptions.ValidationError, match="The validation found 3 error"):
         windIO.validate(IEA_15MW_turb_mod, "turbine/turbine_schema")
 
+def test_defaults():
+    # Setup the turbine reference path
+    turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
+
+    # Load the turbine YAML file
+    IEA_15MW_turb_mod = windIO.load_yaml(turbine_reference_path / "IEA-15-240-RWT.yaml")
+
+    # Remove the "number_of_blades" key
+    IEA_15MW_turb_mod["assembly"].pop("number_of_blades")
+
+    # Validate the turbine model
+    IEA_15MW_turb_nodefaults = windIO.validate(IEA_15MW_turb_mod, "turbine/turbine_schema")
+
+    # Assert that accessing "number_of_blades" raises a KeyError
+    with pytest.raises(KeyError, match="'number_of_blades'"):
+        _ = IEA_15MW_turb_nodefaults["assembly"]["number_of_blades"]
+
+    # Now let the schema populate the missing keys with default values
+    IEA_15MW_turb_defaults = windIO.validate(IEA_15MW_turb_mod, "turbine/turbine_schema", defaults=True)
+    _ = IEA_15MW_turb_defaults["assembly"]["number_of_blades"]
 
 def test_validation_IEA_case_studies_1_2():
 
