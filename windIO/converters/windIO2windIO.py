@@ -24,6 +24,10 @@ class v1p0_to_v2p0:
         # Copy the input windio dict
         dict_v2p0.update(deepcopy(dict_v1p0))
 
+        if "description" in dict_v2p0:
+            dict_v2p0["comments"] = dict_v2p0["description"]
+            dict_v2p0.pop("description")
+
         try:
             dict_v2p0 = self.convert_blade(dict_v2p0)
             print("Blade converted successfully")
@@ -101,8 +105,9 @@ class v1p0_to_v2p0:
         dict_v2p0 = self.convert_blade_reference_axis(dict_v2p0)
         dict_v2p0 = self.convert_blade_outer_shape(dict_v2p0)
         dict_v2p0 = self.convert_blade_structure(dict_v2p0)
-        if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
-            dict_v2p0 = self.convert_elastic_properties(dict_v2p0)
+        if "elastic_properties_mb" in dict_v2p0["components"]["blade"]:
+            if "six_x_six" in dict_v2p0["components"]["blade"]["elastic_properties_mb"]:
+                dict_v2p0 = self.convert_elastic_properties(dict_v2p0)
         return dict_v2p0
     
     def convert_blade_reference_axis(self, dict_v2p0):
@@ -483,6 +488,7 @@ class v1p0_to_v2p0:
 
         # Split nacelle components
         v1p0_dt = deepcopy(dict_v2p0["components"]["nacelle"]["drivetrain"])
+        v1p0_nac = deepcopy(dict_v2p0["components"]["nacelle"])
         dict_v2p0["components"]["drivetrain"] = {}
         dict_v2p0["components"]["drivetrain"]["outer_shape"] = {}
         if "uptilt" in v1p0_dt:
@@ -571,24 +577,31 @@ class v1p0_to_v2p0:
         if "uptower" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["uptower"] = v1p0_dt["uptower"]
         
-        if "generator" in dict_v2p0["components"]["nacelle"]:
-            dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
-            if "generator_length" in v1p0_dt:
-                dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
-            if "generator_radius_user" in v1p0_dt:
-                dict_v2p0["components"]["drivetrain"]["generator"]["radius"] = v1p0_dt["generator_radius_user"]
-            if "generator_mass_user" in v1p0_dt:
-                dict_v2p0["components"]["drivetrain"]["generator"]["mass"] = v1p0_dt["generator_mass_user"]
-            if "rpm_efficiency_user" in v1p0_dt:
-                dict_v2p0["components"]["drivetrain"]["generator"]["rpm_efficiency"] = v1p0_dt["rpm_efficiency_user"]
-            v1p0_gen = deepcopy(dict_v2p0["components"]["nacelle"]["generator"])
-            if "generator_type" in v1p0_gen:
-                dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_gen["generator_type"]
+        if "generator" in v1p0_nac:
+            dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(v1p0_nac["generator"])
+            if "generator_type" in v1p0_nac["generator"]:
+                dict_v2p0["components"]["drivetrain"]["generator"]["type"] = v1p0_nac["generator"]["generator_type"]
                 dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_type")
-
-            if "phi" in dict_v2p0["components"]["drivetrain"]["generator"]:
+            if "phi" in v1p0_nac["generator"]:
                 phi_rad = dict_v2p0["components"]["drivetrain"]["generator"]["phi"]
                 dict_v2p0["components"]["drivetrain"]["generator"]["phi"] = np.rad2deg(phi_rad)
+            if "generator_length" in v1p0_nac["generator"]:
+                dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_nac["generator"]["generator_length"]
+                dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_length")
+            if "rated_rpm" in v1p0_nac["generator"]:
+                dict_v2p0["components"]["drivetrain"]["generator"].pop("rated_rpm")
+            if "S_Nmax" in v1p0_nac["generator"]:
+                dict_v2p0["components"]["drivetrain"]["generator"].pop("S_Nmax")
+        else:
+            dict_v2p0["components"]["drivetrain"]["generator"] = {}
+        if "generator_length" in v1p0_dt:
+            dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
+        if "generator_radius_user" in v1p0_dt:
+            dict_v2p0["components"]["drivetrain"]["generator"]["radius"] = v1p0_dt["generator_radius_user"]
+        if "generator_mass_user" in v1p0_dt:
+            dict_v2p0["components"]["drivetrain"]["generator"]["mass"] = v1p0_dt["generator_mass_user"]
+        if "rpm_efficiency_user" in v1p0_dt:
+            dict_v2p0["components"]["drivetrain"]["generator"]["rpm_efficiency"] = v1p0_dt["rpm_efficiency_user"]
 
         dict_v2p0["components"].pop("nacelle")
 

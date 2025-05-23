@@ -1,10 +1,3 @@
-# yaml-language-server: $schema=http://json-schema.org/draft-07/schema#
-# Author: Pietro Bortolotti
-# Organization: National Renewable Energy Laboratory, Golden, CO
-# Date: 2025-01-14
-
-
-
 $schema: "http://json-schema.org/draft-07/schema#"
 $id: "windIO/turbine/turbine_schema"
 title: "windIO: Turbine"
@@ -20,9 +13,6 @@ optional:
     - airfoils
     - materials
     - control
-    - environment
-    - bos
-    - costs
     - outputs
 additionalProperties: False
 properties:
@@ -1453,13 +1443,13 @@ properties:
                           units: dimensionless
                           description: When not doing a detailed generator design, use a simplified approach to generator scaling. This input allows for overriding of the regression-based scaling coefficient to obtain generator mass
                           minimum: 0.0
-                        # I_0:
-                        #   type: number
-                        #   default: 0.0
-                        #   units: A
-                        #   minimum: 0.0
-                        #   maximum: 100.0
-                        #   description: Words
+                        I_0:
+                          type: number
+                          default: 0.0
+                          units: A
+                          minimum: 0.0
+                          maximum: 100.0
+                          description: Words
                         # d_r:
                         #   type: number
                         #   default: 0.0

@@ -857,6 +857,10 @@ components:
             mb1Type: CARB
             mb2Type: SRB
             uptower: true
+        generator:
+            length: 3.047
+            radius: 4.89
+            mass: 508040.0
 airfoils:
    -  name: FFA-W3-211
       coordinates:

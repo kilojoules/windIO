@@ -98,7 +98,7 @@ class TestRegression(unittest.TestCase):
         # Now validate the output
         windIO.validate(filename_v2p0, schema_type="turbine/turbine_schema")
 
-    def test_v1p0_2p0_converter_IEA_22_280_RWT(self):
+    def test_v1p0_2p0_converter_IEA_22_280_RWT_Floater(self):
         
         filename_v1p0 = test_dir / "v1p0" / "IEA-22-280-RWT_Floater.yaml"
         filename_v2p0 = test_dir / "IEA-22-280-RWT_Floater.yaml"

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path, PosixPath, WindowsPath
-import jsonschema.exceptions
 from referencing import Registry, Resource
 from referencing.exceptions import NoSuchResource
 import copy
@@ -52,29 +51,33 @@ def _enforce_no_additional_properties(schema):
 
 
 def validate(
-    input: dict | str | Path, schema_type: str, restrictive: bool = True
+    input: dict | str | Path, schema_type: str, restrictive: bool = True, defaults: bool = False,
 ) -> None:
     """
     Validates a given windIO input based on the selected schema type.
 
     Args:
-        input (dict | str | Path): Input data or path to file to be validated.
-        schema_type (str): Type of schema to be used for validation. This must map to one
-            of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` folders.
-            Examples of valid schema types are 'plant/wind_energy_system' or
-            '`turbine/turbine_schema`'.
+        input (dict | str | Path): Input data as a dictionary or a path to a YAML file 
+            containing the data to be validated.
+        schema_type (str): Type of schema to be used for validation. This must correspond 
+            to one of the schema files available in the ``schemas/plant`` or ``schemas/turbine`` 
+            folders. Examples of valid schema types include 'plant/wind_energy_system' or 
+            'turbine/turbine_schema'.
         restrictive (bool, optional): If True, the schema will be modified to enforce
             that no additional properties are allowed. Defaults to True.
+        defaults (bool, optional): If True, default values specified in the schema will 
+            be applied to the input data during validation. Defaults to False.
 
     Raises:
-        FileNotFoundError: If the schema type is not found in the schemas folder.
-        TypeError: If the input type is not supported.
+        FileNotFoundError: If the schema file corresponding to the schema type is not found.
+        TypeError: If the input type is not supported (must be dict, str, or Path-like).
         jsonschema.exceptions.ValidationError: If the input data fails validation
             against the schema.
-        jsonschema.exceptions.SchemaError: if the schema itself is invalid.
+        jsonschema.exceptions.SchemaError: If the schema itself is invalid.
 
     Returns:
-        None
+        dict: The validated input data. If `defaults` is True, the returned data will 
+        include default values specified in the schema.
     """
     schema_file = schemaPath / f"{schema_type}.yaml"
     if not schema_file.exists():
@@ -91,7 +94,29 @@ def validate(
     if restrictive:
         schema = _enforce_no_additional_properties(schema)
 
-    _jsonschema_validate_modified(data, schema, registry=registry)
+    if defaults:
+        _jsonschema_validate_modified(data, schema, cls = DefaultValidatingDraft7Validator, registry=registry)
+    else:
+        _jsonschema_validate_modified(data, schema, registry=registry)
+
+    return data
+
+
+# See: https://python-jsonschema.readthedocs.io/en/stable/faq/#why-doesn-t-my-schema-s-default-property-set-the-default-on-my-instance
+def extend_with_default(validator_class):
+    validate_properties = validator_class.VALIDATORS["properties"]
+
+    def set_defaults(validator, properties, instance, schema):
+        for property, subschema in properties.items():
+            if "default" in subschema:
+                instance.setdefault(property, subschema["default"])
+
+        for error in validate_properties(validator, properties, instance, schema):
+            yield error
+
+    return jsonschema.validators.extend(validator_class, {"properties": set_defaults})
+
+DefaultValidatingDraft7Validator = extend_with_default(jsonschema.Draft7Validator)
 
 def _jsonschema_validate_modified(instance, schema, cls=None, *args, **kwargs):
     """Modification of the `jsonschema.validate` which is though to provide a better error message when validation fails"""
