@@ -10,7 +10,7 @@ STATIC_DIR = os.path.join(REPO_DIR, 'docs', '_static')
 # relies on soft link of latest tag to "latest"    
 latest_branch = "latest"
 
-DEPLOY_URL = os.environ.get("DEPLOY_URL", "https://ieawindsystems.github.io")
+DEPLOY_URL = os.environ.get("DEPLOY_URL", "https://ieawindsystems.github.io/windIO")
 
 SWITCHER_JSON_PATH = os.path.join(STATIC_DIR, 'switcher.json')
 
@@ -42,7 +42,8 @@ for tag in tags:
 # Add branches that have test_doc in their name (excluding main/master already added)
 print("Docs will be built for the following branches")
 for branch in branches:
-    if ("test_doc" not in branch) and (branch != "main"):
+    if (branch != "main"):
+    # if ("test_doc" not in branch) and (branch != "main"):
         continue
     else:
         version = {"name": branch,
