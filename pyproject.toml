@@ -46,7 +46,8 @@ test = [
     'numpy',
     "pytest",
     "pytest-subtests",
-    "pint"
+    "pint",
+    "scipy"
 ]
 
 [tool.setuptools.packages.find]
