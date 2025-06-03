@@ -1064,7 +1064,7 @@ properties:
                         S_Nmax:
                             type: number
                             default: -0.2
-                            units: none
+                            units: dimensionless
                             minimum: -100.0
                             maximum: 0.0
                             description: Words
