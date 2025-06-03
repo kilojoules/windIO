@@ -53,6 +53,7 @@ jobs:
         git fetch origin
         git branch -a
         python generate_switcher_json.py
+        mkdir -p ${{runner.workspace}}/windIO/docs/_static
         cat _static/switcher.json
         sphinx-multiversion . ./_build/html
         cp assets/gh-pages-redirect.html _build/html/index.html
