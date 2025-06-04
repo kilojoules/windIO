@@ -49,6 +49,8 @@ jobs:
     - name: Build the book
       working-directory: ${{runner.workspace}}/windIO/docs/
       run: |
+        python generate_switcher_json.py
+        cat _static/switcher.json
         sphinx-multiversion . ./_build/html
         cp assets/gh-pages-redirect.html _build/html/index.html
         cd _build/html
