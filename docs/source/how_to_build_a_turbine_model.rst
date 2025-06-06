@@ -87,8 +87,8 @@ To construct this surface, the following steps must be followed in the right ord
    Interpolating based on a common chord-wise discretization will result in very different airfoil shapes particularly for thick airfoils.
    Define the surface with an open trailing edge, since splining a discontinuous trailing edge will likely result in overshooting.
 2. Scale airfoils by chord.
-3. In the blade root coordinate system, apply section_offset_x from the leading edge.
-4. In the blade root coordinate system, apply section_offset_y from the chord line.
+3. In the blade root coordinate system, apply :code:`section_offset_y` from the leading edge along the chord.
+4. In the blade root coordinate system, apply :code:`section_offset_x` from the chord line normal to chord.
 5. Compute and apply rotation matrix M to place airfoils orthonormal to local reference axis tangent, see below for details on this.
 6. Apply x, y and z translations from the curved reference axis.
 

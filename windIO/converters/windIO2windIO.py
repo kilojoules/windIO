@@ -123,24 +123,24 @@ class v1p0_to_v2p0:
         dict_v2p0["components"]["blade"]["outer_shape"] = dict_v2p0["components"]["blade"]["outer_shape_bem"]
         dict_v2p0["components"]["blade"].pop("outer_shape_bem")
         
-        # Switch from pitch_axis to section_offset_x
+        # Switch from pitch_axis to section_offset_y
         # First interpolate on chord grid
         blade_os = dict_v2p0["components"]["blade"]["outer_shape"]
         pitch_axis_grid =  blade_os["pitch_axis"]["grid"]
         pitch_axis_values =  blade_os["pitch_axis"]["values"]
         chord_grid =  blade_os["chord"]["grid"]
         chord_values =  blade_os["chord"]["values"]
-        section_offset_x_grid = chord_grid
-        pitch_axis_interp = np.interp(section_offset_x_grid,
+        section_offset_y_grid = chord_grid
+        pitch_axis_interp = np.interp(section_offset_y_grid,
                                       pitch_axis_grid,
                                       pitch_axis_values,
                                       )
         # Now dimensionalize offset using chord
-        section_offset_x_values = pitch_axis_interp * chord_values
+        section_offset_y_values = pitch_axis_interp * chord_values
         blade_os.pop("pitch_axis")
-        blade_os["section_offset_x"] = {}
-        blade_os["section_offset_x"]["grid"] = section_offset_x_grid
-        blade_os["section_offset_x"]["values"] = section_offset_x_values
+        blade_os["section_offset_y"] = {}
+        blade_os["section_offset_y"]["grid"] = section_offset_y_grid
+        blade_os["section_offset_y"]["values"] = section_offset_y_values
         
         # Convert twist from rad to deg
         twist_rad = blade_os["twist"]["values"]
