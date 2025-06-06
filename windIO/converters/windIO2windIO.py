@@ -165,10 +165,10 @@ class v1p0_to_v2p0:
                 for j in range(n_af_available):
                     if blade_os["airfoil_position"]["labels"][i] == dict_v2p0["airfoils"][j]["name"]:
                         rthick_v1p0[i] = dict_v2p0["airfoils"][j]["relative_thickness"]
-            # Use numpy polyfit
-            coeffs = np.polyfit(blade_os["airfoil_position"]["grid"], rthick_v1p0, deg=3)
-            poly = np.poly1d(coeffs)
-            rthick = poly(chord_grid)
+            from scipy.interpolate import PchipInterpolator
+            spline = PchipInterpolator
+            rthick_spline = spline(blade_os["airfoil_position"]["grid"], rthick_v1p0)
+            rthick = rthick_spline(chord_grid)
             rthick[rthick>1.]=1.
             blade_os["rthick"] = {}
             blade_os["rthick"]["grid"] = chord_grid
