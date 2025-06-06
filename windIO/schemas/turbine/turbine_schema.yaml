@@ -2198,7 +2198,7 @@ properties:
                                                 minimum: 0.0
                                                 maximum: 1.0
                                                 description: Non-dimensional value along member axis
-                                ca: &ca
+                                Ca: &ca
                                     description: User-defined added mass coefficient if axi-symmetric or user-defined added mass coefficient in x-direction
                                     oneOf:
                                         - type: number
@@ -2210,22 +2210,23 @@ properties:
                                             type: number
                                             minimum: -1.0
                                     default: [-1.0]
-                                cay:
+                                Cay:
                                     <<: *ca
                                     description: User-defined added mass coefficient in y-direction
-                                cp: &cp
+                                Cp: &cp
                                     description: User-defined pressure coefficient
                                     type: number
                                     default: 0.0
-                                cd: &cd
+                                Cd: &cd
                                     <<: *ca
                                     description: User-defined drag coefficient if axi-symmetric or user-defined drag coefficient in x-direction
-                                cdy:
+                                Cdy:
                                     <<: *cd
                                     description: User-defined drag coefficient in y-direction                
                     rigid_bodies:
                         type: array
                         description: Additional point masses at joints with user-customized properties
+                        default: []
                         items:
                             type: object
                             required:
