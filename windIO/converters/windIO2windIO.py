@@ -650,7 +650,7 @@ class v1p0_to_v2p0:
         # Rad to deg in some inputs to floating platform
         joints = dict_v2p0["components"]["floating_platform"]["joints"]
         for i_joint in range(len(joints)):
-            if joints[i_joint]["cylindrical"]:
+            if "cylindrical" in joints[i_joint] and joints[i_joint]["cylindrical"]:
                 joints[i_joint]["location"][1] = np.rad2deg( joints[i_joint]["location"][1] )
         
         members = dict_v2p0["components"]["floating_platform"]["members"]
