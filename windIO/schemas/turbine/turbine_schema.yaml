@@ -429,24 +429,12 @@ properties:
                                     type: object
                                     required:
                                         - name
-                                        - start_nd_grid
-                                        - end_nd_grid
                                         - start_nd_arc
                                         - end_nd_arc
                                     properties:
                                         name:
                                             type: string
                                             description: String that identifies the web.
-                                        start_nd_grid:
-                                            type: number
-                                            description: Start arc position of the web in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
-                                        end_nd_grid:
-                                            type: number
-                                            description: End arc position of the web in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
                                         start_nd_arc:
                                             $ref: "#/definitions/anchor_ref"
                                         end_nd_arc:
@@ -513,8 +501,6 @@ properties:
                                         - name
                                         - material
                                         - thickness
-                                        - start_nd_grid
-                                        - end_nd_grid
                                         - start_nd_arc
                                         - end_nd_arc
                                     properties:
@@ -567,22 +553,31 @@ properties:
                                                     $ref: "#/definitions/distributed_data/grid_nd"
                                                 values:
                                                     $ref: "#/definitions/distributed_data/angle"
-                                        start_nd_grid:
-                                            type: number
-                                            description: Start position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
-                                        end_nd_grid:
-                                            type: number
-                                            description: End position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
                                         start_nd_arc:
                                             $ref: "#/definitions/anchor_ref"
                                             description: The field `start_nd_arc` is a reference to the anchor that defines the start of the layer. The anchor is defined in terms of `name`, `start_nd_arc`, and `end_nd_arc`.
                                         end_nd_arc:
                                             $ref: "#/definitions/anchor_ref"
                                             description: The field `end_nd_arc` is a reference to the anchor that defines the end of the layer. The anchor is defined in terms of `name`, `start_nd_arc`, and `end_nd_arc`.
+                            trailing_edge_adhesive:
+                                type: object
+                                description: The trailing edge adhesive fills the void on the inside of the shell at the trailing edge, and its location is defined by four corners, two on the suction sice and two on the pressure side. 
+                                properties:
+                                    material:
+                                        type: string
+                                        description: Material name identifier, which needs to be defined in the :code:`materials` section.
+                                    anchor_ss_start:
+                                        description: defines the start of the trailing edge adhesive on the suction side closest to the trailing edge.
+                                        $ref: "#/definitions/anchor_ref"
+                                    anchor_ss_end:
+                                        description: defines the end of the trailing edge adhesive on the suction side.
+                                        $ref: "#/definitions/anchor_ref"
+                                    anchor_ps_start:
+                                        description: defines the start of the trailing edge adhesive on the pressure side closest to the trailing edge.
+                                        $ref: "#/definitions/anchor_ref"
+                                    anchor_ps_end:
+                                        description: defines the end of the trailing edge adhesive on the pressure side.
+                                        $ref: "#/definitions/anchor_ref"
                             joint:
                                 type: object
                                 default: {}

@@ -632,6 +632,33 @@ and another with tapered thickness.
 
 This feature is currently experimental, and details of the schema could be updated in future releases.
 
+**Trailing edge adhesive**
+
+The optional trailing edge adhesive fills the void on the inside of the shell at the trailing edge,
+and its location is defined by four corners with references to anchors defined in the `anchors` section, two on the suction sice and two on the pressure side.
+The exact topology of the trailing edge is often linked to the specific meshing tool used for the finite element analysis,
+but can by the user be defined such that shell material wraps around trailing edge and meets at
+an `nd_arc_position` of 0.0/1.0 (at the trailing edge midpoint), or left open requiring that the trailing edge bondline closes 
+the trailing edge gap.
+
+.. code-block:: yaml
+
+        trailing_edge_adhesive:
+            material: glue
+            anchor_ss_start:
+                name: TE_SS
+                handle: start_nd_arc
+            anchor_ss_end:
+                name: TE_adhesive_ss_end
+                handle: start_nd_arc
+            anchor_ps_start:
+                name: TE_PS
+                handle: start_nd_arc
+            anchor_ps_end:
+                name: TE_adhesive_ps_end
+                handle: start_nd_arc
+
+This feature is currently experimental, and details of the schema could be updated in future releases.
 
 **Complete example: IEA 15 MW RWT**
 

@@ -228,15 +228,15 @@ class v1p0_to_v2p0:
 
             layer["name"] = name
             if is_web:
-                layer["start_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][-1]
+                start_nd_grid = layer_v1p0["start_nd_arc"]["grid"][0]
+                end_nd_grid = layer_v1p0["start_nd_arc"]["grid"][-1]
             else:
-                layer["start_nd_grid"] = layer_v1p0["thickness"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["thickness"]["grid"][-1]
+                start_nd_grid = layer_v1p0["thickness"]["grid"][0]
+                end_nd_grid = layer_v1p0["thickness"]["grid"][-1]
 
-            zeros_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+            zeros_dict = {"grid": [start_nd_grid, end_nd_grid],
                           "values": [0.0, 0.0]}
-            ones_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+            ones_dict = {"grid": [start_nd_grid, end_nd_grid],
                           "values": [1.0, 1.0]}
             dummy_dict = {"grid": "N/A",
                           "values": "N/A"}
@@ -576,16 +576,16 @@ class v1p0_to_v2p0:
             dict_v2p0["components"]["drivetrain"]["other_components"]["mb2Type"] = v1p0_dt["mb2Type"]
         if "uptower" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["other_components"]["uptower"] = v1p0_dt["uptower"]
-        
+
         dict_v2p0["components"]["drivetrain"]["generator"] = {}
         if "generator" in v1p0_nac:
             #dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(v1p0_nac["generator"])
             if "generator_length" in v1p0_nac["generator"]:
                 dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_nac["generator"]["generator_length"]
                 dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_length")
-        else:
-            if "generator_length" in v1p0_dt:
-                dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
+            else:
+                if "generator_length" in v1p0_dt:
+                    dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
         if "generator_radius_user" in v1p0_dt:
             dict_v2p0["components"]["drivetrain"]["generator"]["radius"] = v1p0_dt["generator_radius_user"]
         if "generator_mass_user" in v1p0_dt:
@@ -767,7 +767,7 @@ if __name__ == "__main__":
 
     turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
 
-    filename_v1p0 = "To_be_set"
+    filename_v1p0 = "../../test/turbine/v1p0/IEA-15-240-RWT.yaml"
     filename_v2p0 = turbine_reference_path / "IEA-15-240-RWT_v2p0.yaml"
     
     if not os.path.exists(filename_v1p0):
