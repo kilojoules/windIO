@@ -501,8 +501,6 @@ properties:
                                         - name
                                         - material
                                         - thickness
-                                        - start_nd_grid
-                                        - end_nd_grid
                                         - start_nd_arc
                                         - end_nd_arc
                                     properties:
@@ -555,16 +553,6 @@ properties:
                                                     $ref: "#/definitions/distributed_data/grid_nd"
                                                 values:
                                                     $ref: "#/definitions/distributed_data/angle"
-                                        start_nd_grid:
-                                            type: number
-                                            description: Start position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
-                                        end_nd_grid:
-                                            type: number
-                                            description: End position of the layer in nondimensional units along the reference axis. The value is between 0 (root) and 1 (tip).
-                                            minimum: 0.0
-                                            maximum: 1.0
                                         start_nd_arc:
                                             $ref: "#/definitions/anchor_ref"
                                             description: The field `start_nd_arc` is a reference to the anchor that defines the start of the layer. The anchor is defined in terms of `name`, `start_nd_arc`, and `end_nd_arc`.
