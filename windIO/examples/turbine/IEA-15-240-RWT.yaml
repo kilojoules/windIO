@@ -721,7 +721,10 @@ components:
             mb1Type: CARB
             mb2Type: SRB
             uptower: true
-        generator: {}
+        generator:
+            length: 2.15
+            radius: 5.08
+            mass: 371570.0
 airfoils:
    -  name: circular
       coordinates:
