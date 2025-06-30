@@ -228,15 +228,15 @@ class v1p0_to_v2p0:
 
             layer["name"] = name
             if is_web:
-                layer["start_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["start_nd_arc"]["grid"][-1]
+                start_nd_grid = layer_v1p0["start_nd_arc"]["grid"][0]
+                end_nd_grid = layer_v1p0["start_nd_arc"]["grid"][-1]
             else:
-                layer["start_nd_grid"] = layer_v1p0["thickness"]["grid"][0]
-                layer["end_nd_grid"] = layer_v1p0["thickness"]["grid"][-1]
+                start_nd_grid = layer_v1p0["thickness"]["grid"][0]
+                end_nd_grid = layer_v1p0["thickness"]["grid"][-1]
 
-            zeros_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+            zeros_dict = {"grid": [start_nd_grid, end_nd_grid],
                           "values": [0.0, 0.0]}
-            ones_dict = {"grid": [layer["start_nd_grid"], layer["end_nd_grid"]],
+            ones_dict = {"grid": [start_nd_grid, end_nd_grid],
                           "values": [1.0, 1.0]}
             dummy_dict = {"grid": "N/A",
                           "values": "N/A"}
