@@ -176,7 +176,7 @@ properties:
                                         $ref: "#/definitions/distributed_data/length"
                             twist:
                                 type: object
-                                description: Aerodynamic twist along blade span in degrees. Twist is generally positive toward blade root, and may become negative toward blade tip.
+                                description: Geometric twist of the local cross-sections along the blade span in degrees. Twist is generally positive toward blade root, and may become negative toward blade tip. Aerodynamic properties and equivalent elastic properties of the blade are defined with respect to this distribution of twist.
                                 required:
                                     - grid
                                     - values
@@ -2996,7 +2996,7 @@ definitions:
         required: [anchor]
     beam:
         type: object
-        description: The equivalent elastic properties of a beam are defined in `elastic_properties`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia.
+        description: The equivalent elastic properties of a beam are defined in `elastic_properties`. Here, 6x6 stiffness and mass matrices are defined. Out of 36 entries of the matrices, given the symmetry, the yaml file requires the definition of only 21 values as inputs for the stiffness matrix, whereas the inertia matrix is defined in terms of unit mass, coordinates of the center of mass, and mass moments of inertia. For the blade, these properties are defined with respect to the aerodynamic twist, which is the same as structural twist.
         required:
             - stiffness_matrix
             - inertia_matrix
