@@ -582,7 +582,8 @@ class v1p0_to_v2p0:
             #dict_v2p0["components"]["drivetrain"]["generator"] = deepcopy(v1p0_nac["generator"])
             if "generator_length" in v1p0_nac["generator"]:
                 dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_nac["generator"]["generator_length"]
-                dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_length")
+                if "generator_length" in dict_v2p0["components"]["drivetrain"]["generator"]:
+                    dict_v2p0["components"]["drivetrain"]["generator"].pop("generator_length")
             else:
                 if "generator_length" in v1p0_dt:
                     dict_v2p0["components"]["drivetrain"]["generator"]["length"] = v1p0_dt["generator_length"]
