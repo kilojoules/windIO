@@ -1421,7 +1421,7 @@ properties:
                                     type: boolean
                                     default: False
                                 relative:
-                                    description: Make this joint relative to the stated joint, non-cylindrical only
+                                    description: Make this joint relative to the stated joint, which is helpful when member dimensions are changing in a design loop (non-cylindrical joints only)
                                     default: origin
                                     type: string
                                 relative_dims:
@@ -1431,7 +1431,7 @@ properties:
                                     items:
                                         type: boolean
                                 axial_coeffs:
-                                    description: Axial hydrodynamic coefficients used in OpenFAST, unused in WISDEM
+                                    description: Axial hydrodynamic coefficients for lumped loads at the joint.
                                     type: object
                                     default: {}
                                     optional:
@@ -1444,7 +1444,7 @@ properties:
                                             type: number
                                             default: 0.0
                                         Cd:
-                                            description: Coefficient of drag
+                                            description: Coefficient of viscous drag
                                             type: number
                                             default: 0.0
                                         Cp:
