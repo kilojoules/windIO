@@ -375,7 +375,7 @@ properties:
                                         plane_intersection:
                                             type: object
                                             description: Defines a plane intersection for computing the arc position(s) of the anchor.
-                                            properties: 
+                                            properties:
                                                 side:
                                                     type: string
                                                     description: The field `side` is a string that defines the side where the intesection should be performed. It can be either `suction`, `pressure`, or `both`.
@@ -417,7 +417,7 @@ properties:
                                                             units: deg
                                                 offset:
                                                     type: object
-                                                    properties:                                                         
+                                                    properties:
                                                         grid:
                                                             $ref: "#/definitions/distributed_data/grid_nd"
                                                         values:
@@ -478,7 +478,7 @@ properties:
                                                             thickness:
                                                                 type: object
                                                                 description: thickness of the bondline in meters described as function of spanwise grid
-                                                                properties: 
+                                                                properties:
                                                                     grid:
                                                                         $ref: "#/definitions/distributed_data/grid_nd"
                                                                     values:
@@ -542,7 +542,7 @@ properties:
                                         fiber_orientation:
                                             type: object
                                             description: For composite laminates, the orientation of the fibers in degrees can be specified. Looking from blade root, positive angles represent a rotation of the fibers towards the leading edge of the blade. Note that the angles are with respect to the cross section local reference system, not the reference system at blade root.
-                                            default: 
+                                            default:
                                                 grid: [0.0, 1.0]
                                                 values: [0.0, 0.0]
                                             required:
@@ -561,7 +561,7 @@ properties:
                                             description: The field `end_nd_arc` is a reference to the anchor that defines the end of the layer. The anchor is defined in terms of `name`, `start_nd_arc`, and `end_nd_arc`.
                             trailing_edge_adhesive:
                                 type: object
-                                description: The trailing edge adhesive fills the void on the inside of the shell at the trailing edge, and its location is defined by four corners, two on the suction sice and two on the pressure side. 
+                                description: The trailing edge adhesive fills the void on the inside of the shell at the trailing edge, and its location is defined by four corners, two on the suction sice and two on the pressure side.
                                 properties:
                                     material:
                                         type: string
@@ -704,7 +704,7 @@ properties:
                     gearbox:
                         type: object
                         description: Inputs describing the gearbox, when present
-                        properties: 
+                        properties:
                             gear_ratio:
                                 type: number
                                 description: Gear ratio of the drivetrain. Set it to 1 for direct drive machines.
@@ -807,7 +807,7 @@ properties:
                     lss:
                         type: object
                         description: Inputs describing the low speed shaft
-                        properties:         
+                        properties:
                             length:
                                 type: number
                                 description: Length of the low speed shaft
@@ -845,7 +845,7 @@ properties:
                     hss:
                         type: object
                         description: Inputs describing the high speed shaft, when present
-                        properties:          
+                        properties:
                             length:
                                 type: number
                                 description: Length of the high speed shaft
@@ -914,8 +914,8 @@ properties:
                             wall_thickness:
                                 type: object
                                 description: Thickness of the hollow elliptical bedplate used in direct drive configurations
-                                default: 
-                                    grid: [0.0, 1.0] 
+                                default:
+                                    grid: [0.0, 1.0]
                                     values: [0.05, 0.05]
                                 required:
                                     - grid
@@ -977,7 +977,7 @@ properties:
                                 default: 0.0
                                 units: kg
                                 description: Override regular regression-based calculation of transformer mass with this value
-                                minimum: 0.0                     
+                                minimum: 0.0
                             mb1Type:
                                 type: string
                                 description: Type of bearing for first main bearing
@@ -991,7 +991,7 @@ properties:
                             uptower:
                                 type: boolean
                                 description: If power electronics are located uptower (True) or at tower base (False)
-                                default: True                  
+                                default: True
                             elastic_properties:
                                 $ref: "#/definitions/rigid_body"
                                 description: Rigid body modeling the assembly of brake, hvac, converter, transformer, and main bearings. Their inertia is defined with respect to the tower top coordinate system.
@@ -1017,11 +1017,11 @@ properties:
                             units: kg
                             minimum: 0.
                             maximum: 1.e+9
-                            default: 0.0                            
+                            default: 0.0
                         rpm_efficiency:
                             type: object
                             description: User input override of generator rpm-efficiency values, with rpm as grid input and eff as values input
-                            default: 
+                            default:
                                 grid: [0.0]
                                 values: [0.0]
                             required:
@@ -1098,7 +1098,7 @@ properties:
                             - outer_diameter
                             - cd
                         properties:
-                            outer_diameter: 
+                            outer_diameter:
                                 type: object
                                 description: Outer diameters of the tower defined from base (grid = 0) to top (grid = 1).
                                 required:
@@ -1397,6 +1397,9 @@ properties:
                                 - reactions
                                 - transition
                                 - cylindrical
+                                - relative
+                                - relative_dims
+                                - axial_coeffs
                             properties:
                                 name:
                                     description: Unique name of the joint (node)
@@ -1417,6 +1420,37 @@ properties:
                                     description: Whether to use cylindrical coordinates (r,θ,z), with (r,θ) lying in the x/y-plane, instead of Cartesian coordinates.
                                     type: boolean
                                     default: False
+                                relative:
+                                    description: Make this joint relative to the stated joint, which is helpful when member dimensions are changing in a design loop (non-cylindrical joints only)
+                                    default: origin
+                                    type: string
+                                relative_dims:
+                                    description: Three dimensional boolean array denoting which dimensions are relative
+                                    default: [True, True, True]
+                                    type: array
+                                    items:
+                                        type: boolean
+                                axial_coeffs:
+                                    description: Axial hydrodynamic coefficients for lumped loads at the joint.
+                                    type: object
+                                    default: {}
+                                    optional:
+                                        - Ca
+                                        - Cd
+                                        - Cp
+                                    properties:
+                                        Ca:
+                                            description: Coefficient of added mass
+                                            type: number
+                                            default: 0.0
+                                        Cd:
+                                            description: Coefficient of viscous drag
+                                            type: number
+                                            default: 0.0
+                                        Cp:
+                                            description: Coefficient of dynamic pressure
+                                            type: number
+                                            default: 0.0
                                 reactions:
                                     # TODO: How to do carabiner type joints that only support tension and not compression?
                                     type: object
@@ -1489,8 +1523,8 @@ properties:
                                                     const: rectangular
                                         then:
                                             required:
-                                                - side_lengths_a
-                                                - side_lengths_b
+                                                - side_length_a
+                                                - side_length_b
                                             # TODO: Might add rotation in the future, ignore for now
                                         else:
                                             if:
@@ -1762,7 +1796,7 @@ properties:
                                     description: User-defined drag coefficient if axi-symmetric or user-defined drag coefficient in x-direction
                                 Cdy:
                                     <<: *cd
-                                    description: User-defined drag coefficient in y-direction                
+                                    description: User-defined drag coefficient in y-direction
                     rigid_bodies:
                         type: array
                         description: Additional point masses at joints with user-customized properties
@@ -2085,7 +2119,7 @@ properties:
                 name:
                     type: string
                     description: Name of the airfoil
-                description: 
+                description:
                     type: string
                     description: Text documenting airfoil data
                 coordinates:
@@ -2127,7 +2161,7 @@ properties:
                     description: Float defined between 0 (leading edge) and 1 (trailing edge) to specify the chordwise coordinate of the aerodynamic center used to define the polars.
                 polars:
                     type: array
-                    description: Different sets of polars at varying conditions. 
+                    description: Different sets of polars at varying conditions.
                     items:
                         type: object
                         properties:
@@ -2553,7 +2587,7 @@ properties:
                             maximum: 1000
                             default: 1.0
                 R:
-                    description: Fatigue stress ratio. An array can be defined to build Goodman-correction diagrams. 
+                    description: Fatigue stress ratio. An array can be defined to build Goodman-correction diagrams.
                     oneOf:
                         - type: number
                           units: dimensionless
@@ -2567,7 +2601,7 @@ properties:
                             maximum: 100
                             default: -1.0
                 N:
-                    description: Number of cycles for fatigue failure. An array can be defined to support multi-segment S-N curves such as for metals. 
+                    description: Number of cycles for fatigue failure. An array can be defined to support multi-segment S-N curves such as for metals.
                     oneOf:
                         - type: integer
                           units: dimensionless
@@ -2988,9 +3022,9 @@ definitions:
             anchor:
                 type: object
                 properties:
-                    name: 
+                    name:
                         type: string
-                    handle: 
+                    handle:
                         type: string
                 required: [name, handle]
         required: [anchor]
