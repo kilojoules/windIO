@@ -759,8 +759,8 @@ The :code:`floating_platform` section of the turbine YAML file provides detailed
 
 - :code:`transition_piece_mass`: Defines a point mass for the transition piece connecting the tower to the floating platform
 - :code:`transition_piece_cost`: Defines the cost associated with the transition piece
-- :code:`joints`: Defines the joints for describing the members' positions and orientations
-- :code:`members`: Defines the structural members of the floating platform
+- :code:`members`: Defines the hydrodynamic and structural members of the floating platform
+- :code:`joints`: Defines the points connected by :code:`members`
 
 Take the floating platform of the IEA-15MW turbine as an example.
 The :code:`transition_piece_mass` and :code:`transition_piece_cost` are values that can be defined as below:
@@ -776,34 +776,37 @@ For the IEA-15MW turbine, the transition piece is defined at the top of the main
     :language: yaml
     :lines: 673-675
 
-If not defined, it will be automatically placed at the center of all platform joints if no specific joint is defined for this purpose.
-
-
 The geometry of the floating platform is defined by the joints and members.
-An example of the floating platform of the IEA-15MW turbine is defined as shown below.
+The VolturnUS platform supporting the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
     :lines: 670-859
 
-There are two approaches to define joints.
-First is to define each joint individually by specifying its coordinates and orientation.
-Second is to define a set of axial joints by specifying them as non-dimensional locations along a member.
+.. image:: images/floating_platform.png
+   :width: 600 px
+   :align: center
+   :alt: Floating platform `joints` and `members`.
 
-The manually-specified joints can be defined either in Cartesian coordinates or cylindrical coordinates.
+Note that the actual platform definition does not include the cross-braces and large heave plates from the image above.
+Image credits to Mayank Chetan, NREL.
+
+Joints can be defined in free space by specifying its coordinates in Cartesian or cylindrical coordinates. 
+Joints can also be specified along the axis of a member by specifying the as non-dimensional locations along a member (from the first joint to the second).
+
 In the example above, the joints for defining the main (central) column are defined in Cartesian coordinates :math:`(x, y, z)`:
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
     :lines: 671-674
 
-The joints for the three outer columns are defined in cylindrical coordinates :math:`(r, \theta, z)`, where :math:`r` is the radial distance from the z-axis to the joint, :math:`\theta` is the angle in degree between the x-axis and the line connecting the origin to the projection of the joint onto the x-y plane, and :math:`z` is the signed distance from the x-y plane to the joint along the z-axis. 
+The joints for the three outer columns are defined in cylindrical coordinates :math:`(r, \theta, z)`, where :math:`r` is the radial distance from the z-axis to the joint, :math:`\theta` is the angle in degree between the x-axis and the line connecting the origin to the projection of the joint onto the x-y plane, and :math:`z` is the distance from the x-y plane to the joint along the z-axis. 
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
     :lines: 676-693
 
-The column members can then be created by referencing the start and end joints defined above.
+The column members are created by referencing the start and end joints defined above.
 For the IEA-15MW turbine, the main column is defined as shown below.
     
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
@@ -818,13 +821,13 @@ These two joints will be used conveniently to define the positions of upper and 
     :lines: 714-718
 
 On the outer columns, three axial joints are defined at non-dimensional locations 0.987, 0.1, and 0.1714 along the member, which will be used to define the positions of upper pontoons, lower pontoons, and fairleads connected to the outer columns.
-For the upwind columns, the axial joints are defined as shown below:
+For the upwind column, the axial joints are defined as shown below:
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
     :lines: 741-747
 
-With these axial joints defined, the upper and lower pontoons on the main column can be defined conveniently by referencing the corresponding axial joints.
+With these axial joints defined, the upper and lower pontoons on the main column can be defined by referencing the corresponding axial joints.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
@@ -834,7 +837,7 @@ With these axial joints defined, the upper and lower pontoons on the main column
     :language: yaml
     :lines: 826-828
 
-For each member, the users can define the hydrodynamic coefficients, the outer shape, and the structure.
+For each member, the users can define the hydrodynamic coefficients, the outer shape, and the internal structure.
 Currently, circular and rectangular cross-sections are supported for members' outer shapes.
 For members with circular cross-sections, the users can define the diameter as spanwise distributions:
 
@@ -849,7 +852,7 @@ An example of defining the hydrodynamic coefficients for the main column is show
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 707-708
+    :lines: 704-708
 
 The `layers` section under `structure` allows the users to define the layup of each member, including the material and thickness of each layer.
 An example of defining the structure for the main column is shown below.
@@ -867,7 +870,7 @@ The spacing of longitudinal stiffeners (in degree) defines circumferential spaci
 There are two types of ballasts that can be defined: permanent ballast and variable water ballast, specified as `variable_flag: false` and `variable_flag: true`, respectively.
 Permanent ballast is defined by its material, volume, start and end locations of the ballast segment along the member in nondimensional form.
 Variable water ballast is defined by start and end locations of the ballast segment along the member in nondimensional form, which determines the maximum volume of the water ballast.
-The actual volume of water ballast is calculated to achieve neutral buoyancy as the operating conditions of the turbine change, with the maximum volume limited by the defined segment volume.
+The actual volume of water ballast is calculated in some modeling tools (e.g. WISDEM) to achieve neutral buoyancy in an unloaded equilibrium position, with the maximum volume limited by the defined segment volume.
 An example of defining bulkheads and ballasts for the upwind column is shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
@@ -889,7 +892,7 @@ The floating platform of the IEA-15MW turbine is defined as shown below.
 
 .. literalinclude:: ../../windIO/examples/turbine/IEA-15-240-RWT_VolturnUS-S.yaml
     :language: yaml
-    :lines: 1000-1052
+    :lines: 860-912
 
 Users should refer to the :doc:`detailed_turbine_documentation` for the details of each subfield.
 
