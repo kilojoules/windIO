@@ -883,8 +883,8 @@ Mooring
 ~~~~~~~
 The `mooring` section of the turbine YAML file provides detailed specifications for the floating wind turbine mooring system, when present. It includes the following subfields:
 
-- :code:`nodes`: Defines the nodes of the mooring system
-- :code:`lines`: Defines the lines of the mooring system
+- :code:`nodes`: Defines the nodes of the mooring system, corresponding to floating platform `joints`
+- :code:`lines`: Defines the lines of the mooring system, connecting the mooring `nodes`
 - :code:`line_types`: Defines the characteristics of the lines
 - :code:`anchor_types`: Defines the characteristics of the anchors
 
