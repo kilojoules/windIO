@@ -141,6 +141,9 @@ properties:
         tau_y:
             title: Sheer stress y
             $ref: "./common.yaml#/definitions/multi_dimensional_data"
+        density:
+            title: air density in kg/m3
+            $ref: "./common.yaml#/definitions/multi_dimensional_data"
 
 
 # DEFINITIONS
