@@ -67,6 +67,9 @@ windIO = [
 Homepage = "https://github.com/IEAWindSystems/windIO"
 Documentation = "https://ieawindsystems.github.io/windio"
 
+[project.scripts]
+windio_converter = "windIO.converters.windIO2windIO:run"
+
 [tool.pytest.ini_options]
 filterwarnings = [
     "error"

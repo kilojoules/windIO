@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+import argparse
+import sys
 import os
 import traceback
 from copy import deepcopy
@@ -762,11 +764,8 @@ class v1p0_to_v2p0:
 
         return dict_v2p0
 
-
-if __name__ == "__main__":
-    import argparse
-    import sys
-
+    
+def run():
     parser = argparse.ArgumentParser(description="WindIO v1->v2 Converter")
     parser.add_argument("-i", "--input", help="Input v1 filename path")
     parser.add_argument("-o", "--output", help="Output v2 filename path")
@@ -782,3 +781,8 @@ if __name__ == "__main__":
     converter.convert()
         
     sys.exit(0)
+
+    
+if __name__ == "__main__":
+    run()
+    
