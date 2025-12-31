@@ -2649,7 +2649,7 @@ properties:
                 minimum: 0
             fine_pitch:
                 type: number
-                description: Pitch angle for optimal power production below rated.
+                description: Constant pitch angle for optimal power production below rated (usually corresponding to a single, optimal tip speed ratio).
                 units: deg
                 minimum: -90
                 maximum: 90
@@ -2661,13 +2661,13 @@ properties:
                         $ref: "#/definitions/distributed_data/grid_nd"
                     min_pitch:
                         $ref: "#/definitions/distributed_data/angle"
-            min_pitch_hardware:
+            min_pitch_limit:
                 type: number
-                description: Minimum pitch angle hardware limit.  The pitch angle cannot be less than this value.
+                description: Constant minimum pitch angle (hardware) limit.  The pitch angle cannot be less than this value.
                 units: deg
                 minimum: -90
                 maximum: 90
-            max_pitch:
+            max_pitch_limit:
                 type: number
                 description: Maximum pitch angle using during parked or idling.  Can be a hardware or software limit.
                 units: deg
