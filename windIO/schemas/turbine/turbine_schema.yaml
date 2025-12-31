@@ -2618,7 +2618,7 @@ properties:
         # additionalProperties: True
         type: object
         description: Dictionary reporting the data describing the wind turbine controller
-        # required:  # Should any of these be required?
+        # required:  # TODO: figure out what should be required
         #     - torque
         #     - pitch
         properties:
@@ -2658,7 +2658,7 @@ properties:
                 description: Minimum pitch vs. wind speed table used for optimizing power production and/or limiting rotor thrust
                 properties:
                     wind_speed:
-                        $ref: "#/definitions/distributed_data/grid_nd"
+                        $ref: "#/definitions/distributed_data/velocity"
                     min_pitch:
                         $ref: "#/definitions/distributed_data/angle"
             min_pitch_limit:
@@ -2708,8 +2708,10 @@ properties:
                     pitch_angle:
                         $ref: "#/definitions/distributed_data/angle"
                     kp:
-                        $ref: "#/definitions/distributed_data/nd"
-                        units: deg/rpm # TODO: check that this overwrites correctly
+                        ype: array
+                        items:
+                            type: number
+                        units: deg/rpm 
             pitch_ki:
                 type: object
                 description: Gain schedule (gain vs. pitch) from rotor speed (rpm) to blade pitch (deg) in an integral control element.
@@ -2717,8 +2719,10 @@ properties:
                     pitch_angle:
                         $ref: "#/definitions/distributed_data/angle"
                     ki:
-                        $ref: "#/definitions/distributed_data/nd"
-                        units: deg/(rpm*s) # TODO: check that this overwrites correctly
+                        type: array
+                        items:
+                            type: number
+                        units: deg/rpm 
             constant_power:
                 type: number
                 description: Flag for using consant torque (0) or constant power (1) torque control above rated.
@@ -3001,6 +3005,14 @@ definitions:
                     units: m
                     minItems: 2
             minItems: 2
+        velocity:
+            type: array
+            default: [0.0, 0.0]
+            items:
+                type: number
+                units: m/s
+                minItems: 2
+                uniqueItems: false
         force:
             type: array
             description: Loading described along a beam, expressed in N per meter
