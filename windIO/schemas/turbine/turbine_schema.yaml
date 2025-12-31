@@ -2708,7 +2708,7 @@ properties:
                     pitch_angle:
                         $ref: "#/definitions/distributed_data/angle"
                     kp:
-                        ype: array
+                        type: array
                         items:
                             type: number
                         units: deg/rpm 
