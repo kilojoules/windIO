@@ -666,6 +666,9 @@ class v1p0_to_v2p0:
             if "rotation" in members[i_memb]["outer_shape"]:
                 rotation_rad = members[i_memb]["outer_shape"]["rotation"]
                 members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
+            if "longitudinal_stiffeners" in members[i_memb]["structure"]:
+                spacing_rad = members[i_memb]["structure"]["longitudinal_stiffeners"]["spacing"]
+                members[i_memb]["structure"]["longitudinal_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
         return dict_v2p0
 
     def convert_airfoils(self, dict_v2p0):
