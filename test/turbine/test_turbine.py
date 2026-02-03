@@ -126,3 +126,7 @@ class TestRegression(unittest.TestCase):
         schema = windIO.load_yaml(path2schema)
 
         windIO.schemas.windIOMetaSchema.check_schema(schema)
+
+if __name__ == "__main__":
+    unittest.main()
+    

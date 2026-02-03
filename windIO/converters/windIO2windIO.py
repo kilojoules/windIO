@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+import argparse
+import sys
 import os
 import traceback
 from copy import deepcopy
@@ -662,10 +665,16 @@ class v1p0_to_v2p0:
             # switch from rad to deg
             if "angles" in members[i_memb]["outer_shape"]:
                 angles_rad = members[i_memb]["outer_shape"]["angles"]
-                members[i_memb]["outer_shape"]["angles"] = np.rad2deg(angles_rad)
+                if angles_rad < 0.5*np.pi:
+                    members[i_memb]["outer_shape"]["angles"] = np.rad2deg(angles_rad)
             if "rotation" in members[i_memb]["outer_shape"]:
                 rotation_rad = members[i_memb]["outer_shape"]["rotation"]
-                members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
+                if rotation_rad < 0.5*np.pi:
+                    members[i_memb]["outer_shape"]["rotation"] = np.rad2deg(rotation_rad)
+            if "longitudinal_stiffeners" in members[i_memb]["structure"]:
+                spacing_rad = members[i_memb]["structure"]["longitudinal_stiffeners"]["spacing"]
+                if spacing_rad < 0.5*np.pi:
+                    members[i_memb]["structure"]["longitudinal_stiffeners"]["spacing"] = np.rad2deg(spacing_rad)
         return dict_v2p0
 
     def convert_airfoils(self, dict_v2p0):
@@ -772,18 +781,25 @@ class v1p0_to_v2p0:
 
         return dict_v2p0
 
-
-if __name__ == "__main__":
     
-    from pathlib import Path
+def run():
+    parser = argparse.ArgumentParser(description="WindIO v1->v2 Converter")
+    parser.add_argument("-i", "--input", help="Input v1 filename path")
+    parser.add_argument("-o", "--output", help="Output v2 filename path")
+    args = parser.parse_args()
 
-    turbine_reference_path = Path(windIO.turbine_ex.__file__).parent
-
-    filename_v1p0 = "../../test/turbine/v1p0/IEA-15-240-RWT.yaml"
-    filename_v2p0 = turbine_reference_path / "IEA-15-240-RWT_v2p0.yaml"
+    filename_v1p0 = args.input
+    filename_v2p0 = args.output
     
     if not os.path.exists(filename_v1p0):
-        raise Exception("Point to an existing yaml file that you want to convert from windIO v1.0 to v2.0.")
+        raise Exception(f"Cannot find input windIO v1.0 file: {filename_v1p0}.")
 
     converter = v1p0_to_v2p0(filename_v1p0, filename_v2p0)
     converter.convert()
+        
+    sys.exit(0)
+
+    
+if __name__ == "__main__":
+    run()
+    
