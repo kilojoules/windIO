@@ -2632,6 +2632,11 @@ properties:
                 description: Rated rotor speed, regulated by the controller.  rated_power * efficiencies / rated_rotor_speed = rated torque.
                 units: rpm
                 minimum: 0
+            rated_power:
+                type: number
+                description: Rated power of the wind turbine, regulated by the controller.
+                units: W
+                minimum: 0
             max_rotor_speed:
                 type: number
                 description: Maximum allowed rotor speed. Speeds greater than this will trigger a shutdown. Should be ~5-20% greater than rated_rotor_speed.
@@ -2640,7 +2645,7 @@ properties:
             max_gen_torque: 
                 type: number
                 description: Maximum allowed generator torque.  Should be ~10-20% higher than rated torque.  Used in constant power applications.
-                units: kNm
+                units: N*m
                 minimum: 0
             max_torque_rate:
                 type: number
@@ -2653,6 +2658,10 @@ properties:
                 units: deg
                 minimum: -90
                 maximum: 90
+            optimal_tsr:
+                type: number
+                description: Optimal tip speed ratio for power production below rated.
+                minimum: 0
             min_pitch_table:
                 type: object
                 description: Minimum pitch vs. wind speed table used for optimizing power production and/or limiting rotor thrust
