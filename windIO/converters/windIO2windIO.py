@@ -13,6 +13,8 @@ class v1p0_to_v2p0:
         self.filename_v1p0 = filename_v1p0
         self.filename_v2p0 = filename_v2p0
 
+        os.makedirs(os.path.dirname(self.filename_v2p0), exist_ok=True)
+
     def convert(self):
         print("Converter windIO v1.0 to v2.0 started.")
 
@@ -775,6 +777,8 @@ class v2p0_to_v2p1:
     def __init__(self, filename_v2p0, filename_v2p1):
         self.filename_v2p0 = filename_v2p0
         self.filename_v2p1 = filename_v2p1
+
+        os.makedirs(os.path.dirname(self.filename_v2p1), exist_ok=True)
 
     def convert(self):
         # Load v2.0 file
