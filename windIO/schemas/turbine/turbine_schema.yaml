@@ -2615,12 +2615,8 @@ properties:
                             maximum: 1e+10
                             default: 1
     control:
-        # additionalProperties: True
         type: object
         description: Dictionary reporting the data describing the wind turbine controller
-        # required:  # TODO: figure out what should be required
-        #     - torque
-        #     - pitch
         properties:
             min_rotor_speed:
                 type: number
@@ -2736,10 +2732,6 @@ properties:
                 type: number
                 description: Flag for using consant torque (0) or constant power (1) torque control above rated.
                 enum: [0,1]
-            # gen_efficiency:  # TODO: this one may be covered by other entries in windIO (efficiency, rpm_efficiency)
-            #     type: number
-            #     description: Combined efficiency of the generator, gearbox, and power electronics.  
-            #     minimum: 0
             gen_actuator_frequency:
                 type: number
                 description: Natural frequency of the generator torque actuator model 2nd order system.
