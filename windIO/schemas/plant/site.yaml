@@ -81,10 +81,14 @@ properties:
       - depth
     properties:
       x:
-        $ref: "./common.yaml#/definitions/multi_dimensional_coordinate"
+        oneOf:
+           - $ref: "./common.yaml#/definitions/multi_dimensional_coordinate"
+           - $ref: "./common.yaml#/definitions/coordinates"
         description: "West-East coordinate axis"
       y:
-        $ref: "./common.yaml#/definitions/multi_dimensional_coordinate"
+        oneOf:
+           - $ref: "./common.yaml#/definitions/multi_dimensional_coordinate"
+           - $ref: "./common.yaml#/definitions/coordinates"
         description: "South-North coordinate axis"
       depth:
         $ref: "./common.yaml#/definitions/multi_dimensional_data"
